@@ -4,7 +4,9 @@ import istu.bacs.model.Contest;
 import istu.bacs.service.ContestService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,6 +17,11 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public Contest findById(Integer id) {
 		return contestById.get(id);
+	}
+	
+	@Override
+	public List<Contest> findAll() {
+		return new ArrayList<>(contestById.values());
 	}
 	
 	@Override
