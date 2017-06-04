@@ -1,39 +1,25 @@
 package istu.bacs.web;
 
-import istu.bacs.model.Contest;
-import istu.bacs.model.Submission;
 import istu.bacs.service.ContestService;
-import istu.bacs.service.SubmissionService;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@RestController
+@Controller
 public class ContestController {
 	
-	private final ContestService contestService;
-	private final SubmissionService submissionService;
+	private static final String VIEWS_CONTEST_LIST = "contests/contest-list";
 	
-	public ContestController(ContestService contestService, SubmissionService submissionService) {
+	private final ContestService contestService;
+	
+	public ContestController(ContestService contestService) {
 		this.contestService = contestService;
-		this.submissionService = submissionService;
 	}
 	
 	@RequestMapping("/contests")
-	public List<Contest> getAllContests() {
-		return contestService.findAll();
-	}
-	
-	@RequestMapping("/contest/{contestId}")
-	public Contest getContest(@PathVariable Integer contestId) {
-		return contestService.findById(contestId);
-	}
-	
-	@RequestMapping("/contest/{contestId}/submissions")
-	public List<Submission> getSubmissionsForContest(@PathVariable Integer contestId) {
-		return submissionService.findAllByContestId(contestId);
+	public String getAllContests(Model model) {
+		model.addAttribute("contests", contestService.findAll());
+		return VIEWS_CONTEST_LIST;
 	}
 	
 }

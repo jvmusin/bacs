@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{main-layout}">
+
+    <head>
+        <title>Contests</title>
+    </head>
+
+    <body>
+        <form layout:fragment="content">
+            <h1>Contest list</h1>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Start</th>
+                        <th>Finish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--/*@thymesVar id="contests" type="istu.bacs.model.Contest[]"*/-->
+                    <tr th:each="contest : ${contests}">
+                        <td th:text="${contest.contestId}">42</td>
+                        <td th:text="${contest.contestName}">First of April Contest</td>
+                        <td th:text="${#temporals.format(contest.startTime, 'dd.MM.YYYY HH:mm')}">01.04.2017 12:00</td>
+                        <td th:text="${#temporals.format(contest.finishTime, 'dd.MM.YYYY HH:mm')}">01.04.2017 15:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </body>
+
+</html>
