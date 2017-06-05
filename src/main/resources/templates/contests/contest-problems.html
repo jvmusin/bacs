@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{contests/contest-layout}">
+
+    <!--/*@thymesVar id="contest" type="istu.bacs.model.Contest"*/-->
+    <head>
+        <title th:text="${contest.contestName}">First of April Contest</title>
+    </head>
+
+    <body>
+        <div layout:fragment="contest-content">
+            <h1 th:text="${contest.contestName}">First of April Contest</h1>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Problem</th>
+                        <th>Time limit</th>
+                        <th>Memory limit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="problem : ${contest.problems}">
+                        <td th:text="${problemStat.count}">1</td>
+                        <td th:text="${problem.problemName}">A + B</td>
+                        <td th:text="${(problem.timeLimitMillis / 1000) + ' s'}">9.9 s</td>
+                        <td th:text="${(problem.memoryLimitBytes / 1024 / 1024) + ' MB'}">256.5 MB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+
+</html>

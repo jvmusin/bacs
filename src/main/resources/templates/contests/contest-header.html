@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <!--/*@thymesVar id="contestId" type="java.lang.String"*/-->
+    <nav layout:fragment="contest-header">
+        <a href="contest-problems.html" th:href="@{/contest/__${contestId}__}">PROBLEMS</a>
+    </nav>
+
+</html>
