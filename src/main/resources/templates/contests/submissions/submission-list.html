@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{contests/contest-layout}">
+
+    <!--/*@thymesVar id="contestName" type="java.lang.String"*/-->
+
+    <head>
+        <title th:text="${'All submissions for ' + contestName}">All submissions for First of April Contest</title>
+    </head>
+
+    <body>
+        <div layout:fragment="contest-content">
+            <h1 th:text="${'All submissions for ' + contestName}">All submissions for First of April Contest</h1>
+            <form>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>When</th>
+                            <th>Who</th>
+                            <th>Problem</th>
+                            <th>Language</th>
+                            <th>Verdict</th>
+                            <th>Test</th>
+                            <th>Time</th>
+                            <th>Memory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--/*@thymesVar id="submissions" type="istu.bacs.model.Submission[]"*/-->
+                        <tr th:each="submission:${submissions}">
+                            <td th:text="${submission.submissionId}">1</td>
+                            <td th:text="${#temporals.format(submission.creationTime, 'dd.MM.YYYY HH:mm:ss')}">01.04.2017 12:35:40</td>
+                            <td th:text="${submission.author.username}">Musin</td>
+                            <td th:text="${submission.problem.problemName}">A + B</td>
+                            <td th:text="${submission.language.languageName}">Kotlin</td>
+                            <td th:text="${submission.verdict.verdictName}">Accepted</td>
+                            <td th:text="${submission.firstFailedTest ?: 'N/A'}">N/A</td>
+                            <td th:text="${#numbers.formatDecimal((submission.timeConsumedMillis ?: 0), 0, 0) + ' ms'}">300 ms</td>
+                            <td th:text="${#numbers.formatDecimal((submission.memoryConsumedBytes ?: 0) / 1024, 0, 0) + ' KB'}">35.6 KB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </body>
+
+</html>
