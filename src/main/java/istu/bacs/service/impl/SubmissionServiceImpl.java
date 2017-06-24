@@ -1,35 +1,37 @@
 package istu.bacs.service.impl;
 
+import istu.bacs.model.Contest;
 import istu.bacs.model.Submission;
+import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.SubmissionService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 	
-	private final Map<Integer, Submission> submissionById = new HashMap<>();
+	private final SubmissionRepository submissionRepository;
+	
+	public SubmissionServiceImpl(SubmissionRepository submissionRepository) {
+		this.submissionRepository = submissionRepository;
+	}
 	
 	@Override
 	public Submission findById(Integer id) {
-		return submissionById.get(id);
+		return submissionRepository.findById(id).orElse(null);
 	}
 	
 	@Override
 	public List<Submission> findAllByContestId(Integer contestId) {
-		return submissionById.values().stream()
-				.filter(s -> Objects.equals(s.getContest().getContestId(), contestId))
-				.collect(Collectors.toList());
+		Contest contest = new Contest();
+		contest.setContestId(contestId);
+		return submissionRepository.findAllByContest(contest);
 	}
 	
 	@Override
 	public void save(Submission submission) {
-		submissionById.put(submission.getSubmissionId(), submission);
+		submissionRepository.save(submission);
 	}
 	
 }

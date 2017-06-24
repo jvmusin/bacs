@@ -1,32 +1,34 @@
 package istu.bacs.service.impl;
 
 import istu.bacs.model.Contest;
+import istu.bacs.repository.ContestRepository;
 import istu.bacs.service.ContestService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ContestServiceImpl implements ContestService {
 	
-	private final Map<Integer, Contest> contestById = new HashMap<>();
+	private final ContestRepository contestRepository;
+	
+	public ContestServiceImpl(ContestRepository contestRepository) {
+		this.contestRepository = contestRepository;
+	}
 	
 	@Override
 	public Contest findById(Integer id) {
-		return contestById.get(id);
+		return contestRepository.findById(id).orElse(null);
 	}
 	
 	@Override
 	public List<Contest> findAll() {
-		return new ArrayList<>(contestById.values());
+		return contestRepository.findAll();
 	}
 	
 	@Override
 	public void save(Contest contest) {
-		contestById.put(contest.getContestId(), contest);
+		contestRepository.save(contest);
 	}
 	
 }
