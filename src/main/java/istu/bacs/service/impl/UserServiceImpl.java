@@ -3,6 +3,7 @@ package istu.bacs.service.impl;
 import istu.bacs.model.User;
 import istu.bacs.repository.UserRepository;
 import istu.bacs.service.UserService;
+import istu.bacs.service.UsernameAlreadyInUseException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,10 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void save(User user) {
-		userRepository.save(user);
+	public void register(User user) throws UsernameAlreadyInUseException {
+		if (userRepository.findByUsername(user.getUsername()) != null)
+			throw new UsernameAlreadyInUseException(user.getUsername());
+		userRepository.saveAndFlush(user);
 	}
 	
 	@Override

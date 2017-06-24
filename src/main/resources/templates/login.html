@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{main-layout}">
+
+<head>
+    <title>Login</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>User login</h1>
+    <!--/*@thymesVar id="user" type="istu.bacs.model.User"*/-->
+    <form th:action="@{/login}" th:object="${user}" method="post">
+        <table>
+            <tr>
+                <td>Username:</td>
+                <td><input type="text" th:field="*{username}"></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" th:field="*{password}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Login"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+
+</html>
