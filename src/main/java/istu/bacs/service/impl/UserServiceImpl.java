@@ -3,6 +3,7 @@ package istu.bacs.service.impl;
 import istu.bacs.model.User;
 import istu.bacs.repository.UserRepository;
 import istu.bacs.service.UserService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,4 +25,8 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 	
+	@Override
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByUsername(username);
+	}
 }
