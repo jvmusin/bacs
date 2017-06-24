@@ -5,6 +5,7 @@
     <!--/*@thymesVar id="contestId" type="java.lang.String"*/-->
     <nav layout:fragment="contest-header">
         <a href="contest-problems.html" th:href="@{/contest/__${contestId}__}">PROBLEMS</a>
+        <a href="#" th:href="@{/contest/__${contestId}__/submit}">SUBMIT CODE</a>
         <a href="submissions/submission-list.html" th:href="@{/contest/__${contestId}__/submissions}">SUBMISSIONS</a>
     </nav>
 

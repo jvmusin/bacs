@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{contests/contest-layout}">
+
+    <head>
+        <title>Submit solution</title>
+    </head>
+
+    <body>
+        <div layout:fragment="contest-content">
+            <h1>Submit solution</h1>
+
+            <!--/*@thymesVar id="submission" type="istu.bacs.model.Submission"*/-->
+            <!--/*@thymesVar id="contestId" type="java.lang.String"*/-->
+            <form th:action="@{/contest/__${contestId}__/submit}"
+                  th:object="${submission}"
+                  enctype="multipart/form-data"
+                  method="post">
+
+                <table>
+                    <tr>
+                        <td>Choose language:</td>
+                        <td>
+                            <select th:field="*{language}">
+                                <!--/*@thymesVar id="languages" type="istu.bacs.model.type.Language[]"*/-->
+                                <option th:each="language:${languages}"
+                                        th:value="${language}"
+                                        th:text="${language.languageName}">Kotlin</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Choose problem:</td>
+                        <td>
+                            <select th:field="*{problem}">
+                                <!--/*@thymesVar id="problems" type="istu.bacs.model.Problem[]"*/-->
+                                <option th:each="problem:${problems}"
+                                        th:value="${problem.problemId}"
+                                        th:text="${problem.problemName}">A + B</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: center">Source code:</td>
+                        <td><textarea th:field="*{solution}" rows="30" cols="80">from kotlin import solution</textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Or choose file:</td>
+                        <td><input type="file" name="file"></td>
+                    </tr>
+                    <tr><td><input type="submit" value="Submit"/></td></tr>
+                </table>
+            </form>
+        </div>
+    </body>
+
+</html>
