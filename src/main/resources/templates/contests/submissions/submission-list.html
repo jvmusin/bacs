@@ -25,6 +25,7 @@
                             <th>Test</th>
                             <th>Time</th>
                             <th>Memory</th>
+                            <th>View code</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                             <td th:text="${submission.firstFailedTest ?: 'N/A'}">N/A</td>
                             <td th:text="${#numbers.formatDecimal((submission.timeConsumedMillis ?: 0), 0, 0) + ' ms'}">300 ms</td>
                             <td th:text="${#numbers.formatDecimal((submission.memoryConsumedBytes ?: 0) / 1024, 0, 0) + ' KB'}">35.6 KB</td>
+                            <td th:if="${submission.author.username == #authentication.name}"><a href="#" th:href="@{/submission/__${submission.submissionId}__}">View code</a></td>
                         </tr>
                     </tbody>
                 </table>

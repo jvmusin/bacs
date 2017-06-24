@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{main-layout}">
+    <head>
+        <title th:text="${'Submission #'+submission.submissionId}">Submission #123</title>
+    </head>
+    <!--/*@thymesVar id="submission" type="istu.bacs.model.Submission"*/-->
+    <body>
+        <div layout:fragment="content">
+            <h1 th:text="${'Submission #'+submission.submissionId}">Submission #123</h1>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>When</th>
+                        <th>Who</th>
+                        <th>Problem</th>
+                        <th>Language</th>
+                        <th>Verdict</th>
+                        <th>Test</th>
+                        <th>Time</th>
+                        <th>Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td th:text="${submission.submissionId}">3</td>
+                        <td th:text="${#temporals.format(submission.creationTime, 'dd.MM.YYYY HH:mm:ss')}">23.04.2015 12:35:40</td>
+                        <td th:text="${submission.author.username}">Rustam</td>
+                        <td th:text="${submission.problem.problemName}">Y - Sum of two</td>
+                        <td th:text="${submission.language}">Kotlin</td>
+                        <td th:text="${submission.verdict}">Accepted</td>
+                        <td th:text="${submission.firstFailedTest?:'N/A'}">N/A</td>
+                        <td th:text="${submission.timeConsumedMillis == null} ? '' : ${#numbers.formatDecimal(submission.timeConsumedMillis / 1000,- 1, 0)} + ' ms'">120 ms</td>
+                        <td th:text="${submission.memoryConsumedBytes == null} ? '' : ${#numbers.formatDecimal(submission.memoryConsumedBytes / 1024, -1, 0) + ' KB'}">20000 KB</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9">
+                            <textarea th:text="${submission.solution}" style="resize: none; border: none; width: 100%; height: 35em; box-sizing: border-box" readonly>The code goes here</textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
