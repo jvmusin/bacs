@@ -1,6 +1,6 @@
-INSERT INTO user(user_id, username, password) VALUES (1, 'tourist', '');
-INSERT INTO user(user_id, username, password) VALUES (2, 'Petr'   , '');
-INSERT INTO user(user_id, username, password) VALUES (3, 'Musin'  , '');
+INSERT INTO user(user_id, username, password) VALUES (1, 'tourist', '$2a$10$1/dMsM7IGrxwFSf/bpQP0.JzRORVvt7pY8A6jpbzE26CiFdaTSn/K');
+INSERT INTO user(user_id, username, password) VALUES (2, 'Petr'   , '$2a$10$1/dMsM7IGrxwFSf/bpQP0.JzRORVvt7pY8A6jpbzE26CiFdaTSn/K');
+INSERT INTO user(user_id, username, password) VALUES (3, 'Musin'  , '$2a$10$1/dMsM7IGrxwFSf/bpQP0.JzRORVvt7pY8A6jpbzE26CiFdaTSn/K');
 
 
 INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (1, 'A + B',   1.5 * 1000, 64.0  * 1024 * 1024);
