@@ -16,10 +16,12 @@
                     <tr>
                         <td>Username:</td>
                         <td><input type="text" th:field="*{username}"></td>
+                        <td th:if="${#fields.hasErrors()}" th:errors="*{username}">Username errors</td>
                     </tr>
                     <tr>
                         <td>Password:</td>
                         <td><input type="password" th:field="*{password}"></td>
+                        <td th:if="${#fields.hasErrors()}" th:errors="*{password}">Password errors</td>
                     </tr>
                     <tr>
                         <td><input type="submit" value="Register"/></td>

@@ -12,6 +12,7 @@
     <h1>User login</h1>
     <!--/*@thymesVar id="user" type="istu.bacs.model.User"*/-->
     <form th:action="@{/login}" th:object="${user}" method="post">
+        <td th:if="${#request.getParameter('error') != null}">Unsuccessful login</td>
         <table>
             <tr>
                 <td>Username:</td>
