@@ -5,6 +5,7 @@
     <nav layout:fragment="default-header">
         <a href="index.html" th:href="@{/}">HOME</a>
         <a href="contests/contest-list.html" th:href="@{/contests}">CONTESTS</a>
+        <div layout:replace="~{active-user :: active-user}"></div>
     </nav>
 
 </html>
