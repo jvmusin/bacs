@@ -9,3 +9,14 @@ spring:
   jpa:
     hibernate:
       use-new-id-generator-mappings: false
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+sybon:
+  apiKey: dwygVKaI6E6AH4wuGXKt4Q
+
+  problemsUrl: https://archive.sybon.org/api/Problems
+  collectionsUrl: https://archive.sybon.org/api/Collections
+
+  compilersUrl: https://checking.sybon.org/api/Compilers
+  submitsUrl: https://checking.sybon.org/api/Submits

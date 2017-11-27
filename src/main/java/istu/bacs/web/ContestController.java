@@ -1,11 +1,14 @@
 package istu.bacs.web;
 
+import istu.bacs.model.Contest;
+import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.model.User;
 import istu.bacs.model.type.Language;
 import istu.bacs.model.type.Verdict;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
+import istu.bacs.sybon.SybonApi;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,11 +28,13 @@ public class ContestController {
 	
 	private final ContestService contestService;
 	private final SubmissionService submissionService;
+	private final SybonApi sybon;
 	
-	public ContestController(ContestService contestService, SubmissionService submissionService) {
+	public ContestController(ContestService contestService, SubmissionService submissionService, SybonApi sybon) {
 		this.contestService = contestService;
 		this.submissionService = submissionService;
-	}
+        this.sybon = sybon;
+    }
 	
 	@RequestMapping("/contests")
 	public String getAllContests(Model model) {
@@ -42,6 +47,13 @@ public class ContestController {
 		model.addAttribute("contest", contestService.findById(contestId));
 		return VIEWS_CONTEST_PROBLEMS;
 	}
+
+    @RequestMapping("/contest/{contestId}/{problemId}")
+    public String loadStatement(@PathVariable Integer contestId, @PathVariable Integer problemId) {
+        Contest contest = contestService.findById(contestId);
+        Problem problem = contest.getProblems().get(problemId - 1);
+        return "redirect:" + sybon.getStatementUrl(problem.getProblemId());
+    }
 	
 	@RequestMapping("/contest/{contestId}/submissions")
 	public String getAllSubmissionsForContest(Model model, @PathVariable Integer contestId) {
