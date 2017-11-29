@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SybonTestResult {
     private Status status;
-    public String JudgeMessage;
+    private String judgeMessage;
     private SybonResourceUsage resourceUsage;
     private String input;
     private String actualResult;
