@@ -3,25 +3,25 @@ INSERT INTO user(user_id, username, password) VALUES (2, 'Petr'   , '$2a$10$1/dM
 INSERT INTO user(user_id, username, password) VALUES (3, 'Musin'  , '$2a$10$1/dMsM7IGrxwFSf/bpQP0.JzRORVvt7pY8A6jpbzE26CiFdaTSn/K');
 
 
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (1, 'A + B',   1.5 * 1000, 64.0  * 1024 * 1024);
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (2, 'Maze',    2.0 * 1000, 256.0 * 1024 * 1024);
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (3, 'Theatre', 2.0 * 1000, 128.0 * 1024 * 1024);
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (4, 'Bit++',   9.9 * 1000, 64.0  * 1024 * 1024);
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (5, 'Team',    2.0 * 1000, 128.0 * 1024 * 1024);
-INSERT INTO problem(problem_id, problem_name, time_limit_millis, memory_limit_bytes) VALUES (6, 'Taxi',    2.0 * 1000, 256.0 * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (1, 'A + B',   1.5 * 1000, 64.0  * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (2, 'Maze',    2.0 * 1000, 256.0 * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (3, 'Theatre', 2.0 * 1000, 128.0 * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (4, 'Bit++',   9.9 * 1000, 64.0  * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (5, 'Team',    2.0 * 1000, 128.0 * 1024 * 1024);
+-- INSERT INTO problem(problemId, problem_name, time_limit_millis, memory_limit_bytes) VALUES (6, 'Taxi',    2.0 * 1000, 256.0 * 1024 * 1024);
 
 
 INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (1, 'Happy New Year',  '2017-01-01 00:01:00', '2017-01-01 05:01:00');
 INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (2, 'Kotlin Love Day', '2017-04-23 12:00:00', '2017-04-23 15:00:00');
 
 
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 1, 0);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 2, 1);
-
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (2, 3, 0);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (2, 4, 1);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (2, 5, 2);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (2, 6, 3);
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (1, 1, 0);
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (1, 2, 1);
+--
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (2, 3, 0);
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (2, 4, 1);
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (2, 5, 2);
+-- INSERT INTO contest_problems(contest_id, problemId, `order`) VALUES (2, 6, 3);
 
 
 INSERT INTO submission(submission_id, author_id, contest_id, problem_id, creation_time, language, solution, verdict, first_failed_test, time_consumed_millis, memory_consumed_bytes) VALUES (1, 1, 1, 1,  '2017-01-01 00:06:00', 'CPP',    '...C++ code...',                'Accepted',          null, 0.25 * 1000, 5.0   * 1024 * 1024);

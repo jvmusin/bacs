@@ -6,12 +6,15 @@ CREATE TABLE IF NOT EXISTS user(
 );
 
 CREATE TABLE IF NOT EXISTS problem(
-  problem_id INT PRIMARY KEY AUTO_INCREMENT,
+  problem_id INT PRIMARY KEY,
 
-  problem_name VARCHAR(255) NOT NULL,
+  problem_name VARCHAR(255),
+  statement_url VARCHAR(255),
 
-  time_limit_millis DOUBLE NOT NULL,
-  memory_limit_bytes DOUBLE NOT NULL
+  pretest_count INT,
+  tests_count INT,
+  time_limit_millis INT,
+  memory_limit_bytes INT
 );
 
 CREATE TABLE IF NOT EXISTS contest(

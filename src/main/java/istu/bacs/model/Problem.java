@@ -16,14 +16,17 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Entity
 public class Problem {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer problemId;
-	
+
 	private String problemName;
-	
-	private Double timeLimitMillis;
-	private Double memoryLimitBytes;
-	
+	private String statementUrl;
+
+    private Integer pretestCount;
+    private Integer testCount;
+
+	private Integer timeLimitMillis;
+	private Integer memoryLimitBytes;
 }

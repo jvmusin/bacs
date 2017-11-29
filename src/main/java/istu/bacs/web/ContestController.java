@@ -51,7 +51,7 @@ public class ContestController {
     @RequestMapping("/contest/{contestId}/{problemId}")
     public String loadStatement(@PathVariable Integer contestId, @PathVariable Integer problemId) {
         Contest contest = contestService.findById(contestId);
-        Problem problem = contest.getProblems().get(problemId - 1);
+        Problem problem = contest.getProblems()[problemId - 1];
         return "redirect:" + sybon.getStatementUrl(problem.getProblemId());
     }
 	

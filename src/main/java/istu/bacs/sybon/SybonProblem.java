@@ -10,6 +10,5 @@ public class SybonProblem {
     private Integer collectionId;
     private Integer testsCount;
     private Integer pretestsCount;
-    private String internalProblemId;
     private SybonResourceLimits resourceLimits;
 }

@@ -57,7 +57,7 @@ public class SybonApiImpl implements SybonApi {
 
     //todo: test it
     @Override
-    public SybonSubmitResult[] getSubmits(String ids) {
+    public SybonSubmitResult[] getSubmitResults(String ids) {
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("ids", ids);
         URI uri = buildUrl(config.getSubmitsUrl() + "/results", EMPTY_MAP, queryParams);

@@ -8,5 +8,5 @@ public interface SybonApi {
     SybonProblemCollection[] getProblemCollections(int offset, int limit);
     SybonProblemCollection getProblemCollection(int id);
     SybonCompiler[] getCompilers();
-    SybonSubmitResult[] getSubmits(String ids);
+    SybonSubmitResult[] getSubmitResults(String ids);
 }

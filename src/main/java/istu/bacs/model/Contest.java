@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +29,5 @@ public class Contest {
 	@JoinTable(name = "contest_problems",
 			joinColumns = @JoinColumn(name = "contest_id"),
 			inverseJoinColumns = @JoinColumn(name = "problem_id"))
-	private List<Problem> problems;
-	
+	private Problem[] problems;
 }
