@@ -8,6 +8,6 @@ public interface SubmissionService {
 	
 	Submission findById(Integer id);
 	List<Submission> findAllByContestId(Integer contestId);
-	void save(Submission submission);
+	void submit(Submission submission, boolean pretestsOnly);
 	
 }

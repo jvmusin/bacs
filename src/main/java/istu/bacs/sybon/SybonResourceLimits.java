@@ -1,12 +1,9 @@
 package istu.bacs.sybon;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Data;
 
 @Data
-public class SybonResourceLimits {
+class SybonResourceLimits {
     private Integer timeLimitMillis;
     private Integer memoryLimitBytes;
 }

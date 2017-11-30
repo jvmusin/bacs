@@ -3,7 +3,7 @@ package istu.bacs.sybon;
 import lombok.Data;
 
 @Data
-public class SybonProblem {
+class SybonProblem {
     private Integer id;
     private String name;
     private String statementUrl;

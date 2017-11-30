@@ -4,26 +4,29 @@ import istu.bacs.model.Problem;
 import istu.bacs.repository.ProblemRepository;
 import istu.bacs.service.ProblemService;
 import istu.bacs.sybon.SybonApi;
-import istu.bacs.sybon.converter.SybonProblemConverter;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
 	private final ProblemRepository problemRepository;
-	private final SybonProblemConverter sybonProblemConverter;
-	private final SybonApi sybon;
+    private final SybonApi sybon;
 
-	public ProblemServiceImpl(ProblemRepository problemRepository, SybonProblemConverter sybonProblemConverter, SybonApi sybon) {
+	public ProblemServiceImpl(ProblemRepository problemRepository, SybonApi sybon) {
 		this.problemRepository = problemRepository;
-        this.sybonProblemConverter = sybonProblemConverter;
         this.sybon = sybon;
     }
 	
 	@Override
 	public Problem findById(Integer id) {
-	    return sybonProblemConverter.convert(sybon.getProblem(id));
-	}
+        return problemRepository.findById(id)
+                .map(p -> sybon.getProblem(p.getProblemId()))
+                .orElseGet(() -> {
+                    Problem p = sybon.getProblem(id);
+                    problemRepository.save(p);
+                    return p;
+                });
+    }
 	
 	@Override
 	public void save(Problem problem) {

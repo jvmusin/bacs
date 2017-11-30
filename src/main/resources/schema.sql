@@ -6,15 +6,7 @@ CREATE TABLE IF NOT EXISTS user(
 );
 
 CREATE TABLE IF NOT EXISTS problem(
-  problem_id INT PRIMARY KEY,
-
-  problem_name VARCHAR(255),
-  statement_url VARCHAR(255),
-
-  pretest_count INT,
-  tests_count INT,
-  time_limit_millis INT,
-  memory_limit_bytes INT
+  problem_id INT PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS contest(
@@ -27,7 +19,7 @@ CREATE TABLE IF NOT EXISTS contest(
 );
 
 CREATE TABLE IF NOT EXISTS submission(
-  submission_id INT PRIMARY KEY AUTO_INCREMENT,
+  submission_id INT PRIMARY KEY,
 
   author_id INT NOT NULL,
   contest_id INT NOT NULL,
@@ -35,12 +27,7 @@ CREATE TABLE IF NOT EXISTS submission(
 
   creation_time DATETIME NOT NULL,
   language VARCHAR(255) NOT NULL,
-  solution BLOB NOT NULL,
-
-  verdict VARCHAR(255) NOT NULL,
-  first_failed_test INT NULL,
-  time_consumed_millis DOUBLE NULL,
-  memory_consumed_bytes DOUBLE NULL
+  solution BLOB NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS contest_problems(
@@ -50,3 +37,10 @@ CREATE TABLE IF NOT EXISTS contest_problems(
 
   PRIMARY KEY (contest_id, problem_id, `order`)
 );
+
+CREATE TABLE IF NOT EXISTS contest_submissions(
+  contest_id INT NOT NULL,
+  submission_id INT NOT NULL,
+
+  PRIMARY KEY (contest_id, submission_id)
+)

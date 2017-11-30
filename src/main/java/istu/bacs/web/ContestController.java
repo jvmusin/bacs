@@ -5,7 +5,6 @@ import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.model.User;
 import istu.bacs.model.type.Language;
-import istu.bacs.model.type.Verdict;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
 import istu.bacs.sybon.SybonApi;
@@ -48,10 +47,10 @@ public class ContestController {
 		return VIEWS_CONTEST_PROBLEMS;
 	}
 
-    @RequestMapping("/contest/{contestId}/{problemId}")
-    public String loadStatement(@PathVariable Integer contestId, @PathVariable Integer problemId) {
+    @RequestMapping("/contest/{contestId}/{problemNumber}")
+    public String loadStatement(@PathVariable Integer contestId, @PathVariable Integer problemNumber) {
         Contest contest = contestService.findById(contestId);
-        Problem problem = contest.getProblems()[problemId - 1];
+        Problem problem = contest.getProblems()[problemNumber - 1];
         return "redirect:" + sybon.getStatementUrl(problem.getProblemId());
     }
 	
@@ -78,12 +77,9 @@ public class ContestController {
 		if (!file.getOriginalFilename().isEmpty())
 			submission.setSolution(new String(file.getBytes()));
 		submission.setAuthor(user);
-		submission.setContest(contestService.findById(contestId));
-		submission.setCreationTime(LocalDateTime.now());
-		submission.setVerdict(Verdict.Accepted);
-		submission.setTimeConsumedMillis(1.23 * 1000);
-		submission.setMemoryConsumedBytes(21.4 * 1024 * 1024);
-		submissionService.save(submission);
+        submission.setContest(contestService.findById(contestId));
+        submission.setCreationTime(LocalDateTime.now());
+        submissionService.submit(submission, false);
 		return "redirect:/contest/{contestId}/submissions";
 	}
 	

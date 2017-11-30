@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class SybonConfigurationProperties {
+class SybonConfigurationProperties {
     private String apiKey;
 
     private String problemsUrl;

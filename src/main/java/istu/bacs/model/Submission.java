@@ -1,11 +1,7 @@
 package istu.bacs.model;
 
 import istu.bacs.model.type.Language;
-import istu.bacs.model.type.Verdict;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,11 +14,9 @@ import java.time.LocalDateTime;
 public class Submission {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer submissionId;
 	
-	@ManyToOne
-	@JoinColumn(name = "author_id")
+	@ManyToOne @JoinColumn(name = "author_id")
 	private User author;
 	@ManyToOne @JoinColumn(name = "contest_id")
 	private Contest contest;
@@ -33,9 +27,60 @@ public class Submission {
 	private Language language;
 	private String solution;
 	
-	private Verdict verdict;
-	private Integer firstFailedTest;
-	private Double timeConsumedMillis;
-	private Double memoryConsumedBytes;
-	
+	@Transient
+    private SubmissionResult result;
+
+    @Data @AllArgsConstructor
+    public static class SubmissionResult {
+        private Integer id;
+
+        private boolean built;
+        private String buildInfo;
+
+        private TestGroupResult[] testGroupResults;
+
+        public String getVerdict() {
+            if (!built) return "BUILD FAILED";
+            for (TestGroupResult result : testGroupResults)
+                for (TestResult testResult : result.testResults)
+                    if (!"OK".equals(testResult.status))
+                        return testResult.status;
+            return "OK";
+        }
+
+        public ResourceUsage getResourceUsage() {
+            ResourceUsage ru = new ResourceUsage(0, 0);
+            for (TestGroupResult result : testGroupResults) {
+                for (TestResult testResult : result.testResults) {
+                    ru.memoryUsedBytes = Math.max(ru.memoryUsedBytes, testResult.memoryUsedBytes);
+                    ru.timeUsedMillis = Math.max(ru.timeUsedMillis, testResult.timeUsedMillis);
+                }
+            }
+            return ru;
+        }
+
+        @Data @AllArgsConstructor
+        public static class TestGroupResult {
+            private Boolean executed;
+            private TestResult[] testResults;
+        }
+
+        @Data @AllArgsConstructor
+        public static class TestResult {
+            private String status;
+            private String judgeMessage;
+            private String input;
+            private String output;
+            private String expected;
+
+            private Integer timeUsedMillis;
+            private Integer memoryUsedBytes;
+        }
+
+        @Data @AllArgsConstructor
+        public static class ResourceUsage {
+            private Integer timeUsedMillis;
+            private Integer memoryUsedBytes;
+        }
+    }
 }

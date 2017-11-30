@@ -25,9 +25,9 @@
                     <tr th:each="problem : ${contest.problems}">
                         <td th:text="${problemStat.count}">1</td>
                         <td><a th:href="@{/contest/__${contest.getContestId()}__/__${problemStat.count}__}"
-                               th:text="${problem.problemName}">A + B</a></td>
-                        <td th:text="${(problem.timeLimitMillis / 1000) + ' s'}">9.9 s</td>
-                        <td th:text="${(problem.memoryLimitBytes / 1024 / 1024) + ' MB'}">256.5 MB</td>
+                               th:text="${problem.details.problemName}">A + B</a></td>
+                        <td th:text="${(problem.details.timeLimitMillis / 1000) + ' s'}">9.9 s</td>
+                        <td th:text="${(problem.details.memoryLimitBytes / 1024 / 1024) + ' MB'}">256.5 MB</td>
                     </tr>
                 </tbody>
             </table>

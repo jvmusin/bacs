@@ -1,22 +1,22 @@
-package istu.bacs.sybon.converter;
+package istu.bacs.sybon;
 
 import istu.bacs.model.Problem;
-import istu.bacs.sybon.SybonProblem;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SybonProblemConverter implements Converter<SybonProblem, Problem> {
+class SybonProblemConverter implements Converter<SybonProblem, Problem> {
     @Override
     public Problem convert(SybonProblem sybonProblem) {
         return new Problem(
                 sybonProblem.getId(),
+                new Problem.ProblemDetails(
                 sybonProblem.getName(),
                 sybonProblem.getStatementUrl(),
                 sybonProblem.getPretestsCount(),
                 sybonProblem.getTestsCount(),
                 sybonProblem.getResourceLimits().getTimeLimitMillis(),
-                sybonProblem.getResourceLimits().getMemoryLimitBytes()
+                sybonProblem.getResourceLimits().getMemoryLimitBytes())
         );
     }
 }

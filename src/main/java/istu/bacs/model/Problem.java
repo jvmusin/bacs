@@ -1,14 +1,8 @@
 package istu.bacs.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -17,16 +11,21 @@ import javax.persistence.Id;
 @Entity
 public class Problem {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer problemId;
 
-	private String problemName;
-	private String statementUrl;
+	@Transient
+    private ProblemDetails details;
 
-    private Integer pretestCount;
-    private Integer testCount;
+    @Data @AllArgsConstructor
+    public static class ProblemDetails {
+        private String problemName;
+        private String statementUrl;
 
-	private Integer timeLimitMillis;
-	private Integer memoryLimitBytes;
+        private Integer pretestCount;
+        private Integer testCount;
+
+        private Integer timeLimitMillis;
+        private Integer memoryLimitBytes;
+    }
 }

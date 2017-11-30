@@ -37,7 +37,7 @@
                                 <!--/*@thymesVar id="problems" type="istu.bacs.model.Problem[]"*/-->
                                 <option th:each="problem:${problems}"
                                         th:value="${problem.problemId}"
-                                        th:text="${problem.problemName}">A + B</option>
+                                        th:text="${problem.details.problemName}">A + B</option>
                             </select>
                         </td>
                     </tr>

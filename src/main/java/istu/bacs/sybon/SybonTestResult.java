@@ -3,7 +3,7 @@ package istu.bacs.sybon;
 import lombok.Data;
 
 @Data
-public class SybonTestResult {
+class SybonTestResult {
     private Status status;
     private String judgeMessage;
     private SybonResourceUsage resourceUsage;
@@ -11,7 +11,7 @@ public class SybonTestResult {
     private String actualResult;
     private String expectedResult;
 
-    public enum Status {
+    enum Status {
         OK,
         WRONG_ANSWER,
         PRESENTATION_ERROR,
