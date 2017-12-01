@@ -7,6 +7,6 @@ import java.util.List;
 @Data
 class SybonSubmitResult {
     private Integer id;
-    SybonBuildResult buildResult;
-    List<SybonTestGroupResult> testResults;
+    private SybonBuildResult buildResult;
+    private List<SybonTestGroupResult> testResults;
 }

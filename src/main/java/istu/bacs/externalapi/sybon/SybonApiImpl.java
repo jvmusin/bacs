@@ -1,7 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.externalapi.ExternalApi;
-import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.model.SubmissionResult;
@@ -28,12 +27,14 @@ class SybonApiImpl implements ExternalApi {
     private final SybonConfigurationProperties config;
     private final SybonProblemConverter problemConverter;
     private final SybonSubmitResultConverter submitResultConverter;
+    private final SybonLanguageConverter languageConverter;
     private final RestTemplate restTemplate;
 
-    public SybonApiImpl(SybonConfigurationProperties config, SybonProblemConverter problemConverter, SybonSubmitResultConverter submitResultConverter, RestTemplateBuilder restTemplateBuilder) {
+    public SybonApiImpl(SybonConfigurationProperties config, SybonProblemConverter problemConverter, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, RestTemplateBuilder restTemplateBuilder) {
         this.config = config;
         this.problemConverter = problemConverter;
         this.submitResultConverter = submitResultConverter;
+        this.languageConverter = languageConverter;
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -74,11 +75,10 @@ class SybonApiImpl implements ExternalApi {
     private SybonSubmit createSubmit(boolean pretestsOnly, Submission submission) {
         SybonSubmit submit = new SybonSubmit();
 
-        submit.setCompilerId(getLanguageId(submission.getLanguage()));
+        submit.setCompilerId(languageConverter.convert(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
         submit.setProblemId(getSybonId(submission.getProblem().getProblemId()));
-        submit.setUserId(submission.getAuthor().getUserId());
         submit.setPretestsOnly(pretestsOnly);
 
         return submit;
@@ -157,16 +157,5 @@ class SybonApiImpl implements ExternalApi {
 
     private int getSybonId(String s) {
         return Integer.parseInt(s.split("@", 2)[1]);
-    }
-
-    private int getLanguageId(Language language) {
-        if (language == Language.C)       return 1;
-        if (language == Language.CPP)     return 2;
-        if (language == Language.Delphi)  return 3;
-        if (language == Language.FPC)     return 4;
-        if (language == Language.Python2) return 5;
-        if (language == Language.Python3) return 6;
-        if (language == Language.Mono)    return 8;
-        throw new RuntimeException("Unknown language: " + language);
     }
 }

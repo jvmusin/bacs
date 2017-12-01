@@ -4,10 +4,9 @@ import lombok.Data;
 
 @Data
 class SybonSubmit {
-    private Integer compilerId;
+    private int compilerId;
     private String solution;
     private String solutionFileType;
-    private Integer problemId;
-    private Integer userId;
-    private Boolean pretestsOnly;
+    private int problemId;
+    private boolean pretestsOnly;
 }

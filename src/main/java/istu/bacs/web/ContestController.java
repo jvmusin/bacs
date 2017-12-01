@@ -1,17 +1,12 @@
 package istu.bacs.web;
 
 import istu.bacs.externalapi.ExternalApiAggregator;
-import istu.bacs.model.Contest;
-import istu.bacs.model.Problem;
-import istu.bacs.model.Submission;
-import istu.bacs.model.User;
-import istu.bacs.model.Language;
+import istu.bacs.model.*;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,11 +54,14 @@ public class ContestController {
     }
 	
 	@RequestMapping("/contest/{contestId}/submissions")
-	public String getAllSubmissionsForContest(Model model, @PathVariable Integer contestId) {
+	public String getAllSubmissionsForContest(Model model, @PathVariable Integer contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
         externalApi.updateContest(contest);
 
-        model.addAttribute("submissions", contest.getSubmissions());
+        List<Submission> submissions = contest.getSubmissions();
+        submissions.removeIf(s -> s.getAuthor().getUserId() != (int) user.getUserId());
+
+        model.addAttribute("submissions", submissions);
 		model.addAttribute("contestName", contest.getContestName());
 		return VIEWS_SUBMISSION_LIST;
 	}

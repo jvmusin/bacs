@@ -37,10 +37,10 @@
                             <td th:text="${submission.problem.details.problemName}">A + B</td>
                             <td th:text="${submission.language.languageName}">Kotlin</td>
                             <td th:text="${submission.result.verdict}">Accepted</td>
-                            <td th:text="${'N/A'}">N/A</td>
-                            <td th:text="${#numbers.formatDecimal((submission.result.resourceUsage.timeUsedMillis ?: 0), 0, 0) + ' ms'}">300 ms</td>
-                            <td th:text="${#numbers.formatDecimal((submission.result.resourceUsage.memoryUsedBytes ?: 0) / 1024, 0, 0) + ' KB'}">35.6 KB</td>
-                            <td th:if="${submission.author.username == #authentication.name}"><a href="#" th:href="@{/submission/__${submission.submissionId}__}">View code</a></td>
+                            <td th:text="${submission.result.firstFailedTest ?: 'N/A'}">N/A</td>
+                            <td th:text="${#numbers.formatDecimal((submission.result.timeUsedMillis ?: 0), 0, 0) + ' ms'}">300 ms</td>
+                            <td th:text="${#numbers.formatDecimal((submission.result.memoryUsedBytes ?: 0) / 1024, 0, 0) + ' KB'}">35.6 KB</td>
+                            <td><a href="#" th:href="@{/submission/__${submission.submissionId}__}">View code</a></td>
                         </tr>
                     </tbody>
                 </table>

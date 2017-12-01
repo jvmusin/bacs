@@ -31,9 +31,9 @@
                         <td th:text="${submission.problem.details.problemName}">Y - Sum of two</td>
                         <td th:text="${submission.language}">Kotlin</td>
                         <td th:text="${submission.result.verdict}">Accepted</td>
-                        <td th:text="${'N/A'}">N/A</td>
-                        <td th:text="${submission.result.resourceUsage.timeUsedMillis == null} ? '' : ${#numbers.formatDecimal(submission.result.resourceUsage.timeUsedMillis / 1000,- 1, 0)} + ' ms'">120 ms</td>
-                        <td th:text="${submission.result.resourceUsage.memoryUsedBytes == null} ? '' : ${#numbers.formatDecimal(submission.result.resourceUsage.memoryUsedBytes / 1024, -1, 0) + ' KB'}">20000 KB</td>
+                        <td th:text="${submission.result.firstFailedTest ?: 'N/A'}">N/A</td>
+                        <td th:text="${submission.result.timeUsedMillis == null} ? '' : ${#numbers.formatDecimal(submission.result.timeUsedMillis / 1000,- 1, 0)} + ' ms'">120 ms</td>
+                        <td th:text="${submission.result.memoryUsedBytes == null} ? '' : ${#numbers.formatDecimal(submission.result.memoryUsedBytes / 1024, -1, 0) + ' KB'}">20000 KB</td>
                     </tr>
                     <tr>
                         <td colspan="9">

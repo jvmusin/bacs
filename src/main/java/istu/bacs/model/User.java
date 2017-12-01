@@ -22,8 +22,7 @@ import java.util.Collections;
 @Entity
 public class User implements UserDetails {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer userId;
 	
 	private String username;

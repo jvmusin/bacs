@@ -3,6 +3,7 @@ package istu.bacs.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.xml.transform.OutputKeys;
 import java.util.List;
 
 @Data
@@ -11,29 +12,10 @@ public class SubmissionResult {
     private boolean built;
     private String buildInfo;
 
+    private Verdict verdict;
+    private Integer firstFailedTest;
+    private int timeUsedMillis;
+    private int memoryUsedBytes;
+
     private List<TestGroupResult> testGroupResults;
-
-    public String getVerdict() {
-        if (!built) return "BUILD FAILED";
-        for (TestGroupResult result : testGroupResults)
-            for (TestResult testResult : result.getTestResults())
-                if (!"OK".equals(testResult.getStatus()))
-                    return testResult.getStatus();
-        return "OK";
-    }
-
-    public ResourceUsage getResourceUsage() {
-        ResourceUsage max = new ResourceUsage(0, 0);
-        for (TestGroupResult result : testGroupResults) {
-            for (TestResult testResult : result.getTestResults()) {
-                if (testResult.getMemoryUsedBytes() > max.getMemoryUsedBytes())
-                    max.setMemoryUsedBytes(testResult.getMemoryUsedBytes());
-                if (testResult.getTimeUsedMillis() > max.getTimeUsedMillis())
-                    max.setTimeUsedMillis(testResult.getTimeUsedMillis());
-            }
-        }
-        return max;
-    }
 }
-
-
