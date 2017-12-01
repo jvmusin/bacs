@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
 
 @Service
-public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
+class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     private final ExternalApi[] externalApis;
 
@@ -19,40 +23,41 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     @Override
     public Problem getProblem(String problemId) {
-        return findApi(extractResourceName(problemId)).getProblem(problemId);
+        return findApi(extractResource(problemId)).getProblem(problemId);
     }
 
     @Override
     public URI getStatementUrl(String problemId) {
-        return findApi(extractResourceName(problemId)).getStatementUrl(problemId);
+        return findApi(extractResource(problemId)).getStatementUrl(problemId);
     }
 
     @Override
     public void submit(boolean pretestsOnly, Submission submission) {
         String problemId = submission.getProblem().getProblemId();
-        findApi(extractResourceName(problemId)).submit(pretestsOnly, submission);
+        findApi(extractResource(problemId)).submit(pretestsOnly, submission);
     }
 
     @Override
     public void submit(boolean pretestsOnly, List<Submission> submissions) {
         if (submissions.isEmpty()) return;
-        String problemId = submissions.get(0).getProblem().getProblemId();
-        findApi(extractResourceName(problemId)).submit(pretestsOnly, submissions);
+        String submissionId = submissions.get(0).getExternalSubmissionId();
+        findApi(extractResource(submissionId)).submit(pretestsOnly, submissions);
     }
 
     @Override
     public void updateSubmissionResults(List<Submission> submissions) {
-        if (submissions.isEmpty()) return;
-        String problemId = submissions.get(0).getProblem().getProblemId();
-        //todo: may not work if different clients (sybon and smth else), solve it
-        findApi(extractResourceName(problemId)).updateSubmissionResults(submissions);
+        Map<String, List<Submission>> byResource = submissions.stream()
+                .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()),
+                        Collectors.toList()));
+        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissionResults(subs));
     }
 
     @Override
     public void updateProblemDetails(List<Problem> problems) {
-        if (problems.isEmpty()) return;
-        String problemId = problems.get(0).getProblemId();
-        findApi(extractResourceName(problemId)).updateProblemDetails(problems);
+        Map<String, List<Problem>> byResource = problems.stream()
+                .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()),
+                        Collectors.toList()));
+        byResource.forEach((resource, subs) -> findApi(resource).updateProblemDetails(subs));
     }
 
     @Override
@@ -61,12 +66,7 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
         updateSubmissionResults(contest.getSubmissions());
     }
 
-    private String extractResourceName(String s) {
-        return s.split("@", 2)[0];
-    }
-
-    @Override
-    public ExternalApi findApi(String resourceName) {
+    private ExternalApi findApi(String resourceName) {
         for (ExternalApi api : externalApis)
             if (api.getResourceName().equals(resourceName))
                 return api;

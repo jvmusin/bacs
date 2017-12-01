@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static istu.bacs.externalapi.ExternalApiHelper.addResource;
+import static istu.bacs.externalapi.ExternalApiHelper.removeResource;
 import static java.util.Collections.EMPTY_MAP;
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.joining;
@@ -23,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 class SybonApiImpl implements ExternalApi {
+
+    public static final String API_NAME = "SYBON";
 
     private final SybonConfigurationProperties config;
     private final SybonProblemConverter problemConverter;
@@ -148,14 +152,14 @@ class SybonApiImpl implements ExternalApi {
 
     @Override
     public String getResourceName() {
-        return "SYBON";
+        return API_NAME;
     }
 
     private String toResourceName(Object o) {
-        return getResourceName() + "@" + o;
+        return addResource(o, getResourceName());
     }
 
     private int getSybonId(String s) {
-        return Integer.parseInt(s.split("@", 2)[1]);
+        return Integer.parseInt(removeResource(s));
     }
 }

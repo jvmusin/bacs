@@ -5,12 +5,14 @@ import istu.bacs.model.ProblemDetails;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import static istu.bacs.externalapi.ExternalApiHelper.addResource;
+
 @Component
 class SybonProblemConverter implements Converter<SybonProblem, Problem> {
     @Override
     public Problem convert(SybonProblem sybonProblem) {
         return new Problem(
-                "SYBON@" + sybonProblem.getId(),
+                addResource(sybonProblem.getId(), SybonApiImpl.API_NAME),
                 new ProblemDetails(
                         sybonProblem.getName(),
                         sybonProblem.getStatementUrl(),

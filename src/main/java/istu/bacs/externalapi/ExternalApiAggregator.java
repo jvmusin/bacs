@@ -15,6 +15,4 @@ public interface ExternalApiAggregator {
     void updateSubmissionResults(List<Submission> submissions);
     void updateProblemDetails(List<Problem> problems);
     void updateContest(Contest contest);
-
-    ExternalApi findApi(String resourceName);
 }

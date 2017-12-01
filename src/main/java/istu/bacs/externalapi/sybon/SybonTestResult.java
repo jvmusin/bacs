@@ -10,5 +10,4 @@ class SybonTestResult {
     private String input;
     private String actualResult;
     private String expectedResult;
-
 }
