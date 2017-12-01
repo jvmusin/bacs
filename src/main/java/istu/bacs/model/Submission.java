@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 public class Submission {
 	
-	@Id
-	private String submissionId;
+	@Id @GeneratedValue
+	private Integer submissionId;
 	
 	@ManyToOne @JoinColumn(name = "author_id")
 	private User author;
@@ -27,6 +27,8 @@ public class Submission {
 	private LocalDateTime creationTime;
 	private Language language;
 	private String solution;
+
+	private String externalSubmissionId;
 
 	@Transient
     private SubmissionResult result;

@@ -3,6 +3,7 @@ package istu.bacs.externalapi.sybon;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.externalapi.ExternalApi;
+import istu.bacs.model.Submission.SubmissionResult;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,10 +11,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_MAP;
 import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -31,12 +34,15 @@ class SybonApiImpl implements ExternalApi {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    private final Map<String, Problem> cache = new ConcurrentHashMap<>();
     @Override
     public Problem getProblem(String problemId) {
-        int id = getSybonId(problemId);
-        URI uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", id));
-        SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
-        return problemConverter.convert(sybonProblem);
+        return cache.computeIfAbsent(problemId, key -> {
+            int id = getSybonId(problemId);
+            URI uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", id));
+            SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
+            return problemConverter.convert(sybonProblem);
+        });
     }
 
     @Override
@@ -48,7 +54,7 @@ class SybonApiImpl implements ExternalApi {
     @Override
     public void submit(boolean pretestsOnly, Submission submission) {
         SybonSubmit submit = createSubmit(pretestsOnly, submission);
-        submission.setSubmissionId(toResourceName(submit(submit)));
+        submission.setExternalSubmissionId(toResourceName(submit(submit)));
     }
 
     //todo: UNTESTED
@@ -59,7 +65,7 @@ class SybonApiImpl implements ExternalApi {
                 .collect(toList());
         int[] ids = submit(submits);
         for (int i = 0; i < submissions.size(); i++)
-            submissions.get(i).setSubmissionId(toResourceName(ids[i]));
+            submissions.get(i).setExternalSubmissionId(toResourceName(ids[i]));
     }
 
     private SybonSubmit createSubmit(boolean pretestsOnly, Submission submission) {
@@ -88,14 +94,14 @@ class SybonApiImpl implements ExternalApi {
     @Override
     public void updateSubmissionResults(List<Submission> submissions) {
         String ids = submissions.stream()
-                .map(sub -> getSybonId(sub.getSubmissionId()) + "")
-                .collect(Collectors.joining(","));
+                .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
+                .collect(joining(","));
 
         URI url = buildUrl(config.getSubmitsUrl() + "/results", EMPTY_MAP, singletonMap("ids", ids));
 
         SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
         for (int i = 0; i < submissions.size(); i++) {
-            Submission.SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
+            SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
             submissions.get(i).setResult(result);
         }
     }

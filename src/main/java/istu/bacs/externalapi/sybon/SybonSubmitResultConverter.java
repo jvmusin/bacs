@@ -1,18 +1,21 @@
 package istu.bacs.externalapi.sybon;
 
-import istu.bacs.model.Submission;
+import istu.bacs.model.Submission.SubmissionResult;
+import istu.bacs.model.Submission.SubmissionResult.TestGroupResult;
+import istu.bacs.model.Submission.SubmissionResult.TestResult;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submission.SubmissionResult> {
+public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
     @Override
-    public Submission.SubmissionResult convert(SybonSubmitResult submission) {
-        return new Submission.SubmissionResult(
+    public SubmissionResult convert(SybonSubmitResult submission) {
+        if (submission.buildResult == null)
+            return new SubmissionResult(false, null, emptyList());
+        return new SubmissionResult(
                 submission.buildResult.getStatus() == SybonBuildResult.Status.OK,
                 submission.buildResult.getOutput(),
                 submission.getTestResults().stream()
@@ -21,8 +24,8 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
         );
     }
 
-    private Submission.SubmissionResult.TestGroupResult convertTestGroupResult(SybonTestGroupResult result) {
-        return new Submission.SubmissionResult.TestGroupResult(
+    private TestGroupResult convertTestGroupResult(SybonTestGroupResult result) {
+        return new TestGroupResult(
                 result.getExecuted(),
                 result.getTestResults().stream()
                         .map(this::convertTestResult)
@@ -30,8 +33,8 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
         );
     }
 
-    private Submission.SubmissionResult.TestResult convertTestResult(SybonTestResult res) {
-        return new Submission.SubmissionResult.TestResult(
+    private TestResult convertTestResult(SybonTestResult res) {
+        return new TestResult(
                 res.getStatus().name(),
                 res.getJudgeMessage(),
                 res.getInput(),

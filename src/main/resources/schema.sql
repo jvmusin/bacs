@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS contest_problems(
 );
 
 CREATE TABLE IF NOT EXISTS submission(
-  submission_id VARCHAR(255) PRIMARY KEY,
+  submission_id INT PRIMARY KEY AUTO_INCREMENT,
 
   author_id INT NOT NULL,
   contest_id INT NOT NULL,
@@ -35,5 +35,7 @@ CREATE TABLE IF NOT EXISTS submission(
 
   creation_time DATETIME NOT NULL,
   language VARCHAR(255) NOT NULL,
-  solution BLOB NOT NULL
+  solution BLOB NOT NULL,
+
+  external_submission_id VARCHAR(255) NOT NULL
 );

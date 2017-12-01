@@ -11,7 +11,7 @@ public interface ExternalApiAggregator {
     Problem getProblem(String problemId);
     URI getStatementUrl(String problemId);
     void submit(boolean pretestsOnly, Submission submission);
-    void submit(boolean pretestsOnly, Submission... submissions);
+    void submit(boolean pretestsOnly, List<Submission> submissions);
     void updateSubmissionResults(List<Submission> submissions);
     void updateProblemDetails(List<Problem> problems);
     void updateContest(Contest contest);

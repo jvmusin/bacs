@@ -34,8 +34,9 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void submit(boolean pretestsOnly, Submission... submissions) {
-        String problemId = submissions[0].getProblem().getProblemId();
+    public void submit(boolean pretestsOnly, List<Submission> submissions) {
+        if (submissions.isEmpty()) return;
+        String problemId = submissions.get(0).getProblem().getProblemId();
         findApi(extractResourceName(problemId)).submit(pretestsOnly, submissions);
     }
 
