@@ -1,8 +1,8 @@
 package istu.bacs.externalapi.sybon;
 
-import istu.bacs.model.Submission.SubmissionResult;
-import istu.bacs.model.Submission.SubmissionResult.TestGroupResult;
-import istu.bacs.model.Submission.SubmissionResult.TestResult;
+import istu.bacs.model.SubmissionResult;
+import istu.bacs.model.TestGroupResult;
+import istu.bacs.model.TestResult;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

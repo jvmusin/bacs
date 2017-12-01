@@ -1,18 +1,21 @@
 package istu.bacs.externalapi.sybon;
 
+import istu.bacs.externalapi.ExternalApi;
+import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
-import istu.bacs.externalapi.ExternalApi;
-import istu.bacs.model.Submission.SubmissionResult;
+import istu.bacs.model.SubmissionResult;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_MAP;
 import static java.util.Collections.singletonMap;
@@ -71,7 +74,7 @@ class SybonApiImpl implements ExternalApi {
     private SybonSubmit createSubmit(boolean pretestsOnly, Submission submission) {
         SybonSubmit submit = new SybonSubmit();
 
-        submit.setCompilerId(submission.getLanguage().getLanguageId());
+        submit.setCompilerId(getLanguageId(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
         submit.setProblemId(getSybonId(submission.getProblem().getProblemId()));
@@ -154,5 +157,16 @@ class SybonApiImpl implements ExternalApi {
 
     private int getSybonId(String s) {
         return Integer.parseInt(s.split("@", 2)[1]);
+    }
+
+    private int getLanguageId(Language language) {
+        if (language == Language.C)       return 1;
+        if (language == Language.CPP)     return 2;
+        if (language == Language.Delphi)  return 3;
+        if (language == Language.FPC)     return 4;
+        if (language == Language.Python2) return 5;
+        if (language == Language.Python3) return 6;
+        if (language == Language.Mono)    return 8;
+        throw new RuntimeException("Unknown language: " + language);
     }
 }

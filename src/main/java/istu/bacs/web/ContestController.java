@@ -5,19 +5,19 @@ import istu.bacs.model.Contest;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.model.User;
-import istu.bacs.model.type.Language;
+import istu.bacs.model.Language;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ContestController {
@@ -80,9 +80,9 @@ public class ContestController {
 	
 	@PostMapping("/contest/{contestId}/submit")
 	public String submit(@ModelAttribute Submission submission,
-						 @PathVariable Integer contestId,
-						 @RequestParam MultipartFile file,
-						 @AuthenticationPrincipal User user) throws IOException {
+                         @PathVariable Integer contestId,
+                         @RequestParam MultipartFile file,
+                         @AuthenticationPrincipal User user) throws IOException {
 		if (!file.getOriginalFilename().isEmpty())
 			submission.setSolution(new String(file.getBytes()));
 		submission.setAuthor(user);

@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS submission(
   problem_id VARCHAR(255) NOT NULL,
 
   creation_time DATETIME NOT NULL,
-  language VARCHAR(255) NOT NULL,
+  language INT NOT NULL,
   solution BLOB NOT NULL,
 
   external_submission_id VARCHAR(255) NOT NULL

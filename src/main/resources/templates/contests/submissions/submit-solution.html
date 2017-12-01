@@ -23,9 +23,9 @@
                         <td>Choose language:</td>
                         <td>
                             <select th:field="*{language}">
-                                <!--/*@thymesVar id="languages" type="istu.bacs.model.type.Language[]"*/-->
+                                <!--/*@thymesVar id="languages" type="istu.bacs.model.Language[]"*/-->
                                 <option th:each="language:${languages}"
-                                        th:value="${language}"
+                                        th:value="${language.languageId}"
                                         th:text="${language.languageName}">Kotlin</option>
                             </select>
                         </td>
