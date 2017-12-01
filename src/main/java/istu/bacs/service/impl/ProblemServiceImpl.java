@@ -1,35 +1,30 @@
 package istu.bacs.service.impl;
 
 import istu.bacs.model.Problem;
+import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.repository.ProblemRepository;
 import istu.bacs.service.ProblemService;
-import istu.bacs.sybon.SybonApi;
 import org.springframework.stereotype.Service;
 
+//Нахер он нужен?
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
 	private final ProblemRepository problemRepository;
-    private final SybonApi sybon;
+    private final ExternalApiAggregator externalApi;
 
-	public ProblemServiceImpl(ProblemRepository problemRepository, SybonApi sybon) {
+	public ProblemServiceImpl(ProblemRepository problemRepository, ExternalApiAggregator externalApi) {
 		this.problemRepository = problemRepository;
-        this.sybon = sybon;
+        this.externalApi = externalApi;
     }
 	
 	@Override
-	public Problem findById(Integer id) {
-        return problemRepository.findById(id)
-                .map(p -> sybon.getProblem(p.getProblemId()))
-                .orElseGet(() -> {
-                    Problem p = sybon.getProblem(id);
-                    problemRepository.save(p);
-                    return p;
-                });
+	public Problem findById(String problemId) {
+	    return externalApi.getProblem(problemId);
     }
 	
 	@Override
 	public void save(Problem problem) {
-	    problemRepository.save(problem);
+//	    problemRepository.save(problem);
 	}
 }

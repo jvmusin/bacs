@@ -1,4 +1,4 @@
-package istu.bacs.sybon;
+package istu.bacs.externalapi.sybon;
 
 import lombok.Data;
 

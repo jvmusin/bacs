@@ -16,8 +16,7 @@ import java.util.List;
 @Entity
 public class Contest {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer contestId;
 	
 	private String contestName;
@@ -30,7 +29,7 @@ public class Contest {
 	@JoinTable(name = "contest_problems",
 			joinColumns = @JoinColumn(name = "contest_id"),
 			inverseJoinColumns = @JoinColumn(name = "problem_id"))
-	private Problem[] problems;
+	private List<Problem> problems;
 
 	@OneToMany(mappedBy = "contest")
     private List<Submission> submissions;

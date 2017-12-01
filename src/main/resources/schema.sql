@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS user(
 );
 
 CREATE TABLE IF NOT EXISTS problem(
-  problem_id INT PRIMARY KEY
+  problem_id VARCHAR(255) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS contest(
@@ -18,29 +18,22 @@ CREATE TABLE IF NOT EXISTS contest(
   finish_time DATETIME NULL
 );
 
-CREATE TABLE IF NOT EXISTS submission(
-  submission_id INT PRIMARY KEY,
-
-  author_id INT NOT NULL,
-  contest_id INT NOT NULL,
-  problem_id INT NOT NULL,
-
-  creation_time DATETIME NOT NULL,
-  language VARCHAR(255) NOT NULL,
-  solution BLOB NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS contest_problems(
   contest_id INT NOT NULL,
-  problem_id INT NOT NULL,
+  problem_id VARCHAR(255) NOT NULL,
   `order` INT NOT NULL,
 
   PRIMARY KEY (contest_id, problem_id, `order`)
 );
 
-CREATE TABLE IF NOT EXISTS contest_submissions(
-  contest_id INT NOT NULL,
-  submission_id INT NOT NULL,
+CREATE TABLE IF NOT EXISTS submission(
+  submission_id VARCHAR(255) PRIMARY KEY,
 
-  PRIMARY KEY (contest_id, submission_id)
-)
+  author_id INT NOT NULL,
+  contest_id INT NOT NULL,
+  problem_id VARCHAR(255) NOT NULL,
+
+  creation_time DATETIME NOT NULL,
+  language VARCHAR(255) NOT NULL,
+  solution BLOB NOT NULL
+);

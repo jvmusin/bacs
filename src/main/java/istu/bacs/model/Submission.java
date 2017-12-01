@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class Submission {
 	
 	@Id
-	private Integer submissionId;
+	private String submissionId;
 	
 	@ManyToOne @JoinColumn(name = "author_id")
 	private User author;
@@ -26,18 +27,16 @@ public class Submission {
 	private LocalDateTime creationTime;
 	private Language language;
 	private String solution;
-	
+
 	@Transient
     private SubmissionResult result;
 
     @Data @AllArgsConstructor
     public static class SubmissionResult {
-        private Integer id;
-
         private boolean built;
         private String buildInfo;
 
-        private TestGroupResult[] testGroupResults;
+        private List<TestGroupResult> testGroupResults;
 
         public String getVerdict() {
             if (!built) return "BUILD FAILED";
@@ -62,7 +61,7 @@ public class Submission {
         @Data @AllArgsConstructor
         public static class TestGroupResult {
             private Boolean executed;
-            private TestResult[] testResults;
+            private List<TestResult> testResults;
         }
 
         @Data @AllArgsConstructor

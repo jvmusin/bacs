@@ -11,8 +11,8 @@ import javax.persistence.*;
 @Entity
 public class Problem {
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer problemId;
+	@Id
+	private String problemId;
 
 	@Transient
     private ProblemDetails details;

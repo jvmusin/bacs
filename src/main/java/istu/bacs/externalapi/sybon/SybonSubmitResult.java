@@ -1,10 +1,12 @@
-package istu.bacs.sybon;
+package istu.bacs.externalapi.sybon;
 
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 class SybonSubmitResult {
     private Integer id;
     SybonBuildResult buildResult;
-    SybonTestGroupResult[] testResults;
+    List<SybonTestGroupResult> testResults;
 }
