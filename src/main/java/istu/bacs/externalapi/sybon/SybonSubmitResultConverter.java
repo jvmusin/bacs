@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
+class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
     @Override
     public SubmissionResult convert(SybonSubmitResult submission) {
         if (submission.getBuildResult() == null)

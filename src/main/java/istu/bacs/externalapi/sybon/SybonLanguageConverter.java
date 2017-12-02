@@ -5,7 +5,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SybonLanguageConverter implements Converter<Language, Integer> {
+class SybonLanguageConverter implements Converter<Language, Integer> {
 
     @Override
     public Integer convert(Language language) {

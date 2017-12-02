@@ -1,6 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
-public enum SybonTestResultStatus {
+enum SybonTestResultStatus {
     OK,
     WRONG_ANSWER,
     PRESENTATION_ERROR,

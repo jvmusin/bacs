@@ -57,7 +57,7 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
         Map<String, List<Problem>> byResource = problems.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()),
                         Collectors.toList()));
-        byResource.forEach((resource, subs) -> findApi(resource).updateProblemDetails(subs));
+        byResource.forEach((resource, problems1) -> findApi(resource).updateProblemDetails(problems1));
     }
 
     @Override
