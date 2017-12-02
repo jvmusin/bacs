@@ -14,14 +14,17 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
+
 @Controller
 public class ContestController {
 	
 	private static final String VIEWS_CONTEST_LIST = "contests/contest-list";
 	private static final String VIEWS_CONTEST_PROBLEMS = "contests/contest-problems";
 	private static final String VIEWS_SUBMISSION_LIST = "contests/submissions/submission-list";
-	private static final String VIEWS_SUBMIT_PAGE = "contests/submissions/submit-solution";
-	
+    private static final String VIEWS_SUBMISSION_VIEW = "contests/submissions/submission-view";
+    private static final String VIEWS_SUBMIT_PAGE = "contests/submissions/submit-solution";
+
 	private final ContestService contestService;
 	private final SubmissionService submissionService;
 	private final ExternalApiAggregator externalApi;
@@ -89,5 +92,17 @@ public class ContestController {
         submissionService.submit(submission, false);
 		return "redirect:/contest/{contestId}/submissions";
 	}
-	
+
+    @RequestMapping("/submission/{submissionId}")
+    public String getSubmission(@AuthenticationPrincipal User user, Model model, @PathVariable int submissionId) {
+        Submission submission = submissionService.findById(submissionId);
+        if (!submission.getAuthor().getUserId().equals(user.getUserId()))
+            throw new SecurityException("Not enough rights to see this page");
+
+        externalApi.updateSubmissionResults(singletonList(submission));
+        externalApi.updateProblemDetails(singletonList(submission.getProblem()));
+
+        model.addAttribute(submission);
+        return VIEWS_SUBMISSION_VIEW;
+    }
 }
