@@ -24,8 +24,8 @@ public class Contest {
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@OrderColumn(name = "order")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OrderColumn(name = "problem_index")
 	@JoinTable(name = "contest_problems",
 			joinColumns = @JoinColumn(name = "contest_id"),
 			inverseJoinColumns = @JoinColumn(name = "problem_id"))

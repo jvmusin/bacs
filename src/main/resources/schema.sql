@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS contest(
 CREATE TABLE IF NOT EXISTS contest_problems(
   contest_id INT NOT NULL,
   problem_id VARCHAR(255) NOT NULL,
-  `order` INT NOT NULL,
+  problem_index INT NOT NULL,
 
-  PRIMARY KEY (contest_id, problem_id, `order`)
+  PRIMARY KEY (contest_id, problem_id, problem_index)
 );
 
 CREATE TABLE IF NOT EXISTS submission(

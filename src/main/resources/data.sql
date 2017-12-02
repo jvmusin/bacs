@@ -15,14 +15,14 @@ INSERT INTO problem(problem_id) VALUES ('SYBON@20008');
 INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (1, 'Main contest', '2017-01-02', '2018-03-04');
 INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (2, 'Main2 contest', '2017-01-02', '2018-03-04');
 
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@1', 0);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@2', 1);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@3', 2);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@4', 3);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@5', 4);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@20004', 5);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@20005', 6);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@20006', 7);
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (1, 'SYBON@20008', 8);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@1', 0);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@2', 1);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@3', 2);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@4', 3);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@5', 4);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@20004', 5);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@20005', 6);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@20006', 7);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@20008', 8);
 
-INSERT INTO contest_problems(contest_id, problem_id, `order`) VALUES (2, 'SYBON@20005', 0);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (2, 'SYBON@20005', 0);

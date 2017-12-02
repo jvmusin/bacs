@@ -25,4 +25,14 @@ public class ContestServiceImpl implements ContestService {
 	public List<Contest> findAll() {
         return contestRepository.findAll();
     }
+
+    @Override
+    public void save(Contest contest) {
+        contestRepository.save(contest);
+    }
+
+    @Override
+    public void delete(Contest contest) {
+        contestRepository.delete(contest);
+    }
 }

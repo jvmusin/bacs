@@ -1,12 +1,11 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.model.Problem;
 import istu.bacs.externalapi.ExternalApiAggregator;
+import istu.bacs.model.Problem;
 import istu.bacs.repository.ProblemRepository;
 import istu.bacs.service.ProblemService;
 import org.springframework.stereotype.Service;
 
-//Нахер он нужен?
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
@@ -25,6 +24,11 @@ public class ProblemServiceImpl implements ProblemService {
 	
 	@Override
 	public void save(Problem problem) {
-//	    problemRepository.save(problem);
+	    problemRepository.save(problem);
 	}
+
+    @Override
+    public void saveAll(Iterable<Problem> problems) {
+        problemRepository.saveAll(problems);
+    }
 }
