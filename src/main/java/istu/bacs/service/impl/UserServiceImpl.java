@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByUsername(user.getUsername()) != null)
 			throw new UsernameAlreadyInUseException(user.getUsername());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userRepository.saveAndFlush(user);
+		userRepository.save(user);
 	}
 	
 	@Override

@@ -6,6 +6,8 @@ import istu.bacs.repository.ProblemRepository;
 import istu.bacs.service.ProblemService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
@@ -21,8 +23,13 @@ public class ProblemServiceImpl implements ProblemService {
 	public Problem findById(String problemId) {
 	    return externalApi.getProblem(problemId);
     }
-	
-	@Override
+
+    @Override
+    public List<Problem> findAll() {
+        return problemRepository.findAll();
+    }
+
+    @Override
 	public void save(Problem problem) {
 	    problemRepository.save(problem);
 	}

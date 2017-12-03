@@ -1,6 +1,7 @@
 package istu.bacs.web;
 
 import istu.bacs.externalapi.ExternalApiAggregator;
+import istu.bacs.externalapi.ExternalApiHelper;
 import istu.bacs.model.*;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
@@ -12,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.singletonList;
 
@@ -71,11 +74,21 @@ public class ContestController {
 	
 	@GetMapping("/contest/{contestId}/submit")
 	public String loadSubmissionForm(Model model, @PathVariable int contestId) {
-		model.addAttribute("submission", new Submission());
-		model.addAttribute("languages", Language.values());
-        List<Problem> problems = contestService.findById(contestId).getProblems();
+        Contest contest = contestService.findById(contestId);
+
+        Set<Language> allLanguages = EnumSet.noneOf(Language.class);
+        contest.getProblems().forEach(p -> {
+            String resource = ExternalApiHelper.extractResource(p.getProblemId());
+            allLanguages.addAll(externalApi.getSupportedLanguages(resource));
+        });
+
+        model.addAttribute("submission", new Submission());
+        model.addAttribute("languages", allLanguages);
+
+        List<Problem> problems = contest.getProblems();
         externalApi.updateProblemDetails(problems);
         model.addAttribute("problems", problems);
+
 		return VIEWS_SUBMIT_PAGE;
 	}
 	

@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) {
 		auth.authenticationProvider(authenticationProvider());
 	}
 	
@@ -47,5 +47,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
 }

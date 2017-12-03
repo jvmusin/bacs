@@ -1,6 +1,7 @@
 package istu.bacs.externalapi;
 
 import istu.bacs.model.Contest;
+import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
@@ -64,6 +66,11 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     public void updateContest(Contest contest) {
         updateProblemDetails(contest.getProblems());
         updateSubmissionResults(contest.getSubmissions());
+    }
+
+    @Override
+    public Set<Language> getSupportedLanguages(String resourceName) {
+        return findApi(resourceName).getSupportedLanguages();
     }
 
     private ExternalApi findApi(String resourceName) {

@@ -1,6 +1,7 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.externalapi.ExternalApi;
+import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import istu.bacs.model.SubmissionResult;
@@ -10,10 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static istu.bacs.externalapi.ExternalApiHelper.addResource;
@@ -119,6 +117,11 @@ class SybonApiImpl implements ExternalApi {
             Problem problem = getProblem(p.getProblemId());
             p.setDetails(problem.getDetails());
         });
+    }
+
+    @Override
+    public Set<Language> getSupportedLanguages() {
+        return languageConverter.getSupportedLanguages();
     }
 
     public SybonProblemCollection[] getProblemCollections(int offset, int limit) {

@@ -4,20 +4,34 @@ import istu.bacs.model.Language;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
+
+import static istu.bacs.model.Language.*;
+
 @Component
 class SybonLanguageConverter implements Converter<Language, Integer> {
 
+    private static final Map<Language, Integer> supportedLanguages;
+
+    static {
+        supportedLanguages = new EnumMap<>(Language.class);
+        supportedLanguages.put(C, 1);
+        supportedLanguages.put(CPP, 2);
+        supportedLanguages.put(Delphi, 3);
+        supportedLanguages.put(FPC, 4);
+        supportedLanguages.put(Python2, 5);
+        supportedLanguages.put(Python3, 6);
+        supportedLanguages.put(Mono, 8);
+    }
+
     @Override
     public Integer convert(Language language) {
-        switch (language) {
-            case C:       return 1;
-            case CPP:     return 2;
-            case Delphi:  return 3;
-            case FPC:     return 4;
-            case Python2: return 5;
-            case Python3: return 6;
-            case Mono:    return 8;
-            default: throw new RuntimeException("Language is not supported: " + language);
-        }
+        return supportedLanguages.get(language);
+    }
+
+    public Set<Language> getSupportedLanguages() {
+        return supportedLanguages.keySet();
     }
 }
