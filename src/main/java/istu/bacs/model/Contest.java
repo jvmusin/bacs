@@ -1,21 +1,20 @@
 package istu.bacs.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+import static java.time.LocalDateTime.now;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
+
+@Data
 @Entity
 public class Contest {
-	
+
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer contestId;
 	
@@ -24,7 +23,7 @@ public class Contest {
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
 	@OrderColumn(name = "problem_index")
 	@JoinTable(name = "contest_problems",
 			joinColumns = @JoinColumn(name = "contest_id"),
@@ -33,4 +32,23 @@ public class Contest {
 
 	@OneToMany(mappedBy = "contest")
     private List<Submission> submissions;
+
+	public boolean isRunning() {
+        return isStarted() && !isFinished();
+    }
+
+    public boolean isStarted() {
+	    return startTime != null && now().isBefore(startTime);
+    }
+
+    public boolean isFinished() {
+	    return finishTime != null && now().isAfter(finishTime);
+    }
+
+    public int getProblemIndex(Problem problem) {
+	    for (int i = 0; i < problems.size(); i++)
+	        if (problems.get(i).getProblemId().equals(problem.getProblemId()))
+	            return i;
+	    return -1;
+    }
 }
