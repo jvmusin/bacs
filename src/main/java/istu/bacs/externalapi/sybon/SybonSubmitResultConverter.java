@@ -9,94 +9,80 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Component
 class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
+
+    private final SybonTestResultStatusConverter testResultStatusConverter;
+
+    SybonSubmitResultConverter(SybonTestResultStatusConverter testResultStatusConverter) {
+        this.testResultStatusConverter = testResultStatusConverter;
+    }
+
     @Override
     public SubmissionResult convert(SybonSubmitResult submission) {
-        if (submission.getBuildResult() == null)
-            return new SubmissionResult(false, "", Verdict.SERVER_ERROR, null, 0, 0, emptyList());
         //todo: FIX THIS PART, SYBON IS BUGGED HERE
-        if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.FAILED) {
-            String status = submission.getBuildResult().getOutput();
-            return new SubmissionResult(false, status, Verdict.COMPILE_ERROR, null, 0, 0, emptyList());
-        }
+        if (submission.getBuildResult() == null)
+            return SubmissionResult.builder()
+                    .built(false)
+                    .verdict(Verdict.SERVER_ERROR)
+                    .build();
 
-        int timeUsedMillis = 0;
-        int memoryUsedBytes = 0;
+        if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.FAILED)
+            return SubmissionResult.builder()
+                .built(false)
+                .buildInfo(submission.getBuildResult().getOutput())
+                .verdict(Verdict.COMPILE_ERROR)
+                .build();
+
+        int maxTimeUsedMillis = 0;
+        int maxMemoryUsedBytes = 0;
         Verdict verdict = Verdict.OK;
-        Integer firstFailedTest = 0;
+        Integer testsPassed = 0;
         for (SybonTestGroupResult testGroup : submission.getTestResults()) {
             for (SybonTestResult result : testGroup.getTestResults()) {
-                firstFailedTest++;
                 SybonResourceUsage res = result.getResourceUsage();
-                timeUsedMillis = Math.max(timeUsedMillis, res.getTimeUsageMillis());
-                memoryUsedBytes = Math.max(memoryUsedBytes, res.getMemoryUsageBytes());
+                maxTimeUsedMillis = Math.max(maxTimeUsedMillis, res.getTimeUsageMillis());
+                maxMemoryUsedBytes = Math.max(maxMemoryUsedBytes, res.getMemoryUsageBytes());
                 if (result.getStatus() != SybonTestResultStatus.OK) {
-                    verdict = convertVerdict(result.getStatus());
+                    verdict = testResultStatusConverter.convert(result.getStatus());
                     break;
                 }
+                testsPassed++;
             }
             if (verdict != Verdict.OK) break;
         }
-        if (verdict == Verdict.OK) firstFailedTest = null;
+        if (verdict == Verdict.OK) testsPassed = null;
 
         List<TestGroupResult> testGroups = submission.getTestResults().stream().map(this::convertTestGroupResult).collect(toList());
-        return new SubmissionResult(
-                true,
-                submission.getBuildResult().getOutput(),
-                verdict,
-                firstFailedTest,
-                timeUsedMillis,
-                memoryUsedBytes,
-                testGroups
-        );
-    }
-
-    private Verdict convertVerdict(SybonTestResultStatus res) {
-        switch (res) {
-            case OK:                                    return Verdict.OK;
-            case WRONG_ANSWER:                          return Verdict.WRONG_ANSWER;
-            case PRESENTATION_ERROR:                    return Verdict.PRESENTATION_ERROR;
-            case QUERIES_LIMIT_EXCEEDED:                return Verdict.QUERIES_LIMIT_EXCEEDED;
-            case INCORRECT_REQUEST:                     return Verdict.INCORRECT_REQUEST;
-            case INSUFFICIENT_DATA:                     return Verdict.INSUFFICIENT_DATA;
-            case EXCESS_DATA:                           return Verdict.EXCESS_DATA;
-            case OUTPUT_LIMIT_EXCEEDED:                 return Verdict.OUTPUT_LIMIT_EXCEEDED;
-            case TERMINATION_REAL_TIME_LIMIT_EXCEEDED:  return Verdict.TERMINATION_REAL_TIME_LIMIT_EXCEEDED;
-            case ABNORMAL_EXIT:                         return Verdict.ABNORMAL_EXIT;
-            case MEMORY_LIMIT_EXCEEDED:                 return Verdict.MEMORY_LIMIT_EXCEEDED;
-            case TIME_LIMIT_EXCEEDED:                   return Verdict.TIME_LIMIT_EXCEEDED;
-            case REAL_TIME_LIMIT_EXCEEDED:              return Verdict.REAL_TIME_LIMIT_EXCEEDED;
-            case TERMINATED_BY_SYSTEM:                  return Verdict.TERMINATED_BY_SYSTEM;
-            case CUSTOM_FAILURE:                        return Verdict.CUSTOM_FAILURE;
-            case FAIL_TEST:                             return Verdict.FAIL_TEST;
-            case FAILED:                                return Verdict.FAILED;
-            case SKIPPED:                               return Verdict.SKIPPED;
-            default: throw new RuntimeException("No matching verdict: " + res);
-        }
+        return SubmissionResult.builder()
+                .built(true)
+                .buildInfo(submission.getBuildResult().getOutput())
+                .verdict(verdict)
+                .testsPassed(testsPassed)
+                .timeUsedMillis(maxTimeUsedMillis)
+                .memoryUsedBytes(maxMemoryUsedBytes)
+                .testGroupResults(testGroups)
+                .build();
     }
 
     private TestGroupResult convertTestGroupResult(SybonTestGroupResult result) {
-        return new TestGroupResult(
-                result.getExecuted(),
-                result.getTestResults().stream()
-                        .map(this::convertTestResult)
-                        .collect(toList())
-        );
+        List<TestResult> results = result.getTestResults().stream()
+                .map(this::convertTestResult)
+                .collect(toList());
+        return new TestGroupResult(result.getExecuted(), results);
     }
 
     private TestResult convertTestResult(SybonTestResult res) {
-        return new TestResult(
-                convertVerdict(res.getStatus()),
-                res.getJudgeMessage(),
-                res.getInput(),
-                res.getActualResult(),
-                res.getExpectedResult(),
-                res.getResourceUsage().getTimeUsageMillis(),
-                res.getResourceUsage().getMemoryUsageBytes()
-        );
+        return TestResult.builder()
+                .verdict(testResultStatusConverter.convert(res.getStatus()))
+                .judgeMessage(res.getJudgeMessage())
+                .input(res.getInput())
+                .output(res.getActualResult())
+                .expected(res.getExpectedResult())
+                .timeUsedMillis(res.getResourceUsage().getTimeUsageMillis())
+                .memoryUsedBytes(res.getResourceUsage().getMemoryUsageBytes())
+                .build();
     }
 }

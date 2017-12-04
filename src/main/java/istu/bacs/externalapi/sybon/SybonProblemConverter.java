@@ -11,16 +11,18 @@ import static istu.bacs.externalapi.ExternalApiHelper.addResource;
 class SybonProblemConverter implements Converter<SybonProblem, Problem> {
     @Override
     public Problem convert(SybonProblem sybonProblem) {
-        return new Problem(
-                addResource(sybonProblem.getId(), SybonApiImpl.API_NAME),
-                new ProblemDetails(
-                        sybonProblem.getName(),
-                        sybonProblem.getStatementUrl(),
-                        sybonProblem.getPretestsCount(),
-                        sybonProblem.getTestsCount(),
-                        sybonProblem.getResourceLimits().getTimeLimitMillis(),
-                        sybonProblem.getResourceLimits().getMemoryLimitBytes()
-                )
-        );
+        ProblemDetails details = new ProblemDetails();
+        details.setProblemName(sybonProblem.getName());
+        details.setStatementUrl(sybonProblem.getStatementUrl());
+        details.setPretestCount(sybonProblem.getPretestsCount());
+        details.setTestCount(sybonProblem.getTestsCount());
+        details.setTimeLimitMillis(sybonProblem.getResourceLimits().getTimeLimitMillis());
+        details.setMemoryLimitBytes(sybonProblem.getResourceLimits().getMemoryLimitBytes());
+
+        Problem problem = new Problem();
+        problem.setProblemId(addResource(sybonProblem.getId(), SybonApi.API_NAME));
+        problem.setDetails(details);
+
+        return problem;
     }
 }
