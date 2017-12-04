@@ -3,56 +3,52 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{contests/contest-layout}">
 
-    <head>
-        <title>Submit solution</title>
-    </head>
+<head>
+    <title>Submit solution</title>
+</head>
 
-    <body>
-        <div layout:fragment="contest-content">
-            <h1>Submit solution</h1>
+<body>
+<div layout:fragment="contest-content">
+    <h1>Submit solution</h1>
 
-            <!--/*@thymesVar id="submission" type="istu.bacs.model.Submission"*/-->
-            <!--/*@thymesVar id="contestId" type="java.lang.String"*/-->
-            <form th:action="@{/contest/__${contestId}__/submit}"
-                  th:object="${submission}"
-                  enctype="multipart/form-data"
-                  method="post">
+    <form th:action="${model.submitSolutionUrl}"
+          enctype="multipart/form-data"
+          method="post"
+          name="submission">
 
-                <table>
-                    <tr>
-                        <td>Choose language:</td>
-                        <td>
-                            <select th:field="*{language}">
-                                <!--/*@thymesVar id="languages" type="istu.bacs.model.Language[]"*/-->
-                                <option th:each="language:${languages}"
-                                        th:value="${language.languageId}"
-                                        th:text="${language.languageName}">Kotlin</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Choose problem:</td>
-                        <td>
-                            <select th:field="*{problem}">
-                                <!--/*@thymesVar id="problems" type="istu.bacs.model.Problem[]"*/-->
-                                <option th:each="problem:${problems}"
-                                        th:value="${problem.problemId}"
-                                        th:text="${problem.details.problemName}">A + B</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: center">Source code:</td>
-                        <td><textarea th:field="*{solution}" rows="30" cols="80">from kotlin import solution</textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Or choose file:</td>
-                        <td><input type="file" name="file"></td>
-                    </tr>
-                    <tr><td><input type="submit" value="Submit"/></td></tr>
-                </table>
-            </form>
-        </div>
-    </body>
+        <table>
+            <tr>
+                <td><label for="language">Choose language:</label></td>
+                <td>
+                    <select id="language" name="language">
+                        <option th:each="language : ${model.languages}"
+                                th:value="${language}"
+                                th:text="${language.languageName}">Kotlin</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="problem.index">Choose problem:</label></td>
+                <td>
+                    <select id="problem.index" name="problem.index">
+                        <option th:each="problem : ${model.problems}"
+                                th:value="${problem.index}"
+                                th:text="${problem.indexedName}">A. A + B</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: center"><label for="solution">Source code:</label></td>
+                <td><textarea id="solution" name="solution" rows="30" cols="80">from kotlin import solution</textarea></td>
+            </tr>
+            <tr>
+                <td><label for="file">Or choose file:</label></td>
+                <td><input id="file" name="file" type="file"></td>
+            </tr>
+            <tr><td><input type="submit" value="Submit"/></td></tr>
+        </table>
+    </form>
+</div>
+</body>
 
 </html>

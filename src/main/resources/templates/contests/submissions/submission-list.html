@@ -3,15 +3,13 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{contests/contest-layout}">
 
-    <!--/*@thymesVar id="contestName" type="java.lang.String"*/-->
-
     <head>
-        <title th:text="${'All submissions for ' + contestName}">All submissions for First of April Contest</title>
+        <title th:text="${'Submissions for ' + model.contestName}">Submissions for First of April Contest</title>
     </head>
 
     <body>
         <div layout:fragment="contest-content">
-            <h1 th:text="${'All submissions for ' + contestName}">All submissions for First of April Contest</h1>
+            <h1 th:text="${'Submissions for ' + model.contestName}">Submissions for First of April Contest</h1>
             <form>
                 <table border="1">
                     <thead>
@@ -23,24 +21,23 @@
                             <th>Language</th>
                             <th>Verdict</th>
                             <th>Test</th>
-                            <th>Time</th>
-                            <th>Memory</th>
+                            <th>Time (ms)</th>
+                            <th>Memory (KB)</th>
                             <th>View code</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!--/*@thymesVar id="submissions" type="istu.bacs.model.Submission[]"*/-->
-                        <tr th:each="submission:${submissions}">
-                            <td th:text="${submission.submissionId}">1</td>
-                            <td th:text="${#temporals.format(submission.creationTime, 'dd.MM.YYYY HH:mm:ss')}">01.04.2017 12:35:40</td>
-                            <td th:text="${submission.author.username}">Musin</td>
-                            <td th:text="${submission.problem.details.problemName}">A + B</td>
+                        <tr th:each="submission : ${model.submissions}">
+                            <td th:text="${submission.id}">1</td>
+                            <td th:text="${submission.created}">01.04.2017 12:35:40</td>
+                            <td th:text="${submission.author}">Musin</td>
+                            <td th:text="${submission.problem.name}">A + B</td>
                             <td th:text="${submission.language.languageName}">Kotlin</td>
-                            <td th:text="${submission.result.verdict}">Accepted</td>
-                            <td th:text="${submission.result.firstFailedTest ?: 'N/A'}">N/A</td>
-                            <td th:text="${#numbers.formatDecimal((submission.result.timeUsedMillis ?: 0), 0, 0) + ' ms'}">300 ms</td>
-                            <td th:text="${#numbers.formatDecimal((submission.result.memoryUsedBytes ?: 0) / 1024, 0, 0) + ' KB'}">35.6 KB</td>
-                            <td><a href="#" th:href="@{/submission/__${submission.submissionId}__}">View code</a></td>
+                            <td th:text="${submission.verdict.verdictName}">Accepted</td>
+                            <td th:text="${submission.firstFailedTest}">12</td>
+                            <td th:text="${submission.usedMillis}">300</td>
+                            <td th:text="${submission.usedKilobytes}">524</td>
+                            <td><a href="#" th:href="${submission.submissionUrl}">View code</a></td>
                         </tr>
                     </tbody>
                 </table>

@@ -5,11 +5,13 @@ import istu.bacs.externalapi.ExternalApiHelper;
 import istu.bacs.model.*;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.SubmissionService;
+import istu.bacs.web.dto.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,83 +41,77 @@ public class ContestController {
     }
 	
 	@RequestMapping("/contests")
-	public String getAllContests(Model model) {
-		model.addAttribute("contests", contestService.findAll());
-		return VIEWS_CONTEST_LIST;
-	}
+	public ModelAndView loadAllContests() {
+        List<Contest> contests = contestService.findAll();
+        return new ModelAndView(VIEWS_CONTEST_LIST, "model", new ContestListDto(contests));
+    }
 	
 	@RequestMapping("/contest/{contestId}")
-	public String getContest(Model model, @PathVariable Integer contestId) {
+	public ModelAndView loadContestProblems(@PathVariable int contestId) {
         Contest contest = contestService.findById(contestId);
-        externalApi.updateProblemDetails(contest.getProblems());
-        model.addAttribute("contest", contest);
-		return VIEWS_CONTEST_PROBLEMS;
+        return new ModelAndView(VIEWS_CONTEST_PROBLEMS, "contest", ContestDto.withProblems(contest));
 	}
 
-    @RequestMapping("/contest/{contestId}/{problemNumber}")
-    public String loadStatement(@PathVariable Integer contestId, @PathVariable Integer problemNumber) {
+    @RequestMapping("/contest/{contestId}/problem/{problemLetter}")
+    public RedirectView loadStatement(@PathVariable int contestId, @PathVariable char problemLetter) {
         Contest contest = contestService.findById(contestId);
-        Problem problem = contest.getProblems().get(problemNumber - 1);
-        return "redirect:" + externalApi.getStatementUrl(problem.getProblemId());
+        Problem problem = contest.getProblems().get(problemLetter - 'A');
+        return new RedirectView(externalApi.getStatementUrl(problem.getProblemId()).toString());
     }
 	
 	@RequestMapping("/contest/{contestId}/submissions")
-	public String getAllSubmissionsForContest(Model model, @PathVariable Integer contestId, @AuthenticationPrincipal User user) {
+	public ModelAndView loadContestSubmissions(@PathVariable int contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
-        externalApi.updateContest(contest);
 
         List<Submission> submissions = contest.getSubmissions();
         submissions.removeIf(s -> s.getAuthor().getUserId() != (int) user.getUserId());
+        externalApi.updateSubmissionResults(submissions);
 
-        model.addAttribute("submissions", submissions);
-		model.addAttribute("contestName", contest.getContestName());
-		return VIEWS_SUBMISSION_LIST;
+        return new ModelAndView(VIEWS_SUBMISSION_LIST, "model", new ContestSubmissionsDto(contest.getContestName(), submissions));
 	}
 	
 	@GetMapping("/contest/{contestId}/submit")
-	public String loadSubmissionForm(Model model, @PathVariable int contestId) {
+	public ModelAndView loadSubmissionForm(@PathVariable int contestId) {
         Contest contest = contestService.findById(contestId);
-
-        Set<Language> allLanguages = EnumSet.noneOf(Language.class);
-        contest.getProblems().forEach(p -> {
-            String resource = ExternalApiHelper.extractResource(p.getProblemId());
-            allLanguages.addAll(externalApi.getSupportedLanguages(resource));
-        });
-
-        model.addAttribute("submission", new Submission());
-        model.addAttribute("languages", allLanguages);
-
         List<Problem> problems = contest.getProblems();
-        externalApi.updateProblemDetails(problems);
-        model.addAttribute("problems", problems);
 
-		return VIEWS_SUBMIT_PAGE;
-	}
+        return new ModelAndView(VIEWS_SUBMIT_PAGE, "model",
+                new SubmissionFormDto(contestId, EnumSet.allOf(Language.class), problems));
+    }
 	
 	@PostMapping("/contest/{contestId}/submit")
-	public String submit(@ModelAttribute Submission submission,
-                         @PathVariable Integer contestId,
+	public RedirectView submit(@ModelAttribute SubmissionDto submission,
+                         @PathVariable int contestId,
                          @RequestParam MultipartFile file,
                          @AuthenticationPrincipal User user) throws IOException {
-		if (!file.getOriginalFilename().isEmpty())
-			submission.setSolution(new String(file.getBytes()));
-		submission.setAuthor(user);
-        submission.setContest(contestService.findById(contestId));
-        submission.setCreationTime(LocalDateTime.now());
-        submissionService.submit(submission, false);
-		return "redirect:/contest/{contestId}/submissions";
+	    //add user checking to controller
+        if (!file.getOriginalFilename().isEmpty()) submission.setSolution(new String(file.getBytes()));
+
+        Contest contest = contestService.findById(contestId);
+
+        Submission sub = new Submission();
+        sub.setAuthor(user);
+        sub.setSolution(submission.getSolution());
+        sub.setContest(contest);
+        sub.setCreationTime(LocalDateTime.now());
+        sub.setLanguage(submission.getLanguage());
+        int problemIndex = submission.getProblem().getIndex();
+        sub.setProblem(contest.getProblems().get(problemIndex));
+
+        submissionService.submit(sub, false);
+        return new RedirectView("/contest/{contestId}/submissions");
 	}
 
     @RequestMapping("/submission/{submissionId}")
-    public String getSubmission(@AuthenticationPrincipal User user, Model model, @PathVariable int submissionId) {
+    public ModelAndView loadSubmission(@AuthenticationPrincipal User user, @PathVariable int submissionId) {
         Submission submission = submissionService.findById(submissionId);
+        //todo: add this to controller
         if (!submission.getAuthor().getUserId().equals(user.getUserId()))
             throw new SecurityException("Not enough rights to see this page");
 
         externalApi.updateSubmissionResults(singletonList(submission));
         externalApi.updateProblemDetails(singletonList(submission.getProblem()));
 
-        model.addAttribute(submission);
-        return VIEWS_SUBMISSION_VIEW;
+        return new ModelAndView(VIEWS_SUBMISSION_VIEW, "submission", new SubmissionDto(submission));
     }
 }

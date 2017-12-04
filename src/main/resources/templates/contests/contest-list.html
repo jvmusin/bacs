@@ -20,16 +20,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--/*@thymesVar id="contests" type="istu.bacs.model.Contest[]"*/-->
-                    <tr th:each="contest : ${contests}">
+                    <tr th:each="contest : ${model.contests}">
                         <td th:text="${contest.contestId}">42</td>
                         <td>
-                            <a href="contest-problems.html" th:href="@{contest/__${contest.contestId}__}" th:text="${contest.contestName}">
+                            <a href="contest-problems.html" th:href="${contest.contestUrl}" th:text="${contest.contestName}">
                                 First of April Contest
                             </a>
                         </td>
-                        <td th:text="${#temporals.format(contest.startTime, 'dd.MM.YYYY HH:mm')}">01.04.2017 12:00</td>
-                        <td th:text="${#temporals.format(contest.finishTime, 'dd.MM.YYYY HH:mm')}">01.04.2017 15:00</td>
+                        <td th:text="${contest.startTime}">01.04.2017 12:00</td>
+                        <td th:text="${contest.finishTime}">01.04.2017 15:00</td>
                     </tr>
                 </tbody>
             </table>
