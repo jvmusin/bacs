@@ -1,5 +1,6 @@
 package istu.bacs.service.impl;
 
+import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.model.Contest;
 import istu.bacs.repository.ContestRepository;
 import istu.bacs.service.ContestService;
@@ -11,19 +12,28 @@ import java.util.List;
 public class ContestServiceImpl implements ContestService {
 	
 	private final ContestRepository contestRepository;
+	private final ExternalApiAggregator externalApi;
 
-    public ContestServiceImpl(ContestRepository contestRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, ExternalApiAggregator externalApi) {
 		this.contestRepository = contestRepository;
+        this.externalApi = externalApi;
     }
 
 	@Override
-	public Contest findById(Integer id) {
-        return contestRepository.findById(id).orElse(null);
+	public Contest findById(int id) {
+        return contestRepository.findById(id)
+                .map(contest -> {
+                    externalApi.updateProblemDetails(contest.getProblems());
+                    return contest;
+                })
+                .orElse(null);
     }
 	
 	@Override
 	public List<Contest> findAll() {
-        return contestRepository.findAll();
+        List<Contest> contests = contestRepository.findAll();
+        contests.forEach(c -> externalApi.updateProblemDetails(c.getProblems()));
+        return contests;
     }
 
     @Override

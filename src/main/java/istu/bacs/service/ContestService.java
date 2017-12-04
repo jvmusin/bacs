@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ContestService {
 	
-	Contest findById(Integer id);
+	Contest findById(int id);
 	List<Contest> findAll();
 	void save(Contest contest);
     void delete(Contest contest);
