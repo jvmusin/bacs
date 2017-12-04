@@ -4,22 +4,22 @@ import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Data
 public class SubmissionFormDto {
+    private int contestId;
     private Set<Language> languages;
     private List<ProblemDto> problems;
-    private String submitSolutionUrl;
 
     public SubmissionFormDto(int contestId, Set<Language> languages, List<Problem> problems) {
+        this.contestId = contestId;
         this.languages = languages;
+        this.problems = ProblemDto.convert(problems, contestId);
+    }
 
-        this.problems = new ArrayList<>(problems.size());
-        for (int i = 0; i < problems.size(); i++)
-            this.problems.add(new ProblemDto(contestId, i, problems.get(i)));
-        submitSolutionUrl = "/contest/" + contestId + "/submit";
+    public String getSubmitSolutionUrl() {
+        return "/contest/" + contestId + "/submit";
     }
 }

@@ -1,11 +1,9 @@
 package istu.bacs.web.dto;
 
 import istu.bacs.model.Contest;
-import istu.bacs.model.Problem;
 import lombok.Data;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -38,12 +36,7 @@ public class ContestDto {
 
     public static ContestDto withProblems(Contest contest) {
         ContestDto dto = new ContestDto(contest);
-
-        List<Problem> contestProblems = contest.getProblems();
-        dto.problems = new ArrayList<>(contestProblems.size());
-        for (int i = 0; i < contestProblems.size(); i++)
-            dto.problems.add(new ProblemDto(contest.getContestId(), i, contestProblems.get(i)));
-
+        dto.problems = ProblemDto.convert(contest.getProblems(), contest.getContestId());
         return dto;
     }
 }

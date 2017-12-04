@@ -5,6 +5,9 @@ import istu.bacs.model.ProblemDetails;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data @NoArgsConstructor
 public class ProblemDto {
 
@@ -34,5 +37,12 @@ public class ProblemDto {
 
     public String getStatementUrl() {
         return String.format(STATEMENT_URL_FORMAT, contestId, index + 'A');
+    }
+
+    public static List<ProblemDto> convert(List<Problem> problems, int contestId) {
+        List<ProblemDto> result = new ArrayList<>(problems.size());
+        for (int i = 0; i < result.size(); i++)
+            result.add(new ProblemDto(contestId, i, problems.get(i)));
+        return result;
     }
 }
