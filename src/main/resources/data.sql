@@ -12,8 +12,10 @@ INSERT INTO problem(problem_id) VALUES ('SYBON@20005');
 INSERT INTO problem(problem_id) VALUES ('SYBON@20006');
 INSERT INTO problem(problem_id) VALUES ('SYBON@20008');
 
-INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (1, 'Main contest', '2017-01-02', '2018-03-04');
-INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (2, 'Main2 contest', '2017-01-02', '2018-03-04');
+INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (1, 'Running contest', '2017-01-02', '2018-03-04');
+INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (2, 'Previous contest', '2017-01-02', '2017-02-02');
+INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (3, 'Future contest', '2018-01-01', '2018-02-02');
+INSERT INTO contest(contest_id, contest_name, start_time, finish_time) VALUES (4, 'Running empty contest', '2017-01-02', '2018-03-04');
 
 INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@1', 0);
 INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@2', 1);
@@ -26,3 +28,4 @@ INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, '
 INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (1, 'SYBON@20008', 8);
 
 INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (2, 'SYBON@20005', 0);
+INSERT INTO contest_problems(contest_id, problem_id, problem_index) VALUES (3, 'SYBON@20005', 0);
