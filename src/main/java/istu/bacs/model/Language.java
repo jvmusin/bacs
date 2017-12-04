@@ -3,7 +3,8 @@ package istu.bacs.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 public enum Language {
 
     C       (0, "C"),
@@ -16,11 +17,6 @@ public enum Language {
 
     private final Integer languageId;
     private final String languageName;
-
-    @Override
-    public String toString() {
-        return languageName;
-    }
 
     public static Language findById(int id) {
         for (Language lang : values())
