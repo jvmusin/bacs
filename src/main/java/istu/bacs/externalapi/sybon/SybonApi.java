@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Service
-class SybonApiImpl implements ExternalApi {
+class SybonApi implements ExternalApi {
 
     public static final String API_NAME = "SYBON";
 
@@ -32,7 +32,7 @@ class SybonApiImpl implements ExternalApi {
     private final SybonLanguageConverter languageConverter;
     private final RestTemplate restTemplate;
 
-    public SybonApiImpl(SybonConfigurationProperties config, SybonProblemConverter problemConverter, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, RestTemplateBuilder restTemplateBuilder) {
+    public SybonApi(SybonConfigurationProperties config, SybonProblemConverter problemConverter, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, RestTemplateBuilder restTemplateBuilder) {
         this.config = config;
         this.problemConverter = problemConverter;
         this.submitResultConverter = submitResultConverter;
