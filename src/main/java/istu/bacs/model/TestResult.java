@@ -1,10 +1,10 @@
 package istu.bacs.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class TestResult {
     private Verdict verdict;
     private String judgeMessage;

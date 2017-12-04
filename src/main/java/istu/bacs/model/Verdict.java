@@ -1,5 +1,10 @@
 package istu.bacs.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum Verdict {
     OK("OK"),
     WRONG_ANSWER("Wrong Answer"),
@@ -25,14 +30,5 @@ public enum Verdict {
 
     SERVER_ERROR("Server Error");
 
-    public final String value;
-
-    Verdict(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
+    private final String verdictName;
 }
