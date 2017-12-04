@@ -15,19 +15,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final UserService userService;
-	
+
 	public SecurityConfig(UserService userService) {
 		this.userService = userService;
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.formLogin().loginPage("/login")
 				.and()
 				.authorizeRequests().antMatchers("/", "/login", "/register").permitAll()
-				.and()
-				.authorizeRequests().anyRequest().hasAuthority("ROLE_USER");
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
 	}
 	
 	@Override
