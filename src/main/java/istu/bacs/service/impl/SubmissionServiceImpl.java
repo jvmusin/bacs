@@ -6,6 +6,8 @@ import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.SubmissionService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
@@ -26,5 +28,10 @@ public class SubmissionServiceImpl implements SubmissionService {
     public void submit(Submission submission, boolean pretestsOnly) {
 	    externalApi.submit(pretestsOnly, submission);
         submissionRepository.save(submission);
+    }
+
+    @Override
+    public void updateSubmissions(List<Submission> submissions) {
+        externalApi.updateSubmissions(submissions);
     }
 }

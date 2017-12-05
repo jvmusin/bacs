@@ -1,6 +1,5 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.model.Contest;
 import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
@@ -14,9 +13,8 @@ public interface ExternalApiAggregator {
     URI getStatementUrl(String problemId);
     void submit(boolean pretestsOnly, Submission submission);
     void submit(boolean pretestsOnly, List<Submission> submissions);
-    void updateSubmissionResults(List<Submission> submissions);
-    void updateProblemDetails(List<Problem> problems);
-    void updateContest(Contest contest);
+    void updateSubmissions(List<Submission> submissions);
+    void updateProblems(List<Problem> problems);
 
     Set<Language> getSupportedLanguages(String resourceName);
 }

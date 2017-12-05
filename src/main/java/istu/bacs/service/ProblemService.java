@@ -2,6 +2,7 @@ package istu.bacs.service;
 
 import istu.bacs.model.Problem;
 
+import java.net.URI;
 import java.util.List;
 
 public interface ProblemService {
@@ -9,4 +10,5 @@ public interface ProblemService {
 	List<Problem> findAll();
 	void save(Problem problem);
 	void saveAll(Iterable<Problem> problems);
+    URI getStatementUrl(String problemId);
 }

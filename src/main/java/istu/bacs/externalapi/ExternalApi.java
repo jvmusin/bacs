@@ -13,7 +13,7 @@ public interface ExternalApi {
     URI getStatementUrl(String problemId);
     void submit(boolean pretestsOnly, Submission submission);
     void submit(boolean pretestsOnly, List<Submission> submissions);
-    void updateSubmissionResults(List<Submission> submissions);
+    void updateSubmissions(List<Submission> submissions);
     void updateProblemDetails(List<Problem> problems);
 
     Set<Language> getSupportedLanguages();

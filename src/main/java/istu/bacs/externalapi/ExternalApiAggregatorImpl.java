@@ -1,6 +1,5 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.model.Contest;
 import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
@@ -13,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
+import static java.util.stream.Collectors.toList;
 
 @Service
 class ExternalApiAggregatorImpl implements ExternalApiAggregator {
@@ -47,25 +47,20 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void updateSubmissionResults(List<Submission> submissions) {
+    public void updateSubmissions(List<Submission> submissions) {
+        List<Problem> problems = submissions.stream().map(Submission::getProblem).distinct().collect(toList());
+        updateProblems(problems);
+
         Map<String, List<Submission>> byResource = submissions.stream()
-                .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()),
-                        Collectors.toList()));
-        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissionResults(subs));
+                .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
+        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissions(subs));
     }
 
     @Override
-    public void updateProblemDetails(List<Problem> problems) {
+    public void updateProblems(List<Problem> problems) {
         Map<String, List<Problem>> byResource = problems.stream()
-                .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()),
-                        Collectors.toList()));
-        byResource.forEach((resource, problems1) -> findApi(resource).updateProblemDetails(problems1));
-    }
-
-    @Override
-    public void updateContest(Contest contest) {
-        updateProblemDetails(contest.getProblems());
-        updateSubmissionResults(contest.getSubmissions());
+                .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()), toList()));
+        byResource.forEach((resource, prob) -> findApi(resource).updateProblemDetails(prob));
     }
 
     @Override

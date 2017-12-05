@@ -25,6 +25,6 @@ public class ProblemPreFetcher {
                 .flatMap(c -> c.getProblems().stream())
                 .distinct()
                 .collect(Collectors.toList());
-        externalApi.updateProblemDetails(problems);
+        externalApi.updateProblems(problems);
     }
 }

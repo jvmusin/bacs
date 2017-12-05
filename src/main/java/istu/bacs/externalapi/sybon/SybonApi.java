@@ -97,7 +97,7 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void updateSubmissionResults(List<Submission> submissions) {
+    public void updateSubmissions(List<Submission> submissions) {
         String ids = submissions.stream()
                 .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
                 .collect(joining(","));

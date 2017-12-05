@@ -1,9 +1,8 @@
 package istu.bacs.web;
 
-import istu.bacs.externalapi.ExternalApiAggregator;
-import istu.bacs.externalapi.ExternalApiHelper;
 import istu.bacs.model.*;
 import istu.bacs.service.ContestService;
+import istu.bacs.service.ProblemService;
 import istu.bacs.service.SubmissionService;
 import istu.bacs.web.dto.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,10 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Collections.singletonList;
 
@@ -32,12 +31,12 @@ public class ContestController {
 
 	private final ContestService contestService;
 	private final SubmissionService submissionService;
-	private final ExternalApiAggregator externalApi;
-	
-	public ContestController(ContestService contestService, SubmissionService submissionService, ExternalApiAggregator externalApi) {
+	private final ProblemService problemService;
+
+    public ContestController(ContestService contestService, SubmissionService submissionService, ProblemService problemService) {
 		this.contestService = contestService;
 		this.submissionService = submissionService;
-        this.externalApi = externalApi;
+        this.problemService = problemService;
     }
 	
 	@RequestMapping("/contests")
@@ -56,7 +55,8 @@ public class ContestController {
     public RedirectView loadStatement(@PathVariable int contestId, @PathVariable char problemLetter) {
         Contest contest = contestService.findById(contestId);
         Problem problem = contest.getProblems().get(problemLetter - 'A');
-        return new RedirectView(externalApi.getStatementUrl(problem.getProblemId()).toString());
+        URI url = problemService.getStatementUrl(problem.getProblemId());
+        return new RedirectView(url.toString());
     }
 	
 	@RequestMapping("/contest/{contestId}/submissions")
@@ -65,9 +65,10 @@ public class ContestController {
 
         List<Submission> submissions = contest.getSubmissions();
         submissions.removeIf(s -> s.getAuthor().getUserId() != (int) user.getUserId());
-        externalApi.updateSubmissionResults(submissions);
+        submissionService.updateSubmissions(submissions);
 
-        return new ModelAndView(VIEWS_SUBMISSION_LIST, "model", new ContestSubmissionsDto(contest.getContestName(), submissions));
+        return new ModelAndView(VIEWS_SUBMISSION_LIST, "model",
+                new ContestSubmissionsDto(contest.getContestName(), submissions));
 	}
 	
 	@GetMapping("/contest/{contestId}/submit")
@@ -109,9 +110,7 @@ public class ContestController {
         if (!submission.getAuthor().getUserId().equals(user.getUserId()))
             throw new SecurityException("Not enough rights to see this page");
 
-        externalApi.updateSubmissionResults(singletonList(submission));
-        externalApi.updateProblemDetails(singletonList(submission.getProblem()));
-
+        submissionService.updateSubmissions(singletonList(submission));
         return new ModelAndView(VIEWS_SUBMISSION_VIEW, "submission", new SubmissionDto(submission));
     }
 }

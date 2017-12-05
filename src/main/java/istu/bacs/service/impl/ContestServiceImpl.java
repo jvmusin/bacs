@@ -23,7 +23,7 @@ public class ContestServiceImpl implements ContestService {
 	public Contest findById(int id) {
         return contestRepository.findById(id)
                 .map(contest -> {
-                    externalApi.updateProblemDetails(contest.getProblems());
+                    externalApi.updateProblems(contest.getProblems());
                     return contest;
                 })
                 .orElse(null);
@@ -32,7 +32,7 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public List<Contest> findAll() {
         List<Contest> contests = contestRepository.findAll();
-        contests.forEach(c -> externalApi.updateProblemDetails(c.getProblems()));
+        contests.forEach(c -> externalApi.updateProblems(c.getProblems()));
         return contests;
     }
 
