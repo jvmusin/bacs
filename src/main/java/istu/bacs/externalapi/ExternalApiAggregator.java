@@ -12,7 +12,7 @@ public interface ExternalApiAggregator {
     Problem getProblem(String problemId);
     URI getStatementUrl(String problemId);
     void submit(boolean pretestsOnly, Submission submission);
-    void submit(boolean pretestsOnly, List<Submission> submissions);
+    void submitAll(List<Submission> submissions, boolean pretestsOnly);
     void updateSubmissions(List<Submission> submissions);
     void updateProblems(List<Problem> problems);
 

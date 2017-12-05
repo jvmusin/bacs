@@ -20,7 +20,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 	
 	@Override
-	public Submission findById(Integer id) {
+	public Submission findById(int id) {
 		return submissionRepository.findById(id).orElse(null);
 	}
 
@@ -28,6 +28,11 @@ public class SubmissionServiceImpl implements SubmissionService {
     public void submit(Submission submission, boolean pretestsOnly) {
 	    externalApi.submit(pretestsOnly, submission);
         submissionRepository.save(submission);
+    }
+
+    @Override
+    public void submitAll(List<Submission> submissions, boolean pretestsOnly) {
+        externalApi.submitAll(submissions, pretestsOnly);
     }
 
     @Override

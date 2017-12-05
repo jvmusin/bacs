@@ -36,7 +36,7 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
     @Override
-    public void saveAll(Iterable<Problem> problems) {
+    public void saveAll(List<Problem> problems) {
         problemRepository.saveAll(problems);
     }
 

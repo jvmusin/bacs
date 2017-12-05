@@ -9,6 +9,6 @@ public interface ProblemService {
 	Problem findById(String problemId);
 	List<Problem> findAll();
 	void save(Problem problem);
-	void saveAll(Iterable<Problem> problems);
+	void saveAll(List<Problem> problems);
     URI getStatementUrl(String problemId);
 }
