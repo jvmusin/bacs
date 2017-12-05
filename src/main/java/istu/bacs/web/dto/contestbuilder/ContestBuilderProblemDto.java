@@ -1,6 +1,7 @@
 package istu.bacs.web.dto.contestbuilder;
 
 import istu.bacs.model.Problem;
+import istu.bacs.model.ProblemDetails;
 import lombok.Data;
 
 @Data
@@ -10,8 +11,9 @@ public class ContestBuilderProblemDto {
     private String statementUrl;
 
     public ContestBuilderProblemDto(Problem problem) {
+        ProblemDetails details = problem.getDetails();
         id = problem.getProblemId();
-        name = problem.getDetails().getProblemName();
-        statementUrl = problem.getDetails().getStatementUrl();
+        name = details.getProblemName();
+        statementUrl = details.getStatementUrl();
     }
 }

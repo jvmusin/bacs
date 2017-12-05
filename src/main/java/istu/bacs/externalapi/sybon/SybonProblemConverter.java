@@ -1,5 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
+import istu.bacs.externalapi.NumberHeadComparator;
 import istu.bacs.model.Problem;
 import istu.bacs.model.ProblemDetails;
 import org.springframework.core.convert.converter.Converter;
@@ -21,6 +22,7 @@ class SybonProblemConverter implements Converter<SybonProblem, Problem> {
 
         Problem problem = new Problem();
         problem.setProblemId(addResource(sybonProblem.getId(), SybonApi.API_NAME));
+        problem.setComparator(NumberHeadComparator.getInstance());
         problem.setDetails(details);
 
         return problem;

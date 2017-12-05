@@ -23,6 +23,7 @@ public class ProblemPreFetcher {
     public void fetchProblems() {
         List<Problem> problems = contestService.findAll().stream()
                 .flatMap(c -> c.getProblems().stream())
+                .filter(p -> p.getDetails() == null)
                 .distinct()
                 .collect(Collectors.toList());
         externalApi.updateProblems(problems);

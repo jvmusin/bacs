@@ -17,8 +17,8 @@ public class ProblemDto {
     private int contestId;
     private int index;
     private String name;
-    private int timeLimitSeconds;
-    private int memoryLimitMegabytes;
+    private Integer timeLimitSeconds;
+    private Integer memoryLimitMegabytes;
     private String statementUrl;
 
     public ProblemDto(int contestId, int index, Problem problem) {
@@ -27,8 +27,9 @@ public class ProblemDto {
 
         ProblemDetails details = problem.getDetails();
         this.name = problem.getDetails().getProblemName();
-        this.timeLimitSeconds = details.getTimeLimitMillis() / 1000;
-        this.memoryLimitMegabytes = details.getMemoryLimitBytes() / 1024 / 1024;
+
+        if (details.getTimeLimitMillis() != null) this.timeLimitSeconds = details.getTimeLimitMillis() / 1000;
+        if (details.getMemoryLimitBytes() != null) this.memoryLimitMegabytes = details.getMemoryLimitBytes() / 1024 / 1024;
     }
 
     public String getIndexedName() {

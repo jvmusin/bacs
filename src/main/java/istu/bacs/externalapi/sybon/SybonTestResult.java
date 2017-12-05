@@ -10,4 +10,12 @@ class SybonTestResult {
     private String input;
     private String actualResult;
     private String expectedResult;
+
+    public Integer getMillis() {
+        return resourceUsage == null ? null : resourceUsage.getTimeUsageMillis();
+    }
+
+    public Integer getBytes() {
+        return resourceUsage == null ? null : resourceUsage.getMemoryUsageBytes();
+    }
 }

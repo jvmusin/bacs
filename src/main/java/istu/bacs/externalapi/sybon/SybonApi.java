@@ -1,6 +1,7 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.externalapi.ExternalApi;
+import istu.bacs.externalapi.NumberHeadComparator;
 import istu.bacs.model.Language;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,16 +27,16 @@ class SybonApi implements ExternalApi {
     public static final String API_NAME = "SYBON";
 
     private final SybonConfigurationProperties config;
-    private final SybonProblemConverter problemConverter;
     private final SybonSubmitResultConverter submitResultConverter;
     private final SybonLanguageConverter languageConverter;
+    private final SybonProblemConverter problemConverter;
     private final RestTemplate restTemplate;
 
-    public SybonApi(SybonConfigurationProperties config, SybonProblemConverter problemConverter, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, RestTemplateBuilder restTemplateBuilder) {
+    public SybonApi(SybonConfigurationProperties config, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, SybonProblemConverter problemConverter, RestTemplateBuilder restTemplateBuilder) {
         this.config = config;
-        this.problemConverter = problemConverter;
         this.submitResultConverter = submitResultConverter;
         this.languageConverter = languageConverter;
+        this.problemConverter = problemConverter;
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -45,12 +45,13 @@ class SybonApi implements ExternalApi {
     public Problem getProblem(String problemId) {
         return cache.computeIfAbsent(problemId, key -> {
             int id = getSybonId(problemId);
-            URI uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", id));
+            String uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", id));
             SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
             Problem problem = problemConverter.convert(sybonProblem);
 
-            String statementUrl = problem.getDetails().getStatementUrl();
-            problem.getDetails().setStatementUrl(buildUrl(statementUrl, emptyMap()).toString());
+            String statementUrl = buildUrl(sybonProblem.getStatementUrl(), emptyMap()); //with api_key
+            problem.getDetails().setStatementUrl(statementUrl);
+
             return problem;
         });
     }
@@ -58,7 +59,7 @@ class SybonApi implements ExternalApi {
     @Override
     public void submit(boolean pretestsOnly, Submission submission) {
         SybonSubmit submit = createSubmit(pretestsOnly, submission);
-        submission.setExternalSubmissionId(toResourceName(submit(submit)));
+        submission.setExternalSubmissionId(withResourceName(submit(submit)));
     }
 
     //todo: UNTESTED
@@ -69,7 +70,7 @@ class SybonApi implements ExternalApi {
                 .collect(toList());
         int[] ids = submit(submits);
         for (int i = 0; i < submissions.size(); i++)
-            submissions.get(i).setExternalSubmissionId(toResourceName(ids[i]));
+            submissions.get(i).setExternalSubmissionId(withResourceName(ids[i]));
     }
 
     private SybonSubmit createSubmit(boolean pretestsOnly, Submission submission) {
@@ -85,12 +86,12 @@ class SybonApi implements ExternalApi {
     }
 
     private int submit(SybonSubmit submit) {
-        URI url = buildUrl(config.getSubmitsUrl() + "/send", emptyMap());
+        String url = buildUrl(config.getSubmitsUrl() + "/send", emptyMap());
         return restTemplate.postForObject(url, submit, int.class);
     }
 
     private int[] submit(List<SybonSubmit> submits) {
-        URI url = buildUrl(config.getSubmitsUrl() + "/sendall", emptyMap());
+        String url = buildUrl(config.getSubmitsUrl() + "/sendall", emptyMap());
         return restTemplate.postForObject(url, submits, int[].class);
     }
 
@@ -100,7 +101,7 @@ class SybonApi implements ExternalApi {
                 .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
                 .collect(joining(","));
 
-        URI url = buildUrl(config.getSubmitsUrl() + "/results", emptyMap(), singletonMap("ids", ids));
+        String url = buildUrl(config.getSubmitsUrl() + "/results", emptyMap(), singletonMap("ids", ids));
 
         SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
         for (int i = 0; i < submissions.size(); i++) {
@@ -110,10 +111,10 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void updateProblemDetails(List<Problem> problems) {
+    public void updateProblems(List<Problem> problems) {
         problems.forEach(p -> {
-            Problem problem = getProblem(p.getProblemId());
-            p.setDetails(problem.getDetails());
+            p.setDetails(getProblem(p.getProblemId()).getDetails());
+            p.setComparator(NumberHeadComparator.getInstance());
         });
     }
 
@@ -126,28 +127,28 @@ class SybonApi implements ExternalApi {
         Map<String, Integer> queryParams = new HashMap<>();
         queryParams.put("Offset", offset);
         queryParams.put("Limit", limit);
-        URI uri = buildUrl(config.getCollectionsUrl(), emptyMap(), queryParams);
+        String uri = buildUrl(config.getCollectionsUrl(), emptyMap(), queryParams);
         return restTemplate.getForObject(uri, SybonProblemCollection[].class);
     }
     public SybonProblemCollection getProblemCollection(int id) {
-        URI uri = buildUrl(config.getCollectionsUrl() + "/{id}", singletonMap("id", id));
+        String uri = buildUrl(config.getCollectionsUrl() + "/{id}", singletonMap("id", id));
         return restTemplate.getForObject(uri, SybonProblemCollection.class);
     }
     public SybonCompiler[] getCompilers() {
-        URI uri = buildUrl(config.getCompilersUrl(), emptyMap());
+        String uri = buildUrl(config.getCompilersUrl(), emptyMap());
         return restTemplate.getForObject(uri, SybonCompiler[].class);
     }
 
-    private URI buildUrl(String url, Map<String, ?> urlParams, Map<String, ?> queryParams) {
+    private String buildUrl(String url, Map<String, ?> urlParams, Map<String, ?> queryParams) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 
         queryParams.forEach(builder::queryParam);
         builder.queryParam("api_key", config.getApiKey());
 
-        return builder.buildAndExpand(urlParams).toUri();
+        return builder.buildAndExpand(urlParams).toString();
     }
 
-    private URI buildUrl(String url, Map<String, ?> urlParams) {
+    private String buildUrl(String url, Map<String, ?> urlParams) {
         return buildUrl(url, urlParams, emptyMap());
     }
 
@@ -156,7 +157,7 @@ class SybonApi implements ExternalApi {
         return API_NAME;
     }
 
-    private String toResourceName(Object o) {
+    private String withResourceName(Object o) {
         return addResource(o, getResourceName());
     }
 

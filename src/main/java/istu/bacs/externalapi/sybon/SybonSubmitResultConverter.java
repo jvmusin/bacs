@@ -81,8 +81,8 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
                 .input(res.getInput())
                 .output(res.getActualResult())
                 .expected(res.getExpectedResult())
-                .timeUsedMillis(res.getResourceUsage().getTimeUsageMillis())
-                .memoryUsedBytes(res.getResourceUsage().getMemoryUsageBytes())
+                .timeUsedMillis(res.getMillis())
+                .memoryUsedBytes(res.getBytes())
                 .build();
     }
 }

@@ -13,7 +13,7 @@ public interface ExternalApi {
     void submit(boolean pretestsOnly, Submission submission);
     void submit(boolean pretestsOnly, List<Submission> submissions);
     void updateSubmissions(List<Submission> submissions);
-    void updateProblemDetails(List<Problem> problems);
+    void updateProblems(List<Problem> problems);
 
     Set<Language> getSupportedLanguages();
 

@@ -12,7 +12,10 @@ public class ContestBuilderDto {
     private List<ContestBuilderProblemDto> problems;
 
     public ContestBuilderDto(List<Problem> problems) {
-        this.problems = problems.stream().map(ContestBuilderProblemDto::new).collect(toList());
+        this.problems = problems.stream()
+                .sorted()
+                .map(ContestBuilderProblemDto::new)
+                .collect(toList());
     }
 
     public String getBuildContestUrl() {
