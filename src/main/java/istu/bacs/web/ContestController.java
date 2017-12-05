@@ -17,8 +17,10 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class ContestController {
@@ -63,8 +65,9 @@ public class ContestController {
 	public ModelAndView loadContestSubmissions(@PathVariable int contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
 
-        List<Submission> submissions = contest.getSubmissions();
-        submissions.removeIf(s -> s.getAuthor().getUserId() != (int) user.getUserId());
+        List<Submission> submissions = contest.getSubmissions().stream()
+                .filter(s -> s.getAuthor().getUserId() == (int) user.getUserId())
+                .collect(toList());
         submissionService.updateSubmissions(submissions);
 
         return new ModelAndView(VIEWS_SUBMISSION_LIST, "model",
@@ -74,10 +77,9 @@ public class ContestController {
 	@GetMapping("/contest/{contestId}/submit")
 	public ModelAndView loadSubmissionForm(@PathVariable int contestId) {
         Contest contest = contestService.findById(contestId);
-        List<Problem> problems = contest.getProblems();
 
         return new ModelAndView(VIEWS_SUBMIT_PAGE, "model",
-                new SubmissionFormDto(contestId, EnumSet.allOf(Language.class), problems));
+                new SubmissionFormDto(contestId, EnumSet.allOf(Language.class), contest.getProblems()));
     }
 	
 	@PostMapping("/contest/{contestId}/submit")
@@ -85,7 +87,7 @@ public class ContestController {
                          @PathVariable int contestId,
                          @RequestParam MultipartFile file,
                          @AuthenticationPrincipal User user) throws IOException {
-	    //add user checking to controller
+	    //todo: add user checking to controller
         if (!file.getOriginalFilename().isEmpty()) submission.setSolution(new String(file.getBytes()));
 
         Contest contest = contestService.findById(contestId);
