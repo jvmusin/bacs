@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       layout:decorate="~{main-layout}">
 
     <head>
@@ -8,8 +9,11 @@
     </head>
 
     <body>
-        <form layout:fragment="content">
+        <div layout:fragment="content">
             <h1>Contest list</h1>
+
+            <a href="#" sec:authorize="hasRole('ROLE_ADMIN')" th:href="${model.contestBuilderUrl}">Create new contest</a>
+
             <table border="1">
                 <thead>
                     <tr>
@@ -27,12 +31,12 @@
                                 First of April Contest
                             </a>
                         </td>
-                        <td th:text="${contest.startTime}">01.04.2017 12:00</td>
-                        <td th:text="${contest.finishTime}">01.04.2017 15:00</td>
+                        <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.startTime)}">01.04.2017 12:00</td>
+                        <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.finishTime)}">01.04.2017 15:00</td>
                     </tr>
                 </tbody>
             </table>
-        </form>
+        </div>
     </body>
 
 </html>
