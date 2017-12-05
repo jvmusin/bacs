@@ -1,14 +1,12 @@
 package istu.bacs.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 @Data
@@ -23,7 +21,7 @@ public class Contest {
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 
-	@ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
+	@ManyToMany(fetch = EAGER)
 	@OrderColumn(name = "problem_index")
 	@JoinTable(name = "contest_problems",
 			joinColumns = @JoinColumn(name = "contest_id"),
