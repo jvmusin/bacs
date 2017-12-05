@@ -10,7 +10,6 @@ import java.util.Set;
 
 public interface ExternalApi {
     Problem getProblem(String problemId);
-    URI getStatementUrl(String problemId);
     void submit(boolean pretestsOnly, Submission submission);
     void submit(boolean pretestsOnly, List<Submission> submissions);
     void updateSubmissions(List<Submission> submissions);

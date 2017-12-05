@@ -5,7 +5,6 @@ import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,11 +25,6 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     @Override
     public Problem getProblem(String problemId) {
         return findApi(extractResource(problemId)).getProblem(problemId);
-    }
-
-    @Override
-    public URI getStatementUrl(String problemId) {
-        return findApi(extractResource(problemId)).getStatementUrl(problemId);
     }
 
     @Override
