@@ -5,6 +5,8 @@ import istu.bacs.service.ContestService;
 import istu.bacs.service.ProblemService;
 import istu.bacs.service.SubmissionService;
 import istu.bacs.web.dto.*;
+import istu.bacs.web.dto.contestbuilder.ContestBuilderDto;
+import istu.bacs.web.dto.contestbuilder.NewContestDto;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -41,27 +41,27 @@ public class ContestController {
         this.problemService = problemService;
     }
 	
-	@RequestMapping("/contests")
+	@GetMapping("/contests")
 	public ModelAndView loadAllContests() {
         List<Contest> contests = contestService.findAll();
         return new ModelAndView(VIEWS_CONTEST_LIST, "model", new ContestListDto(contests));
     }
 	
-	@RequestMapping("/contest/{contestId}")
+	@GetMapping("/contest/{contestId}")
 	public ModelAndView loadContestProblems(@PathVariable int contestId) {
         Contest contest = contestService.findById(contestId);
         return new ModelAndView(VIEWS_CONTEST_PROBLEMS, "contest", ContestDto.withProblems(contest));
 	}
 
-    @RequestMapping("/contest/{contestId}/problem/{problemLetter}")
+    @GetMapping("/contest/{contestId}/problem/{problemLetter}")
     public RedirectView loadStatement(@PathVariable int contestId, @PathVariable char problemLetter) {
         Contest contest = contestService.findById(contestId);
         Problem problem = contest.getProblems().get(problemLetter - 'A');
-        URI url = problemService.getStatementUrl(problem.getProblemId());
-        return new RedirectView(url.toString());
+        String statementUrl = problem.getDetails().getStatementUrl();
+        return new RedirectView(statementUrl);
     }
 	
-	@RequestMapping("/contest/{contestId}/submissions")
+	@GetMapping("/contest/{contestId}/submissions")
 	public ModelAndView loadContestSubmissions(@PathVariable int contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
 
@@ -105,7 +105,7 @@ public class ContestController {
         return new RedirectView("/contest/{contestId}/submissions");
 	}
 
-    @RequestMapping("/submission/{submissionId}")
+    @GetMapping("/submission/{submissionId}")
     public ModelAndView loadSubmission(@AuthenticationPrincipal User user, @PathVariable int submissionId) {
         Submission submission = submissionService.findById(submissionId);
         //todo: add this to controller
@@ -114,5 +114,25 @@ public class ContestController {
 
         submissionService.updateSubmissions(singletonList(submission));
         return new ModelAndView(VIEWS_SUBMISSION_VIEW, "submission", new SubmissionDto(submission));
+    }
+
+    @GetMapping("/contests/builder")
+    public ModelAndView loadContestBuilder() {
+        return new ModelAndView("contests/contest-builder", "model", new ContestBuilderDto(problemService.findAll()));
+    }
+
+    @PostMapping("/contests/build")
+    public RedirectView buildContest(@ModelAttribute NewContestDto contest) {
+        Contest cont = new Contest();
+
+        cont.setContestName(contest.getName());
+        cont.setStartTime(contest.getStartTime());
+        cont.setFinishTime(contest.getFinishTime());
+
+        List<Problem> problems = contest.getProblemIds().stream().map(problemService::findById).collect(toList());
+        cont.setProblems(problems);
+
+        contestService.save(cont);
+        return new RedirectView("/contests");
     }
 }
