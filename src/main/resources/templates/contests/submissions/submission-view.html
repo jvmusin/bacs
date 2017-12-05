@@ -27,7 +27,8 @@
                         <td th:text="${submission.id}">3</td>
                         <td th:text="${submission.created}">23.04.2015 12:35:40</td>
                         <td th:text="${submission.author}">Rustam</td>
-                        <td th:text="${submission.problem.name}">Y. Sum of two</td>
+                        <td><a href="#" th:href="${submission.problem.statementUrl}"
+                               th:text="${submission.problem.indexedName}">A + B</a></td>
                         <td th:text="${submission.language.languageName}">Kotlin</td>
                         <td th:text="${submission.verdict.verdictName}">Wrong Answer</td>
                         <td th:text="${submission.firstFailedTest}">12</td>
