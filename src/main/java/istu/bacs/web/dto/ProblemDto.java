@@ -40,8 +40,9 @@ public class ProblemDto {
     }
 
     public static List<ProblemDto> convert(List<Problem> problems, int contestId) {
-        List<ProblemDto> result = new ArrayList<>(problems.size());
-        for (int i = 0; i < result.size(); i++)
+        int problemCount = problems.size();
+        List<ProblemDto> result = new ArrayList<>(problemCount);
+        for (int i = 0; i < problemCount; i++)
             result.add(new ProblemDto(contestId, i, problems.get(i)));
         return result;
     }
