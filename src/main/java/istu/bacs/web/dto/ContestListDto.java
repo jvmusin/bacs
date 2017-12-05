@@ -16,4 +16,8 @@ public class ContestListDto {
                 .map(ContestDto::withoutProblems)
                 .collect(toList());
     }
+
+    public String getContestBuilderUrl() {
+        return "/contests/builder";
+    }
 }

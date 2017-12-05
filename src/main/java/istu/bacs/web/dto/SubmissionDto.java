@@ -9,9 +9,6 @@ import java.time.format.DateTimeFormatter;
 @Data @NoArgsConstructor
 public class SubmissionDto {
 
-    private static final String TIME_FORMAT = "dd.MM.yyyy HH:mm";
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
     private int id;
     private String created;
     private String author;
@@ -30,7 +27,7 @@ public class SubmissionDto {
         SubmissionResult result = sub.getResult();
 
         this.id = sub.getSubmissionId();
-        this.created = formatter.format(sub.getCreationTime());
+        this.created = DtoUtils.format(sub.getCreationTime());
         this.author = sub.getAuthor().getUsername();
         this.problem = new ProblemDto(contest.getContestId(), contest.getProblemIndex(problem), problem);
         this.language = sub.getLanguage();
