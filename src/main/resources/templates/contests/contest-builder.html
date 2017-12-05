@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{main-layout}">
+
+<head>
+    <title>Contest builder</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>Contest builder</h1>
+
+    <form th:action="${model.buildContestUrl}"
+          method="post"
+          name="contest">
+
+        <label for="name">Contest name:</label>
+        <input type="text" id="name" name="name">
+        <br/>
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Problem</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="problem : ${model.problems}">
+                <td><input type="checkbox" name="problemIds" th:value="${problem.id}"></td>
+                <td><label th:text="${problem.id}"></label></td>
+                <td><a th:href="${problem.statementUrl}"
+                       th:text="${problem.name}">A + B</a></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <label for="start">Start time:</label>
+        <input type="text" id="start" name="startTime" th:placeholder="${#temporals.format(#temporals.createNow(), T(istu.bacs.web.dto.DtoUtils).DATE_TIME_FORMAT)}">
+        <br/>
+
+        <label for="finish">Finish time:</label>
+        <input type="text" id="finish" name="finishTime" th:placeholder="${#temporals.format(#temporals.createNow().plus(5, T(java.time.temporal.ChronoUnit).HOURS), T(istu.bacs.web.dto.DtoUtils).DATE_TIME_FORMAT)}">
+        <br/>
+
+        <input type="submit" value="Build"/>
+    </form>
+
+</div>
+</body>
+
+</html>
