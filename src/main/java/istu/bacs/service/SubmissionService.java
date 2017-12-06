@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface SubmissionService {
 	Submission findById(int id);
+	List<Submission> findAll();
 	void submit(Submission submission, boolean pretestsOnly);
 	void submitAll(List<Submission> submissions, boolean pretestsOnly);
 	void updateSubmissions(List<Submission> submissions);

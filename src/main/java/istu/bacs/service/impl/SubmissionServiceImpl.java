@@ -25,6 +25,11 @@ public class SubmissionServiceImpl implements SubmissionService {
 	}
 
     @Override
+    public List<Submission> findAll() {
+        return submissionRepository.findAll();
+    }
+
+    @Override
     public void submit(Submission submission, boolean pretestsOnly) {
 	    externalApi.submit(pretestsOnly, submission);
         submissionRepository.save(submission);
@@ -33,6 +38,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public void submitAll(List<Submission> submissions, boolean pretestsOnly) {
         externalApi.submitAll(submissions, pretestsOnly);
+        submissionRepository.saveAll(submissions);
     }
 
     @Override
