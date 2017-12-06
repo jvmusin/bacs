@@ -9,10 +9,10 @@ import java.util.Set;
 
 public interface ExternalApiAggregator {
     Problem getProblem(String problemId);
-    void submit(boolean pretestsOnly, Submission submission);
+    void submit(Submission submission, boolean pretestsOnly);
     void submitAll(List<Submission> submissions, boolean pretestsOnly);
-    void updateSubmissions(List<Submission> submissions);
-    void updateProblems(List<Problem> problems);
+    void updateSubmissionDetails(List<Submission> submissions);
+    void updateProblemDetails(List<Problem> problems);
 
     Set<Language> getSupportedLanguages(String resourceName);
 }

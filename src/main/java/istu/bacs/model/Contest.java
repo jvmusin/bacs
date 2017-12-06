@@ -3,6 +3,7 @@ package istu.bacs.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,5 +49,23 @@ public class Contest {
 	        if (problems.get(i).getProblemId().equals(problem.getProblemId()))
 	            return i;
 	    return -1;
+    }
+
+    public Duration getTimeSinceContestStart(Submission submission) {
+	    return Duration.between(startTime, submission.getCreationTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Contest contest = (Contest) o;
+        return contestId.equals(contest.contestId);
+    }
+
+    @Override
+    public int hashCode() {
+        return contestId;
     }
 }

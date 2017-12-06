@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static istu.bacs.externalapi.ExternalApiHelper.addResource;
 import static istu.bacs.externalapi.ExternalApiHelper.removeResource;
@@ -40,31 +39,27 @@ class SybonApi implements ExternalApi {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    private final Map<String, Problem> cache = new ConcurrentHashMap<>();
     @Override
     public Problem getProblem(String problemId) {
-        return cache.computeIfAbsent(problemId, key -> {
-            int id = getSybonId(problemId);
-            String uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", id));
-            SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
-            Problem problem = problemConverter.convert(sybonProblem);
+        String uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", getSybonId(problemId)));
+        SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
+        Problem problem = problemConverter.convert(sybonProblem);
 
-            String statementUrl = buildUrl(sybonProblem.getStatementUrl(), emptyMap()); //with api_key
-            problem.getDetails().setStatementUrl(statementUrl);
+        String statementUrl = buildUrl(sybonProblem.getStatementUrl(), emptyMap()); //with api_key
+        problem.getDetails().setStatementUrl(statementUrl);
 
-            return problem;
-        });
+        return problem;
     }
 
     @Override
-    public void submit(boolean pretestsOnly, Submission submission) {
+    public void submit(Submission submission, boolean pretestsOnly) {
         SybonSubmit submit = createSubmit(pretestsOnly, submission);
         submission.setExternalSubmissionId(withResourceName(submit(submit)));
     }
 
     //todo: UNTESTED
     @Override
-    public void submit(boolean pretestsOnly, List<Submission> submissions) {
+    public void submit(List<Submission> submissions, boolean pretestsOnly) {
         List<SybonSubmit> submits = submissions.stream()
                 .map(sub -> createSubmit(pretestsOnly, sub))
                 .collect(toList());
@@ -96,7 +91,7 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void updateSubmissions(List<Submission> submissions) {
+    public void updateSubmissionDetails(List<Submission> submissions) {
         String ids = submissions.stream()
                 .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
                 .collect(joining(","));
@@ -111,7 +106,7 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void updateProblems(List<Problem> problems) {
+    public void updateProblemDetails(List<Problem> problems) {
         problems.forEach(p -> {
             p.setDetails(getProblem(p.getProblemId()).getDetails());
             p.setComparator(NumberHeadComparator.getInstance());

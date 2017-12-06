@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Controller
@@ -60,6 +59,7 @@ public class ContestController {
 	public ModelAndView loadContestSubmissions(@PathVariable int contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
 
+        //todo: fetch submissions from SubmissionService, not from contest itself
         List<Submission> submissions = contest.getSubmissions().stream()
                 .filter(s -> s.getAuthor().getUserId() == (int) user.getUserId())
                 .collect(toList());
@@ -105,11 +105,10 @@ public class ContestController {
                                        @PathVariable int contestId,
                                        @PathVariable int submissionId) {
         Submission submission = submissionService.findById(submissionId);
-        //todo: add this to controller
+        //todo: add this to service
         if (!submission.getAuthor().getUserId().equals(user.getUserId()))
             throw new SecurityException("Not enough rights to see this page");
 
-        submissionService.updateSubmissions(singletonList(submission));
         return new ModelAndView(VIEWS_SUBMISSION_VIEW, "submission", new SubmissionDto(submission));
     }
 }

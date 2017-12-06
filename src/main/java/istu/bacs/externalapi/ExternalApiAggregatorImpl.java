@@ -28,33 +28,30 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void submit(boolean pretestsOnly, Submission submission) {
+    public void submit(Submission submission, boolean pretestsOnly) {
         String problemId = submission.getProblem().getProblemId();
-        findApi(extractResource(problemId)).submit(pretestsOnly, submission);
+        findApi(extractResource(problemId)).submit(submission, pretestsOnly);
     }
 
     @Override
     public void submitAll(List<Submission> submissions, boolean pretestsOnly) {
         if (submissions.isEmpty()) return;
         String submissionId = submissions.get(0).getExternalSubmissionId();
-        findApi(extractResource(submissionId)).submit(pretestsOnly, submissions);
+        findApi(extractResource(submissionId)).submit(submissions, pretestsOnly);
     }
 
     @Override
-    public void updateSubmissions(List<Submission> submissions) {
-        List<Problem> problems = submissions.stream().map(Submission::getProblem).distinct().collect(toList());
-        updateProblems(problems);
-
+    public void updateSubmissionDetails(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = submissions.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
-        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissions(subs));
+        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissionDetails(subs));
     }
 
     @Override
-    public void updateProblems(List<Problem> problems) {
+    public void updateProblemDetails(List<Problem> problems) {
         Map<String, List<Problem>> byResource = problems.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()), toList()));
-        byResource.forEach((resource, prob) -> findApi(resource).updateProblems(prob));
+        byResource.forEach((resource, prob) -> findApi(resource).updateProblemDetails(prob));
     }
 
     @Override

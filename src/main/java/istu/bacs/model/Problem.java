@@ -24,4 +24,18 @@ public class Problem implements Comparable<Problem> {
     public int compareTo(Problem other) {
         return comparator.compare(this, other);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Problem problem = (Problem) o;
+        return problemId.equals(problem.problemId);
+    }
+
+    @Override
+    public int hashCode() {
+        return problemId.hashCode();
+    }
 }

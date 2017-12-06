@@ -26,7 +26,7 @@ public class ProblemDto {
         this.index = index;
 
         ProblemDetails details = problem.getDetails();
-        this.name = problem.getDetails().getProblemName();
+        this.name = details.getProblemName();
 
         if (details.getTimeLimitMillis() != null) this.timeLimitSeconds = details.getTimeLimitMillis() / 1000;
         if (details.getMemoryLimitBytes() != null) this.memoryLimitMegabytes = details.getMemoryLimitBytes() / 1024 / 1024;
