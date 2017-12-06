@@ -1,13 +1,9 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.model.Problem;
 import istu.bacs.service.ProblemService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class ExternalApiProblemPreFetcher {
@@ -22,10 +18,6 @@ public class ExternalApiProblemPreFetcher {
 
     @PostConstruct
     public void fetchProblems() {
-        List<Problem> problems = problemService.findAll().stream()
-                .filter(p -> p.getDetails() == null)
-                .distinct()
-                .collect(toList());
-        externalApi.updateProblemDetails(problems);
+        externalApi.updateProblemDetails(problemService.findAll());
     }
 }

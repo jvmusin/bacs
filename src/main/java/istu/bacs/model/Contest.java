@@ -29,9 +29,6 @@ public class Contest {
 			inverseJoinColumns = @JoinColumn(name = "problem_id"))
 	private List<Problem> problems;
 
-	@OneToMany(mappedBy = "contest")
-    private List<Submission> submissions;
-
 	public boolean isRunning() {
         return isStarted() && !isFinished();
     }

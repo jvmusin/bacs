@@ -1,8 +1,10 @@
 package istu.bacs.service.impl;
 
 import istu.bacs.externalapi.ExternalApiAggregator;
+import istu.bacs.model.Contest;
 import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
+import istu.bacs.model.User;
 import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.ProblemService;
 import istu.bacs.service.SubmissionService;
@@ -40,10 +42,28 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public List<Submission> findAll() {
         List<Submission> submissions = submissionRepository.findAll();
+        prepareSubmissions(submissions);
+        return submissions;
+    }
+
+    @Override
+    public List<Submission> findAllByContest(Contest contest) {
+        List<Submission> submissions = submissionRepository.findAllByContest(contest);
+        prepareSubmissions(submissions);
+        return submissions;
+    }
+
+    @Override
+    public List<Submission> findAllByContestAndAuthor(Contest contest, User author) {
+        List<Submission> submissions = submissionRepository.findAllByContestAndAuthor(contest, author);
+        prepareSubmissions(submissions);
+        return submissions;
+    }
+
+    private void prepareSubmissions(List<Submission> submissions) {
         List<Problem> problems = submissions.stream().map(Submission::getProblem).collect(toList());
         problemService.updateProblems(problems);
         externalApi.updateSubmissionDetails(submissions);
-        return submissions;
     }
 
     @Override

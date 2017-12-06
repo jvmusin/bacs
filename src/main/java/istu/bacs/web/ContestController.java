@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Controller
 public class ContestController {
 	
@@ -58,13 +56,7 @@ public class ContestController {
 	@GetMapping("/contest/{contestId}/submissions")
 	public ModelAndView loadContestSubmissions(@PathVariable int contestId, @AuthenticationPrincipal User user) {
         Contest contest = contestService.findById(contestId);
-
-        //todo: fetch submissions from SubmissionService, not from contest itself
-        List<Submission> submissions = contest.getSubmissions().stream()
-                .filter(s -> s.getAuthor().getUserId() == (int) user.getUserId())
-                .collect(toList());
-        submissionService.updateSubmissions(submissions);
-
+        List<Submission> submissions = submissionService.findAllByContestAndAuthor(contest, user);
         return new ModelAndView(VIEWS_SUBMISSION_LIST, "model",
                 new ContestSubmissionsDto(contest.getContestName(), submissions));
 	}
