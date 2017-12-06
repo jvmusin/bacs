@@ -6,15 +6,16 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
-public class ProblemPreFetcher {
+public class ExternalApiProblemPreFetcher {
 
     private final ContestService contestService;
     private final ExternalApiAggregator externalApi;
 
-    public ProblemPreFetcher(ContestService contestService, ExternalApiAggregator externalApi) {
+    public ExternalApiProblemPreFetcher(ContestService contestService, ExternalApiAggregator externalApi) {
         this.contestService = contestService;
         this.externalApi = externalApi;
     }
@@ -25,7 +26,7 @@ public class ProblemPreFetcher {
                 .flatMap(c -> c.getProblems().stream())
                 .filter(p -> p.getDetails() == null)
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(toList());
         externalApi.updateProblems(problems);
     }
 }
