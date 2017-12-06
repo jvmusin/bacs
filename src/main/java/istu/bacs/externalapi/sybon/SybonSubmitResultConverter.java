@@ -16,7 +16,7 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
 
     private final SybonTestResultStatusConverter testResultStatusConverter;
 
-    SybonSubmitResultConverter(SybonTestResultStatusConverter testResultStatusConverter) {
+    public SybonSubmitResultConverter(SybonTestResultStatusConverter testResultStatusConverter) {
         this.testResultStatusConverter = testResultStatusConverter;
     }
 

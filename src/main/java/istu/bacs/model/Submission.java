@@ -27,4 +27,9 @@ public class Submission {
 
 	@Transient
     private SubmissionResult result;
+
+	public Verdict getVerdict() {
+	    if (result == null) return Verdict.SERVER_ERROR;
+	    return result.getVerdict();
+    }
 }
