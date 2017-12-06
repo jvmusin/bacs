@@ -33,7 +33,7 @@ public class ContestBuilderController {
         return new ModelAndView("contests/contest-builder", "model", new ContestBuilderDto(problemService.findAll()));
     }
 
-    @PostMapping("/contest/build")
+    @PostMapping("/contests/build")
     public RedirectView buildContest(@ModelAttribute NewContestDto contest) {
         Contest cont = new Contest();
 
