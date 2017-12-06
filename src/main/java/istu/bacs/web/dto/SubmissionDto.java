@@ -4,12 +4,13 @@ import istu.bacs.model.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.format.DateTimeFormatter;
-
 @Data @NoArgsConstructor
 public class SubmissionDto {
 
+    private static final String SUBMISSION_URL_FORMAT = "/contest/%d/submission/%d";
+
     private int id;
+    private int contestId;
     private String created;
     private String author;
     private ProblemDto problem;
@@ -27,6 +28,7 @@ public class SubmissionDto {
         SubmissionResult result = sub.getResult();
 
         this.id = sub.getSubmissionId();
+        this.contestId = contest.getContestId();
         this.created = DtoUtils.format(sub.getCreationTime());
         this.author = sub.getAuthor().getUsername();
         this.problem = new ProblemDto(contest.getContestId(), contest.getProblemIndex(problem), problem);
@@ -42,6 +44,6 @@ public class SubmissionDto {
     }
 
     public String getSubmissionUrl() {
-        return "/submission/" + id;
+        return String.format(SUBMISSION_URL_FORMAT, contestId, id);
     }
 }
