@@ -52,40 +52,40 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void submit(Submission submission, boolean pretestsOnly) {
-        SybonSubmit submit = createSubmit(pretestsOnly, submission);
-        submission.setExternalSubmissionId(withResourceName(submit(submit)));
+    public void submit(Submission submission) {
+        SybonSubmit submit = createSubmit(submission);
+        submission.setExternalSubmissionId(withResourceName(submitInternal(submit)));
     }
 
     //todo: UNTESTED
     @Override
-    public void submit(List<Submission> submissions, boolean pretestsOnly) {
+    public void submit(List<Submission> submissions) {
         List<SybonSubmit> submits = submissions.stream()
-                .map(sub -> createSubmit(pretestsOnly, sub))
+                .map(this::createSubmit)
                 .collect(toList());
-        int[] ids = submit(submits);
+        int[] ids = submitInternal(submits);
         for (int i = 0; i < submissions.size(); i++)
             submissions.get(i).setExternalSubmissionId(withResourceName(ids[i]));
     }
 
-    private SybonSubmit createSubmit(boolean pretestsOnly, Submission submission) {
+    private SybonSubmit createSubmit(Submission submission) {
         SybonSubmit submit = new SybonSubmit();
 
         submit.setCompilerId(languageConverter.convert(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
         submit.setProblemId(getSybonId(submission.getProblem().getProblemId()));
-        submit.setPretestsOnly(pretestsOnly);
+        submit.setPretestsOnly(submission.isPretestsOnly());
 
         return submit;
     }
 
-    private int submit(SybonSubmit submit) {
+    private int submitInternal(SybonSubmit submit) {
         String url = buildUrl(config.getSubmitsUrl() + "/send", emptyMap());
         return restTemplate.postForObject(url, submit, int.class);
     }
 
-    private int[] submit(List<SybonSubmit> submits) {
+    private int[] submitInternal(List<SybonSubmit> submits) {
         String url = buildUrl(config.getSubmitsUrl() + "/sendall", emptyMap());
         return restTemplate.postForObject(url, submits, int[].class);
     }

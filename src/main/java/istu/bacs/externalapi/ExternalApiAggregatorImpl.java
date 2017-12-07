@@ -28,16 +28,16 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void submit(Submission submission, boolean pretestsOnly) {
+    public void submit(Submission submission) {
         String problemId = submission.getProblem().getProblemId();
-        findApi(extractResource(problemId)).submit(submission, pretestsOnly);
+        findApi(extractResource(problemId)).submit(submission);
     }
 
     @Override
-    public void submitAll(List<Submission> submissions, boolean pretestsOnly) {
+    public void submitAll(List<Submission> submissions) {
         if (submissions.isEmpty()) return;
         String submissionId = submissions.get(0).getExternalSubmissionId();
-        findApi(extractResource(submissionId)).submit(submissions, pretestsOnly);
+        findApi(extractResource(submissionId)).submit(submissions);
     }
 
     @Override

@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS submission(
   contest_id INT NOT NULL,
   problem_id VARCHAR(255) NOT NULL,
 
+  pretests_only BOOLEAN NOT NULL,
   creation_time DATETIME NOT NULL,
   language INT NOT NULL,
   solution BLOB NOT NULL,

@@ -11,7 +11,7 @@ public interface SubmissionService {
 	List<Submission> findAll();
 	List<Submission> findAllByContest(Contest contest);
 	List<Submission> findAllByContestAndAuthor(Contest contest, User author);
-	void submit(Submission submission, boolean pretestsOnly);
-	void submitAll(List<Submission> submissions, boolean pretestsOnly);
+	void submit(Submission submission);
+	void submitAll(List<Submission> submissions);
 	void updateSubmissions(List<Submission> submissions);
 }

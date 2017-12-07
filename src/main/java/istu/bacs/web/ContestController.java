@@ -88,7 +88,7 @@ public class ContestController {
         int problemIndex = submission.getProblem().getIndex();
         sub.setProblem(contest.getProblems().get(problemIndex));
 
-        submissionService.submit(sub, false);
+        submissionService.submit(sub);
         return new RedirectView("/contest/{contestId}/submissions");
 	}
 

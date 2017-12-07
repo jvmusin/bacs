@@ -9,8 +9,8 @@ import java.util.Set;
 
 public interface ExternalApiAggregator {
     Problem getProblem(String problemId);
-    void submit(Submission submission, boolean pretestsOnly);
-    void submitAll(List<Submission> submissions, boolean pretestsOnly);
+    void submit(Submission submission);
+    void submitAll(List<Submission> submissions);
     void updateSubmissionDetails(List<Submission> submissions);
     void updateProblemDetails(List<Problem> problems);
 

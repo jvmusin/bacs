@@ -9,8 +9,8 @@ import java.util.Set;
 
 public interface ExternalApi {
     Problem getProblem(String problemId);
-    void submit(Submission submission, boolean pretestsOnly);
-    void submit(List<Submission> submissions, boolean pretestsOnly);
+    void submit(Submission submission);
+    void submit(List<Submission> submissions);
     void updateSubmissionDetails(List<Submission> submissions);
     void updateProblemDetails(List<Problem> problems);
 

@@ -18,7 +18,8 @@ public class Submission {
 	private Contest contest;
 	@ManyToOne @JoinColumn(name = "problem_id")
 	private Problem problem;
-	
+
+	private boolean pretestsOnly;
 	private LocalDateTime creationTime;
 	private Language language;
 	private String solution;

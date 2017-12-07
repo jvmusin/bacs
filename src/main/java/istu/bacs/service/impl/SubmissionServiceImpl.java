@@ -67,14 +67,14 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public void submit(Submission submission, boolean pretestsOnly) {
-	    externalApi.submit(submission, pretestsOnly);
+    public void submit(Submission submission) {
+	    externalApi.submit(submission);
         submissionRepository.save(submission);
     }
 
     @Override
-    public void submitAll(List<Submission> submissions, boolean pretestsOnly) {
-        externalApi.submitAll(submissions, pretestsOnly);
+    public void submitAll(List<Submission> submissions) {
+        externalApi.submitAll(submissions);
         submissionRepository.saveAll(submissions);
     }
 
