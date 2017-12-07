@@ -55,11 +55,13 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
 	public void save(Problem problem) {
+        knownProblems.put(problem.getProblemId(), problem);
 	    problemRepository.save(problem);
 	}
 
     @Override
     public void saveAll(List<Problem> problems) {
+        problems.forEach(p -> knownProblems.put(p.getProblemId(), p));
         problemRepository.saveAll(problems);
     }
 }

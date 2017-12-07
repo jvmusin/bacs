@@ -5,9 +5,7 @@ import istu.bacs.model.Problem;
 import istu.bacs.model.Submission;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
@@ -25,6 +23,14 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     @Override
     public Problem getProblem(String problemId) {
         return findApi(extractResource(problemId)).getProblem(problemId);
+    }
+
+    @Override
+    public List<Problem> getAllProblems() {
+        return Arrays.stream(externalApis)
+                .map(ExternalApi::getAllProblems)
+                .flatMap(Collection::stream)
+                .collect(toList());
     }
 
     @Override

@@ -18,6 +18,6 @@ public class ExternalApiProblemPreFetcher {
 
     @PostConstruct
     public void fetchProblems() {
-        externalApi.updateProblemDetails(problemService.findAll());
+        problemService.saveAll(externalApi.getAllProblems());
     }
 }

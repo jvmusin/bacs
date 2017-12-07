@@ -52,6 +52,13 @@ class SybonApi implements ExternalApi {
     }
 
     @Override
+    public List<Problem> getAllProblems() {
+        return getProblemCollection(1).getProblems().stream()
+                .map(problemConverter::convert)
+                .collect(toList());
+    }
+
+    @Override
     public void submit(Submission submission) {
         SybonSubmit submit = createSubmit(submission);
         submission.setExternalSubmissionId(withResourceName(submitInternal(submit)));

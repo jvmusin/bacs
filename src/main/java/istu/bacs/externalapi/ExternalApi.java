@@ -9,6 +9,7 @@ import java.util.Set;
 
 public interface ExternalApi {
     Problem getProblem(String problemId);
+    List<Problem> getAllProblems();
     void submit(Submission submission);
     void submit(List<Submission> submissions);
     void updateSubmissionDetails(List<Submission> submissions);
