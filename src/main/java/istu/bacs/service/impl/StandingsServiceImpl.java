@@ -7,7 +7,7 @@ import istu.bacs.service.SubmissionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -19,19 +19,19 @@ public class StandingsServiceImpl implements istu.bacs.service.StandingsService 
         this.submissionService = submissionService;
     }
 
-    private final ConcurrentHashMap<Contest, Standings> cache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Contest, Standings> active = new ConcurrentHashMap<>();
     @Override
     public Standings getStandings(Contest contest) {
-        return cache.computeIfAbsent(contest, key -> Standings.empty(contest));
+        return active.computeIfAbsent(contest, key -> Standings.empty(contest));
     }
 
     @Scheduled(fixedDelay = 3000)
     private void updateStandings() {
         System.err.println("STANDINGS ARE UPDATING");
-        cache.keySet().parallelStream().forEach(contest -> {
+        active.keySet().parallelStream().forEach(contest -> {
             List<Submission> submissions = submissionService.findAllByContest(contest);
             Standings standings = new Standings(contest, submissions);
-            cache.put(contest, standings);
+            active.put(contest, standings);
         });
         System.err.println("STANDINGS ARE UPDATED");
     }

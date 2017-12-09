@@ -41,7 +41,7 @@ public class ContestBuilderController {
         cont.setStartTime(contest.getStartTime());
         cont.setFinishTime(contest.getFinishTime());
 
-        List<Problem> problems = contest.getProblemIds().stream().map(problemService::findById).collect(toList());
+        List<Problem> problems = contest.getProblemIds().stream().map(problemService::findById).sorted().collect(toList());
         cont.setProblems(problems);
 
         contestService.save(cont);

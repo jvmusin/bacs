@@ -17,9 +17,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
 	@Override
-	public Contest findById(int id) {
-        return contestRepository.findById(id)
-                .orElse(null);
+	public Contest findById(int contestId) {
+        return contestRepository.findById(contestId).orElse(null);
     }
 	
 	@Override
