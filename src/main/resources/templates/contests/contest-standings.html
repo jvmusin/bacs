@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{contests/contest-layout}">
+
+<head>
+    <title th:text="${standings.contestName}">First of April Contest</title>
+</head>
+
+<body>
+<div layout:fragment="contest-content">
+    <h1 th:text="${standings.contestName}">First of April Contest</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Place</th>
+                <th>Contestant</th>
+                <th th:each="letter : ${standings.problemLetters}" th:text="${letter}"></th>
+                <th>Solved</th>
+                <th>Penalty</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="row : ${standings.rows}">
+                <td scope="row" th:text="${row.place}"></td>
+                <td th:text="${row.contestant}"></td>
+                <th th:each="result : ${row.results}" th:text="${result}"></th>
+                <td th:text="${row.solvedCount}"></td>
+                <td th:text="${row.penalty}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

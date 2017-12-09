@@ -43,16 +43,14 @@ public class Contest {
 	    return -1;
     }
 
-    public Duration getTimeSinceContestStart(Submission submission) {
-	    return Duration.between(startTime, submission.getCreationTime());
+    public Duration getTimeSinceContestStart(LocalDateTime dateTime) {
+	    return Duration.between(startTime, dateTime);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Contest contest = (Contest) o;
+    public boolean equals(Object other) {
+	    if (other == null) return false;
+        Contest contest = (Contest) other;
         return contestId.equals(contest.contestId);
     }
 

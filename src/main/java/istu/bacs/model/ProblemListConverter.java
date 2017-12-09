@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 @Converter
 public class ProblemListConverter implements AttributeConverter<List<Problem>, String> {
 
-    private static ProblemConverter problemConverter = new ProblemConverter();
+    private static final ProblemConverter problemConverter = new ProblemConverter();
 
     @Override
     public String convertToDatabaseColumn(List<Problem> problems) {

@@ -2,6 +2,7 @@ package istu.bacs.web;
 
 import istu.bacs.model.*;
 import istu.bacs.service.ContestService;
+import istu.bacs.service.StandingsService;
 import istu.bacs.service.SubmissionService;
 import istu.bacs.web.dto.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,13 +25,16 @@ public class ContestController {
 	private static final String VIEWS_SUBMISSION_LIST = "contests/submissions/submission-list";
     private static final String VIEWS_SUBMISSION_VIEW = "contests/submissions/submission-view";
     private static final String VIEWS_SUBMIT_PAGE = "contests/submissions/submit-solution";
+    private static final String VIEWS_CONTEST_STANDINGS = "contests/contest-standings";
 
 	private final ContestService contestService;
 	private final SubmissionService submissionService;
+	private final StandingsService standingsService;
 
-    public ContestController(ContestService contestService, SubmissionService submissionService) {
+    public ContestController(ContestService contestService, SubmissionService submissionService, StandingsService standingsService) {
 		this.contestService = contestService;
 		this.submissionService = submissionService;
+        this.standingsService = standingsService;
     }
 	
 	@GetMapping("/contests")
@@ -102,5 +106,12 @@ public class ContestController {
             throw new SecurityException("Not enough rights to see this page");
 
         return new ModelAndView(VIEWS_SUBMISSION_VIEW, "submission", new SubmissionDto(submission));
+    }
+
+    @GetMapping("/contest/{contestId}/standings")
+    public ModelAndView loadStandings(@PathVariable int contestId) {
+        Contest contest = contestService.findById(contestId);
+        Standings standings = standingsService.getStandings(contest);
+        return new ModelAndView(VIEWS_CONTEST_STANDINGS, "standings", new StandingsDto(standings));
     }
 }

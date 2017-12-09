@@ -54,11 +54,10 @@ public class User implements UserDetails, Comparable<User> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        return o != null &&
-                getClass() == o.getClass() &&
-                userId.equals(((User) o).userId);
+    public boolean equals(Object other) {
+	    if (other == null) return false;
+        User user = (User) other;
+        return userId.equals(user.userId);
     }
 
     @Override

@@ -26,11 +26,9 @@ public class Problem implements Comparable<Problem> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Problem problem = (Problem) o;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        Problem problem = (Problem) other;
         return problemId.equals(problem.problemId);
     }
 

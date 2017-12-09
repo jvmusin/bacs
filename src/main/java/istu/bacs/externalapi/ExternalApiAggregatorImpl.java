@@ -27,7 +27,7 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     @Override
     public List<Problem> getAllProblems() {
-        return Arrays.stream(externalApis)
+        return Arrays.stream(externalApis).parallel()
                 .map(ExternalApi::getAllProblems)
                 .flatMap(Collection::stream)
                 .collect(toList());
@@ -50,14 +50,22 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     public void updateSubmissionDetails(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = submissions.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
-        byResource.forEach((resource, subs) -> findApi(resource).updateSubmissionDetails(subs));
+        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
+            String resource = resourceAndSubmissions.getKey();
+            List<Submission> submissions2 = resourceAndSubmissions.getValue();
+            findApi(resource).updateSubmissionDetails(submissions2);
+        });
     }
 
     @Override
     public void updateProblemDetails(List<Problem> problems) {
         Map<String, List<Problem>> byResource = problems.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()), toList()));
-        byResource.forEach((resource, prob) -> findApi(resource).updateProblemDetails(prob));
+        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
+            String resource = resourceAndSubmissions.getKey();
+            List<Problem> problems2 = resourceAndSubmissions.getValue();
+            findApi(resource).updateProblemDetails(problems2);
+        });
     }
 
     @Override
