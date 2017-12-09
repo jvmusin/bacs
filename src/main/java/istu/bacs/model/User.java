@@ -13,7 +13,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-public class User implements UserDetails, Comparable<User> {
+public class User implements UserDetails {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer userId;
@@ -47,11 +47,6 @@ public class User implements UserDetails, Comparable<User> {
 	public boolean isEnabled() {
 		return true;
 	}
-
-    @Override
-    public int compareTo(User other) {
-        return userId.compareTo(other.userId);
-    }
 
     @Override
     public boolean equals(Object other) {

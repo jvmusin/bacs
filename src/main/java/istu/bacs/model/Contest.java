@@ -21,7 +21,6 @@ public class Contest {
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 
-	@Convert(converter = ProblemListConverter.class)
 	private List<Problem> problems;
 
 	public boolean isRunning() {

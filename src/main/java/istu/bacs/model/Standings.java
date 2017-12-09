@@ -69,11 +69,10 @@ public class Standings {
             if (solved) return false;
             if (verdict == OK) {
                 penalty = (int) contest.getTimeSinceContestStart(at).toMinutes() + failTries * TRY_PENALTY_MINUTES;
-                solved = true;
-                return false;
+                return solved = true;
             }
             failTries++;
-            return true;
+            return false;
         }
     }
 }

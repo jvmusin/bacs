@@ -12,12 +12,11 @@ public class Submission {
 	@Id @GeneratedValue
 	private Integer submissionId;
 	
-	@ManyToOne @JoinColumn(name = "author_id")
+    @Column(name = "author_id")
 	private User author;
-	@ManyToOne @JoinColumn(name = "contest_id")
+    @Column(name = "contest_id")
 	private Contest contest;
 	@Column(name = "problem_id")
-	@Convert(converter = ProblemConverter.class)
 	private Problem problem;
 
 	private boolean pretestsOnly;

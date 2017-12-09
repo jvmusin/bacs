@@ -9,7 +9,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Component
-@Converter
+@Converter(autoApply = true)
 public class ProblemConverter implements AttributeConverter<Problem, String> {
 
     private static ProblemService problemService;
@@ -25,7 +25,7 @@ public class ProblemConverter implements AttributeConverter<Problem, String> {
     }
 
     @Bean
-    private CommandLineRunner init(ProblemService problemService) {
+    private CommandLineRunner initProblemConverter(ProblemService problemService) {
         return args -> ProblemConverter.problemService = problemService;
     }
 }

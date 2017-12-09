@@ -4,11 +4,15 @@ import istu.bacs.model.User;
 import istu.bacs.repository.UserRepository;
 import istu.bacs.service.UserService;
 import istu.bacs.service.UsernameAlreadyInUseException;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames = "users")
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepository userRepository;
@@ -20,11 +24,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+    @Cacheable(key = "#userId")
 	public User findById(int userId) {
 		return userRepository.findById(userId).orElse(null);
 	}
 	
 	@Override
+    @CacheEvict(key = "#user.userId")
 	public void register(User user) throws UsernameAlreadyInUseException {
 		if (userRepository.findByUsername(user.getUsername()) != null)
 			throw new UsernameAlreadyInUseException(user.getUsername());

@@ -25,7 +25,7 @@ public class StandingsServiceImpl implements istu.bacs.service.StandingsService 
         return active.computeIfAbsent(contest, key -> Standings.empty(contest));
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 10_000)
     private void updateStandings() {
         System.err.println("STANDINGS ARE UPDATING");
         active.keySet().parallelStream().forEach(contest -> {

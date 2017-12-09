@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Component
-@Converter
+@Converter(autoApply = true)
 public class ProblemListConverter implements AttributeConverter<List<Problem>, String> {
 
     private static final ProblemConverter problemConverter = new ProblemConverter();
