@@ -24,8 +24,8 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 	
 	@Override
-	public Submission findById(int id) {
-		return submissionRepository.findById(id)
+	public Submission findById(int submissionId) {
+		return submissionRepository.findById(submissionId)
                 .map(submission -> {
                     externalApi.updateSubmissionDetails(singletonList(submission));
                     return submission;
@@ -68,10 +68,5 @@ public class SubmissionServiceImpl implements SubmissionService {
     public void submitAll(List<Submission> submissions) {
         externalApi.submitAll(submissions);
         submissionRepository.saveAll(submissions);
-    }
-
-    @Override
-    public void updateSubmissions(List<Submission> submissions) {
-        externalApi.updateSubmissionDetails(submissions);
     }
 }
