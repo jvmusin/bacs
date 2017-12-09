@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
-import static javax.persistence.FetchType.EAGER;
 
 @Data
 @Entity
@@ -22,11 +21,7 @@ public class Contest {
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 
-	@ManyToMany(fetch = EAGER)
-	@OrderColumn(name = "problem_index")
-	@JoinTable(name = "contest_problems",
-			joinColumns = @JoinColumn(name = "contest_id"),
-			inverseJoinColumns = @JoinColumn(name = "problem_id"))
+	@Convert(converter = ProblemListConverter.class)
 	private List<Problem> problems;
 
 	public boolean isRunning() {

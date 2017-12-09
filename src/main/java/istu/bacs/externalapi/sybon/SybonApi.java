@@ -43,19 +43,21 @@ class SybonApi implements ExternalApi {
     public Problem getProblem(String problemId) {
         String uri = buildUrl(config.getProblemsUrl() + "/{id}", singletonMap("id", getSybonId(problemId)));
         SybonProblem sybonProblem = restTemplate.getForObject(uri, SybonProblem.class);
-        Problem problem = problemConverter.convert(sybonProblem);
-
-        String statementUrl = buildUrl(sybonProblem.getStatementUrl(), emptyMap()); //with api_key
-        problem.getDetails().setStatementUrl(statementUrl);
-
-        return problem;
+        return convertProblem(sybonProblem);
     }
 
     @Override
     public List<Problem> getAllProblems() {
         return getProblemCollection(1).getProblems().stream()
-                .map(problemConverter::convert)
+                .map(this::convertProblem)
                 .collect(toList());
+    }
+
+    private Problem convertProblem(SybonProblem sybonProblem) {
+        Problem problem = problemConverter.convert(sybonProblem);
+        String statementUrl = buildUrl(sybonProblem.getStatementUrl(), emptyMap());
+        problem.getDetails().setStatementUrl(statementUrl);
+        return problem;
     }
 
     @Override

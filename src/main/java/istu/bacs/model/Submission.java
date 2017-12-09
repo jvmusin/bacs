@@ -16,7 +16,8 @@ public class Submission {
 	private User author;
 	@ManyToOne @JoinColumn(name = "contest_id")
 	private Contest contest;
-	@ManyToOne @JoinColumn(name = "problem_id")
+	@Column(name = "problem_id")
+	@Convert(converter = ProblemConverter.class)
 	private Problem problem;
 
 	private boolean pretestsOnly;
