@@ -8,30 +8,39 @@
 </head>
 
 <body>
-<div layout:fragment="contest-content">
-    <h1 th:text="${standings.contestName}">First of April Contest</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Place</th>
-                <th>Contestant</th>
-                <th th:each="letter : ${standings.problemLetters}" th:text="${letter}"></th>
-                <th>Solved</th>
-                <th>Penalty</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="row : ${standings.rows}">
-                <td scope="row" th:text="${row.place}"></td>
-                <td th:text="${row.contestant}"></td>
-                <th th:each="result : ${row.results}" th:text="${result}"></th>
-                <td th:text="${row.solvedCount}"></td>
-                <td th:text="${row.penalty}"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="row" layout:fragment="contest-content">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center" th:text="${standings.contestName}">First of April Contest</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="text-center">Place</th>
+                                <th scope="col">Contestant</th>
+                                <th scope="col" class="text-center" th:each="index : ${standings.problemLetters}" th:text="${index}"></th>
+                                <th scope="col" class="text-center">Total</th>
+                                <th scope="col" class="text-center">Penalty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="row : ${standings.rows}">
+                                <th scope="row" class="text-center" th:text="${row.place}"></th>
+                                <td th:text="${row.contestant}"></td>
+                                <td class="text-center" th:each="result : ${row.results}" th:text="${result}"></td>
+                                <td class="text-center" th:text="${row.solvedCount}"></td>
+                                <td class="text-center" th:text="${row.penalty}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
