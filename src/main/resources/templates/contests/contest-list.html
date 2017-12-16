@@ -9,33 +9,41 @@
     </head>
 
     <body>
-        <div layout:fragment="content">
-            <h1>Contest list</h1>
-
-            <a href="#" sec:authorize="hasRole('ROLE_ADMIN')" th:href="${model.contestBuilderUrl}">Create new contest</a>
-
-            <table class="table text-center">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Start</th>
-                        <th scope="col">Finish</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="contest : ${model.contests}">
-                        <th scope="row" th:text="${contest.contestId}">42</th>
-                        <td>
-                            <a href="contest-problems.html" th:href="${contest.contestUrl}" th:text="${contest.contestName}">
-                                First of April Contest
-                            </a>
-                        </td>
-                        <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.startTime)}">01.04.2017 12:00</td>
-                        <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.finishTime)}">01.04.2017 15:00</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row" layout:fragment="content">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center">All contests</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="${model.contestBuilderUrl}">Create new contest</a>
+                        <table class="table text-center">
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Start</th>
+                                <th scope="col">Finish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="contest : ${model.contests}">
+                                <th scope="row" th:text="${contest.contestId}">42</th>
+                                <td>
+                                    <a th:href="${contest.contestUrl}" th:text="${contest.contestName}">
+                                        First of April Contest
+                                    </a>
+                                </td>
+                                <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.startTime)}">01.04.2017 12:00</td>
+                                <td th:text="${T(istu.bacs.web.dto.DtoUtils).format(contest.finishTime)}">01.04.2017 15:00</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 

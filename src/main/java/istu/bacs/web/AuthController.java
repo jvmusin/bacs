@@ -5,7 +5,6 @@ import istu.bacs.service.UserService;
 import istu.bacs.service.UsernameAlreadyInUseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,21 +34,11 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	public String register(@ModelAttribute User user, Errors errors) {
-		int usernameLen = user.getUsername().length();
-		int passwordLen = user.getPassword().length();
-		if (!(6 <= usernameLen && usernameLen <= 20))
-			errors.rejectValue("username", "wronglen", "Username length should be inside [6, 20]");
-		if (!(6 <= passwordLen && passwordLen <= 20))
-			errors.rejectValue("password", "wronglen", "Password length should be inside [6, 20]");
-		if (errors.hasErrors())
-			return VIEWS_REGISTER_FORM;
-		
+	public String register(@ModelAttribute User user) {
 		try {
 			userService.register(user);
 		} catch (UsernameAlreadyInUseException ignored) {
-			errors.rejectValue("username", "taken", "This username is already taken");
-			return VIEWS_REGISTER_FORM;
+			return "redirect:/register";
 		}
 		return "redirect:/login";
 	}

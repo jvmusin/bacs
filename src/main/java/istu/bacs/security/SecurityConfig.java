@@ -25,10 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.formLogin().loginPage("/login")
 				.and()
-				.authorizeRequests().antMatchers("/", "/login", "/register").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+				.authorizeRequests().antMatchers("/contest/**", "/contests").authenticated()
+                .anyRequest().permitAll();
 	}
 	
 	@Override

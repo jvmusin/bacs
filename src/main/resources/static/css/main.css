@@ -8,6 +8,10 @@ html, body, .container {
     height: 100%;
 }
 
+.navbar {
+    border: 1px solid lightgray;
+}
+
 .login-form {
     background: azure;
     border: 0.05rem solid gray;
