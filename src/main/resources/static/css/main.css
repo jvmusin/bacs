@@ -13,6 +13,8 @@ html, body, .container {
     border: 0.05rem solid gray;
     border-radius: 1rem;
     padding: 0.5rem;
+    width: 30%;
+    margin: 0 auto;
 }
 
 .login-form h3 {
