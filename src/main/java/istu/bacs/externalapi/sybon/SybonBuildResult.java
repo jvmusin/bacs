@@ -8,7 +8,7 @@ class SybonBuildResult {
     private String output;
 
     enum Status {
-        OK,
-        FAILED
+        Ok,
+        Failed
     }
 }

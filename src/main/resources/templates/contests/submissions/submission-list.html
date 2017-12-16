@@ -8,42 +8,49 @@
     </head>
 
     <body>
-        <div layout:fragment="contest-content">
-            <h1 th:text="${'Submissions for ' + model.contestName}">Submissions for First of April Contest</h1>
-            <form>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>When</th>
-                            <th>Who</th>
-                            <th>Problem</th>
-                            <th>Language</th>
-                            <th>Verdict</th>
-                            <th>Test</th>
-                            <th>Time (ms)</th>
-                            <th>Memory (KB)</th>
-                            <th>View code</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="submission : ${model.submissions}">
-                            <td th:text="${submission.id}">1</td>
-                            <td th:text="${submission.created}">01.04.2017 12:35:40</td>
-                            <td th:text="${submission.author}">Musin</td>
-                            <td><a href="#" th:href="${submission.problem.statementUrl}"
-                                   th:text="${submission.problem.indexedName}">A + B</a>
-                            </td>
-                            <td th:text="${submission.language.languageName}">Kotlin</td>
-                            <td th:text="${submission.verdict.verdictName}">Accepted</td>
-                            <td th:text="${submission.firstFailedTest}">12</td>
-                            <td th:text="${submission.usedMillis}">300</td>
-                            <td th:text="${submission.usedKilobytes}">524</td>
-                            <td><a href="#" th:href="${submission.submissionUrl}">View code</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+        <div class="row" layout:fragment="contest-content">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center" th:text="${'Submissions for ' + model.contestName}">Submissions for First of April Contest</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">When</th>
+                                    <th scope="col">Who</th>
+                                    <th scope="col">Problem</th>
+                                    <th scope="col">Language</th>
+                                    <th scope="col">Verdict</th>
+                                    <th scope="col">Test</th>
+                                    <th scope="col">Time (ms)</th>
+                                    <th scope="col">Memory (KB)</th>
+                                    <th scope="col">View code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="submission : ${model.submissions}">
+                                    <th scope="row" th:text="${submission.id}">1</th>
+                                    <td th:text="${submission.created}">01.04.2017 12:35:40</td>
+                                    <td th:text="${submission.author}">Musin</td>
+                                    <td><a href="#" th:href="${submission.problem.statementUrl}"
+                                           th:text="${submission.problem.indexedName}">A + B</a></td>
+                                    <td th:text="${submission.language.languageName}">Kotlin</td>
+                                    <td th:text="${submission.verdict.verdictName}">Accepted</td>
+                                    <td th:text="${submission.firstFailedTest}">12</td>
+                                    <td th:text="${submission.usedMillis}">300</td>
+                                    <td th:text="${submission.usedKilobytes}">524</td>
+                                    <td><a href="#" th:href="${submission.submissionUrl}">View code</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 

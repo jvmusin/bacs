@@ -22,7 +22,7 @@ public class StandingsServiceImpl implements istu.bacs.service.StandingsService 
     private final ConcurrentHashMap<Contest, Standings> active = new ConcurrentHashMap<>();
     @Override
     public Standings getStandings(Contest contest) {
-        return active.computeIfAbsent(contest, key -> Standings.empty(contest));
+        return active.computeIfAbsent(contest, Standings::empty);
     }
 
     @Scheduled(fixedDelay = 10_000)

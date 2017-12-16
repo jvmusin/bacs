@@ -11,7 +11,6 @@ class SybonProblem {
     private String statementUrl;
     private Integer collectionId;
     private Integer testsCount;
-    @JsonSetter(nulls = Nulls.AS_EMPTY)
     private Object[] pretest;
     private SybonResourceLimits resourceLimits;
 

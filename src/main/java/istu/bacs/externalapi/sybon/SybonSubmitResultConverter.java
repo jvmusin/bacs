@@ -29,7 +29,7 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
                     .verdict(Verdict.SERVER_ERROR)
                     .build();
 
-        if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.FAILED)
+        if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.Failed)
             return SubmissionResult.builder()
                 .built(false)
                 .buildInfo(submission.getBuildResult().getOutput())
@@ -40,7 +40,7 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         int maxMemoryUsedBytes = 0;
         Verdict verdict = Verdict.OK;
         Integer testsPassed = 0;
-        for (SybonTestGroupResult testGroup : submission.getTestResults()) {
+        for (SybonTestGroupResult testGroup : submission.getTestGroupResults()) {
             for (SybonTestResult result : testGroup.getTestResults()) {
                 SybonResourceUsage res = result.getResourceUsage();
                 maxTimeUsedMillis = Math.max(maxTimeUsedMillis, res.getTimeUsageMillis());
@@ -55,7 +55,7 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         }
         if (verdict == Verdict.OK) testsPassed = null;
 
-        List<TestGroupResult> testGroups = submission.getTestResults().stream().map(this::convertTestGroupResult).collect(toList());
+        List<TestGroupResult> testGroups = submission.getTestGroupResults().stream().map(this::convertTestGroupResult).collect(toList());
         return SubmissionResult.builder()
                 .built(true)
                 .buildInfo(submission.getBuildResult().getOutput())

@@ -8,5 +8,5 @@ import java.util.List;
 class SybonSubmitResult {
     private Integer id;
     private SybonBuildResult buildResult;
-    private List<SybonTestGroupResult> testResults;
+    private List<SybonTestGroupResult> testGroupResults;
 }
