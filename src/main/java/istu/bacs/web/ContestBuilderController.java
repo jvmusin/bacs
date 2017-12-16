@@ -41,10 +41,10 @@ public class ContestBuilderController {
         cont.setStartTime(contest.getStartTime());
         cont.setFinishTime(contest.getFinishTime());
 
-        List<Problem> problems = contest.getProblemIds().stream().map(problemService::findById).sorted().collect(toList());
+        List<Problem> problems = contest.getProblemIds().stream().map(problemService::findById).collect(toList());
         cont.setProblems(problems);
 
         contestService.save(cont);
-        return new RedirectView("/contests");
+        return new RedirectView("/contest/" + cont.getContestId());
     }
 }

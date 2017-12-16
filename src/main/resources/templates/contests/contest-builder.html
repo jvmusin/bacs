@@ -27,22 +27,15 @@
                                 <td><input type="text" id="name" name="name"></td>
                             </tr>
                             <tr>
-                                <td colspan="2">
-                                    <table class="table table-bordered">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th></th>
-                                            <th>Id</th>
-                                            <th>Problem name</th>
-                                        </tr>
-                                        </thead>
-                                        <tr th:each="problem : ${model.problems}">
-                                            <td><input type="checkbox" name="problemIds" th:value="${problem.id}"></td>
-                                            <td><label th:text="${problem.id}"></label></td>
-                                            <td><a th:href="${problem.statementUrl}"
-                                                   th:text="${problem.name}">A + B</a></td>
-                                        </tr>
-                                    </table>
+                                <td colspan="2" nowrap>
+                                    <ul id="all-problems" style="display: inline-block; vertical-align: top; min-height: 3rem; width: 50%; border: 4px dotted yellow;">
+                                        <li th:each="problem : ${model.problems}">
+                                            [[${problem.id + ': ' + problem.name}]]
+                                            <input type="checkbox" name="problemIds" th:value="${problem.id}" hidden>
+                                        </li>
+                                    </ul>
+                                    <ul id="selected-problems" style="display: inline-block; vertical-align: top; min-height: 3rem; width: 50%; border: 4px dotted greenyellow">
+                                    </ul>
                                 </td>
                             </tr>
                             <tr>
@@ -55,7 +48,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="submit" value="Build" class="btn btn-lg btn-primary">
+                                    <button type="button" class="btn btn-lg btn-primary" onclick="buildContest()">Build</button>
                                 </td>
                             </tr>
                         </table>
@@ -63,6 +56,31 @@
                 </div>
             </div>
         </div>
+        <script src="//rubaxa.github.io/Sortable/Sortable.js"></script>
+        <script type="text/javascript">
+            function buildContest() {
+                var inputCount = document.getElementsByTagName('input').length;
+                var selectedProblemCount = 0;
+                for (var i = 0; i < inputCount; i++) {
+                    var good = false;
+                    if (document.getElementsByTagName('input')[i].type === 'checkbox')
+                        if (document.getElementsByTagName('input')[i].parentNode.parentNode.id === 'selected-problems')
+                            good = true;
+                    document.getElementsByTagName('input')[i].checked = good;
+                    selectedProblemCount += good;
+                }
+                console.log('Problems to submit: ' + selectedProblemCount);
+                if (selectedProblemCount) {
+                    document.getElementsByTagName('form')[0].submit();
+                } else {
+                    alert('Should be at least one selected problem');
+                }
+            }
+            $(function () {
+                new Sortable(document.getElementById('all-problems'), { group: 'problems' });
+                new Sortable(document.getElementById('selected-problems'), { group: 'problems' });
+            });
+        </script>
     </div>
 </body>
 
