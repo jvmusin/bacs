@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-    <nav layout:fragment="default-header">
-        <a href="index.html" th:href="@{/}">HOME</a>
-        <a href="contests/contest-list.html" th:href="@{/contests}">CONTESTS</a>
-        <div layout:replace="~{active-user :: active-user}"></div>
-    </nav>
+    <div class="row" layout:fragment="default-header">
+        <div class="col">
+            <nav class="navbar navbar-expand navbar-light bg-light">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contests}">Contests</a>
+                    </li>
+                </ul>
+
+                <div class="form-inline" sec:authorize="not authenticated">
+                    <span class="nav-item">
+                        <a class="nav-link" th:href="@{/register}">Sign Up</a>
+                    </span>
+                    <span class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </span>
+                </div>
+                <div class="form-inline" sec:authorize="authenticated">
+                    <span class="nav-item">
+                        <a class="nav-link" th:text="${#authentication.name + ' (' + #strings.arrayJoin(#authentication.authorities, ', ') + ')'}"></a>
+                    </span>
+                    <span class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    </span>
+                </div>
+            </nav>
+        </div>
+    </div>
 
 </html>

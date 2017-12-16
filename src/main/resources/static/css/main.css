@@ -1,0 +1,28 @@
+body {
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
+html, body, .container {
+    height: 100%;
+}
+
+.login-form {
+    background: azure;
+    border: 0.05rem solid gray;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.login-form h3 {
+    text-align: center;
+}
+
+.login-form .row {
+    text-align: right;
+}
+
+.login-form .btn {
+    width: 80%;
+}
