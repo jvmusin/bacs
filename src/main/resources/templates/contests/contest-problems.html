@@ -8,26 +8,35 @@
     </head>
 
     <body>
-        <div layout:fragment="contest-content">
-            <h1 th:text="${contest.contestName}">First of April Contest</h1>
-
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Problem</th>
-                        <th>Time limit (sec)</th>
-                        <th>Memory limit (MB)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="problem : ${contest.problems}">
-                        <td><a th:href="${problem.statementUrl}"
-                               th:text="${problem.indexedName}">A. A + B</a></td>
-                        <td th:text="${problem.timeLimitSeconds}">9</td>
-                        <td th:text="${problem.memoryLimitMegabytes}">256</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row" layout:fragment="contest-content">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center" th:text="${contest.contestName}">First of April Contest</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Problem</th>
+                                    <th>Time limit (sec)</th>
+                                    <th>Memory limit (MB)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="problem : ${contest.problems}">
+                                    <td><a th:href="${problem.statementUrl}"
+                                           th:text="${problem.indexedName}">A. A + B</a></td>
+                                    <td th:text="${problem.timeLimitSeconds}">9</td>
+                                    <td th:text="${problem.memoryLimitMegabytes}">256</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 
