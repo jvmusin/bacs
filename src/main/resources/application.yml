@@ -14,7 +14,7 @@ spring:
     mapper:
       ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
 sybon:
-  apiKey: dwygVKaI6E6AH4wuGXKt4Q
+  apiKey: YBJY9zkkUUigNcYOlFoSg
 
   problemsUrl: https://archive.sybon.org/api/Problems
   collectionsUrl: https://archive.sybon.org/api/Collections

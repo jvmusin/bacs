@@ -15,7 +15,7 @@ class SybonProblemConverter implements Converter<SybonProblem, Problem> {
         ProblemDetails details = new ProblemDetails();
         details.setProblemName(sybonProblem.getName());
         details.setStatementUrl(sybonProblem.getStatementUrl());
-        details.setPretestCount(sybonProblem.getPretestsCount());
+        details.setPretestCount(sybonProblem.getPretest().length);
         details.setTestCount(sybonProblem.getTestsCount());
         details.setTimeLimitMillis(sybonProblem.getResourceLimits().getTimeLimitMillis());
         details.setMemoryLimitBytes(sybonProblem.getResourceLimits().getMemoryLimitBytes());

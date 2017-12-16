@@ -9,6 +9,6 @@ class SybonProblemCollection {
     private Integer id;
     private String name;
     private String description;
-    private Integer problemCount;
+    private Integer problemsCount;
     private List<SybonProblem> problems;
 }
