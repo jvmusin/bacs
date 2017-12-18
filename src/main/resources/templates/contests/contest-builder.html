@@ -28,13 +28,13 @@
                             </tr>
                             <tr>
                                 <td colspan="2" nowrap>
-                                    <ul id="all-problems" style="display: inline-block; vertical-align: top; min-height: 3rem; width: 50%; border: 4px dotted yellow;">
+                                    <ul id="all-problems" class="builder-problems">
                                         <li th:each="problem : ${model.problems}">
-                                            [[${problem.id + ': ' + problem.name}]]
+                                            <span th:text="${problem.id + ': ' + problem.name}" th:remove="tag"></span>
                                             <input type="checkbox" name="problemIds" th:value="${problem.id}" hidden>
                                         </li>
                                     </ul>
-                                    <ul id="selected-problems" style="display: inline-block; vertical-align: top; min-height: 3rem; width: 50%; border: 4px dotted greenyellow">
+                                    <ul id="selected-problems" class="builder-problems">
                                     </ul>
                                 </td>
                             </tr>

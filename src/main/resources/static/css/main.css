@@ -20,15 +20,30 @@ html, body, .container {
     width: 30%;
     margin: 0 auto;
 }
-
 .login-form h3 {
     text-align: center;
 }
-
 .login-form .row {
     text-align: right;
 }
-
 .login-form .btn {
     width: 80%;
+}
+
+.builder-problems {
+	display: inline-block;
+	vertical-align: top;
+	min-height: 3rem;
+	width: 49.5%;
+	border: 4px dotted yellow;
+}
+#all-problems {
+	border-color: yellow;
+    float: left;
+    padding-right: 0.1rem;
+}
+#selected-problems {
+	border-color: greenyellow;
+    float: right;
+    padding-left: 0.1rem;
 }
