@@ -1,11 +1,16 @@
 package istu.bacs.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static istu.bacs.model.Verdict.OK;
+import static istu.bacs.model.Verdict.PENDING;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -18,7 +23,9 @@ public class Standings {
     public Standings(Contest contest, List<Submission> submissions) {
         this.contest = contest;
         Map<User, ContestantRow> byUser = new HashMap<>();
-        submissions.stream().sorted(Comparator.comparing(Submission::getCreationTime))
+        submissions.stream()
+                .filter(sub -> sub.getVerdict() != PENDING)
+                .sorted(Comparator.comparing(Submission::getCreationTime))
                 .forEach(submission -> byUser.computeIfAbsent(submission.getAuthor(), ContestantRow::new).update(submission));
         rows = byUser.values().stream().sorted().collect(toList());
     }
@@ -51,7 +58,7 @@ public class Standings {
         }
 
         @Override
-        public int compareTo(ContestantRow other) {
+        public int compareTo(@NotNull ContestantRow other) {
             int c = Integer.compare(solvedCount, other.solvedCount);
             if (c == 0) c = Integer.compare(penalty, other.penalty);
             return c;
