@@ -85,6 +85,7 @@ class SybonApi implements ExternalApi {
         submit.setSolutionFileType("Text");
         submit.setProblemId(getSybonId(submission.getProblem().getProblemId()));
         submit.setPretestsOnly(submission.isPretestsOnly());
+        submit.setContinueCondition(SybonContinueCondition.Always);
 
         return submit;
     }
@@ -134,10 +135,12 @@ class SybonApi implements ExternalApi {
         String uri = buildUrl(config.getCollectionsUrl(), emptyMap(), queryParams);
         return restTemplate.getForObject(uri, SybonProblemCollection[].class);
     }
+
     public SybonProblemCollection getProblemCollection(int id) {
         String uri = buildUrl(config.getCollectionsUrl() + "/{id}", singletonMap("id", id));
         return restTemplate.getForObject(uri, SybonProblemCollection.class);
     }
+
     public SybonCompiler[] getCompilers() {
         String uri = buildUrl(config.getCompilersUrl(), emptyMap());
         return restTemplate.getForObject(uri, SybonCompiler[].class);

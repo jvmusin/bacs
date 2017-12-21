@@ -9,4 +9,5 @@ class SybonSubmit {
     private String solutionFileType;
     private int problemId;
     private boolean pretestsOnly;
+    private SybonContinueCondition continueCondition;
 }

@@ -19,11 +19,11 @@ class SybonLanguageConverter implements Converter<Language, Integer> {
         supportedLanguages = new EnumMap<>(Language.class);
         supportedLanguages.put(C, 1);
         supportedLanguages.put(CPP, 2);
-        supportedLanguages.put(Delphi, 3);
-        supportedLanguages.put(FPC, 4);
-        supportedLanguages.put(Python2, 5);
-        supportedLanguages.put(Python3, 6);
-        supportedLanguages.put(Mono, 8);
+        supportedLanguages.put(Mono, 3);
+        supportedLanguages.put(Delphi, 4);
+        supportedLanguages.put(FPC, 5);
+        supportedLanguages.put(Python2, 6);
+        supportedLanguages.put(Python3, 7);
     }
 
     @Override
