@@ -10,43 +10,42 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	private final UserService userService;
 
-	public SecurityConfig(UserService userService) {
-		this.userService = userService;
-	}
+    private final UserService userService;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.formLogin().loginPage("/login")
-				.and()
-				.authorizeRequests().antMatchers("/contest/**", "/contests/**").authenticated()
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .formLogin().loginPage("/login")
+                .and()
+                .authorizeRequests().antMatchers("/contest/**", "/contests/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
-	}
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) {
-		auth.authenticationProvider(authenticationProvider());
-	}
-	
-	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
-	}
-	
-	@Bean
-	public static PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+                .logout().logoutUrl("/logout");
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
 }
