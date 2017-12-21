@@ -52,8 +52,8 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
                 .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
         byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
-            List<Submission> submissions2 = resourceAndSubmissions.getValue();
-            findApi(resource).updateSubmissionDetails(submissions2);
+            List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
+            findApi(resource).updateSubmissionDetails(resourceSubmissions);
         });
     }
 
@@ -61,10 +61,10 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     public void updateProblemDetails(List<Problem> problems) {
         Map<String, List<Problem>> byResource = problems.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()), toList()));
-        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
-            String resource = resourceAndSubmissions.getKey();
-            List<Problem> problems2 = resourceAndSubmissions.getValue();
-            findApi(resource).updateProblemDetails(problems2);
+        byResource.entrySet().parallelStream().forEach(resourceAndProblems -> {
+            String resource = resourceAndProblems.getKey();
+            List<Problem> resourceProblems = resourceAndProblems.getValue();
+            findApi(resource).updateProblemDetails(resourceProblems);
         });
     }
 
