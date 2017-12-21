@@ -1,4 +1,4 @@
-package istu.bacs.model;
+package istu.bacs.domain;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.model.User;
+import istu.bacs.domain.User;
 import istu.bacs.repository.UserRepository;
 import istu.bacs.service.UserService;
 import istu.bacs.service.UsernameAlreadyInUseException;

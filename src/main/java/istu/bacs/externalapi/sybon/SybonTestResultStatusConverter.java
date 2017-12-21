@@ -1,6 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
-import istu.bacs.model.Verdict;
+import istu.bacs.domain.Verdict;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

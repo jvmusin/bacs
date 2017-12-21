@@ -1,10 +1,10 @@
 package istu.bacs.service.impl;
 
 import istu.bacs.externalapi.ExternalApiAggregator;
-import istu.bacs.model.Contest;
-import istu.bacs.model.Submission;
-import istu.bacs.model.User;
-import istu.bacs.model.Verdict;
+import istu.bacs.domain.Contest;
+import istu.bacs.domain.Submission;
+import istu.bacs.domain.User;
+import istu.bacs.domain.Verdict;
 import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.SubmissionService;
 import org.springframework.stereotype.Service;

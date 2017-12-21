@@ -1,6 +1,6 @@
 package istu.bacs.web.dto;
 
-import istu.bacs.model.*;
+import istu.bacs.domain.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

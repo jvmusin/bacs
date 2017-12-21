@@ -1,4 +1,4 @@
-package istu.bacs.model;
+package istu.bacs.domain;
 
 import istu.bacs.service.ProblemService;
 import org.springframework.boot.CommandLineRunner;

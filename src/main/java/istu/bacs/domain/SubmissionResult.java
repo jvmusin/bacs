@@ -1,4 +1,4 @@
-package istu.bacs.model;
+package istu.bacs.domain;
 
 import lombok.Builder;
 import lombok.Data;

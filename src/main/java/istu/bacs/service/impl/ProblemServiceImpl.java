@@ -1,6 +1,6 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.model.Problem;
+import istu.bacs.domain.Problem;
 import istu.bacs.service.ProblemService;
 import org.springframework.stereotype.Service;
 

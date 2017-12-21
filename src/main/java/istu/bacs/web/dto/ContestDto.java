@@ -1,10 +1,9 @@
 package istu.bacs.web.dto;
 
-import istu.bacs.model.Contest;
+import istu.bacs.domain.Contest;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data

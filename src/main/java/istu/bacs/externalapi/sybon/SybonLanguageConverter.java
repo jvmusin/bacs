@@ -1,6 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
-import istu.bacs.model.Language;
+import istu.bacs.domain.Language;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 
-import static istu.bacs.model.Language.*;
+import static istu.bacs.domain.Language.*;
 
 @Component
 class SybonLanguageConverter implements Converter<Language, Integer> {

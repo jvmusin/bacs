@@ -1,6 +1,6 @@
 package istu.bacs.service;
 
-import istu.bacs.model.Problem;
+import istu.bacs.domain.Problem;
 
 import java.util.List;
 

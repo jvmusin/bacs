@@ -1,6 +1,6 @@
-package istu.bacs.web;
+package istu.bacs.web.controller;
 
-import istu.bacs.model.*;
+import istu.bacs.domain.*;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.StandingsService;
 import istu.bacs.service.SubmissionService;

@@ -1,6 +1,6 @@
 package istu.bacs.web.dto;
 
-import istu.bacs.model.Standings;
+import istu.bacs.domain.Standings;
 import lombok.Data;
 
 import java.util.ArrayList;

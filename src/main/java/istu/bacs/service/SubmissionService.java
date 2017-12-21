@@ -1,8 +1,8 @@
 package istu.bacs.service;
 
-import istu.bacs.model.Contest;
-import istu.bacs.model.Submission;
-import istu.bacs.model.User;
+import istu.bacs.domain.Contest;
+import istu.bacs.domain.Submission;
+import istu.bacs.domain.User;
 
 import java.util.List;
 

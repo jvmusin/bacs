@@ -1,6 +1,6 @@
 package istu.bacs.web.dto;
 
-import istu.bacs.model.Contest;
+import istu.bacs.domain.Contest;
 import lombok.Data;
 
 import java.util.List;

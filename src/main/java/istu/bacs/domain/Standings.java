@@ -1,4 +1,4 @@
-package istu.bacs.model;
+package istu.bacs.domain;
 
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static istu.bacs.model.Verdict.OK;
-import static istu.bacs.model.Verdict.PENDING;
+import static istu.bacs.domain.Verdict.OK;
+import static istu.bacs.domain.Verdict.PENDING;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 

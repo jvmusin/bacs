@@ -1,6 +1,6 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.model.Contest;
+import istu.bacs.domain.Contest;
 import istu.bacs.repository.ContestRepository;
 import istu.bacs.service.ContestService;
 import org.springframework.cache.annotation.CacheConfig;

@@ -1,8 +1,8 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.model.Contest;
-import istu.bacs.model.Standings;
-import istu.bacs.model.Submission;
+import istu.bacs.domain.Contest;
+import istu.bacs.domain.Standings;
+import istu.bacs.domain.Submission;
 import istu.bacs.service.SubmissionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

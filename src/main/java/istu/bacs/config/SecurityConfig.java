@@ -1,4 +1,4 @@
-package istu.bacs.security;
+package istu.bacs.config;
 
 import istu.bacs.service.UserService;
 import org.springframework.context.annotation.Bean;

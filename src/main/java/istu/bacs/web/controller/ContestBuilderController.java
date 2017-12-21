@@ -1,7 +1,7 @@
-package istu.bacs.web;
+package istu.bacs.web.controller;
 
-import istu.bacs.model.Contest;
-import istu.bacs.model.Problem;
+import istu.bacs.domain.Contest;
+import istu.bacs.domain.Problem;
 import istu.bacs.service.ContestService;
 import istu.bacs.service.ProblemService;
 import istu.bacs.web.dto.contestbuilder.ContestBuilderDto;

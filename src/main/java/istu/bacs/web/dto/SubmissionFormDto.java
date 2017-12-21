@@ -1,7 +1,7 @@
 package istu.bacs.web.dto;
 
-import istu.bacs.model.Language;
-import istu.bacs.model.Problem;
+import istu.bacs.domain.Language;
+import istu.bacs.domain.Problem;
 import lombok.Data;
 
 import java.util.List;

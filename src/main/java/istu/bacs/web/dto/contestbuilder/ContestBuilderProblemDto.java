@@ -1,7 +1,7 @@
 package istu.bacs.web.dto.contestbuilder;
 
-import istu.bacs.model.Problem;
-import istu.bacs.model.ProblemDetails;
+import istu.bacs.domain.Problem;
+import istu.bacs.domain.ProblemDetails;
 import lombok.Data;
 
 @Data

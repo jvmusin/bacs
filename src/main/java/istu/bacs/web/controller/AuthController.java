@@ -1,6 +1,6 @@
-package istu.bacs.web;
+package istu.bacs.web.controller;
 
-import istu.bacs.model.User;
+import istu.bacs.domain.User;
 import istu.bacs.service.UserService;
 import istu.bacs.service.UsernameAlreadyInUseException;
 import org.springframework.stereotype.Controller;
