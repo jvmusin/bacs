@@ -5,17 +5,15 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@Entity
+@Data @Entity
 public class Submission {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Integer submissionId;
 
-    @Column(name = "author_id")
+    @ManyToOne @JoinColumn(name = "author_id")
     private User author;
-    @Column(name = "contest_id")
+    @ManyToOne @JoinColumn(name = "contest_id")
     private Contest contest;
     @Column(name = "problem_id")
     private Problem problem;
