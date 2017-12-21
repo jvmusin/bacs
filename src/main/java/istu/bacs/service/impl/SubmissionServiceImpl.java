@@ -1,18 +1,17 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.domain.Contest;
 import istu.bacs.domain.Submission;
 import istu.bacs.domain.User;
-import istu.bacs.domain.Verdict;
+import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.SubmissionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static istu.bacs.domain.Verdict.PENDING;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
@@ -57,10 +56,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     private void prepareSubmissions(List<Submission> submissions) {
-        submissions = submissions.stream()
-                .filter(sub -> sub.getVerdict() == Verdict.PENDING)
-                .collect(toList());
-        externalApi.updateSubmissionDetails(submissions);
+        for (Submission submission : submissions)
+            if (submission.getVerdict() == PENDING)
+                externalApi.updateSubmissionDetails(submissions);
     }
 
     @Override
