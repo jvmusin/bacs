@@ -4,6 +4,7 @@ import istu.bacs.model.SubmissionResult;
 import istu.bacs.model.TestGroupResult;
 import istu.bacs.model.TestResult;
 import istu.bacs.model.Verdict;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -20,21 +21,21 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         this.testResultStatusConverter = testResultStatusConverter;
     }
 
+    @NotNull
     @Override
-    public SubmissionResult convert(SybonSubmitResult submission) {
-        //todo: FIX THIS PART, SYBON IS BUGGED HERE
+    public SubmissionResult convert(@NotNull SybonSubmitResult submission) {
         if (submission.getBuildResult() == null)
             return SubmissionResult.builder()
                     .built(false)
-                    .verdict(Verdict.SERVER_ERROR)
+                    .verdict(Verdict.PENDING)
                     .build();
 
         if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.Failed)
             return SubmissionResult.builder()
-                .built(false)
-                .buildInfo(submission.getBuildResult().getOutput())
-                .verdict(Verdict.COMPILE_ERROR)
-                .build();
+                    .built(false)
+                    .buildInfo(submission.getBuildResult().getOutput())
+                    .verdict(Verdict.COMPILE_ERROR)
+                    .build();
 
         int maxTimeUsedMillis = 0;
         int maxMemoryUsedBytes = 0;
