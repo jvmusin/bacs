@@ -29,7 +29,7 @@ public class StandingsServiceImpl implements istu.bacs.service.StandingsService 
     private void updateStandings() {
         System.err.println("STANDINGS ARE UPDATING");
         active.keySet().parallelStream().forEach(contest -> {
-            List<Submission> submissions = submissionService.findAllByContest(contest);
+            List<Submission> submissions = submissionService.findAllByContest(contest.getContestId());
             Standings standings = new Standings(contest, submissions);
             active.put(contest, standings);
         });

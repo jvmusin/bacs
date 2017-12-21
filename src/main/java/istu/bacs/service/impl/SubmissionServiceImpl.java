@@ -1,8 +1,6 @@
 package istu.bacs.service.impl;
 
-import istu.bacs.domain.Contest;
 import istu.bacs.domain.Submission;
-import istu.bacs.domain.User;
 import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.repository.SubmissionRepository;
 import istu.bacs.service.SubmissionService;
@@ -42,15 +40,15 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public List<Submission> findAllByContest(Contest contest) {
-        List<Submission> submissions = submissionRepository.findAllByContest(contest);
+    public List<Submission> findAllByContest(int contestId) {
+        List<Submission> submissions = submissionRepository.findAllByContest_ContestId(contestId);
         prepareSubmissions(submissions);
         return submissions;
     }
 
     @Override
-    public List<Submission> findAllByContestAndAuthor(Contest contest, User author) {
-        List<Submission> submissions = submissionRepository.findAllByContestAndAuthor(contest, author);
+    public List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId) {
+        List<Submission> submissions = submissionRepository.findAllByContest_ContestIdAndAuthor_UserId(contestId, authorUserId);
         prepareSubmissions(submissions);
         return submissions;
     }
