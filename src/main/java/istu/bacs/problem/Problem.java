@@ -1,5 +1,7 @@
 package istu.bacs.problem;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,8 +11,10 @@ import java.util.Comparator;
 public class Problem implements Comparable<Problem> {
 
     private String problemId;
+    @JsonUnwrapped
     private ProblemDetails details;
 
+    @JsonIgnore
     private Comparator<Problem> comparator = Comparator.comparing(p -> p.problemId);
 
     @Override
