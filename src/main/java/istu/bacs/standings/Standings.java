@@ -7,6 +7,7 @@ import istu.bacs.user.User;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -79,7 +80,8 @@ public class Standings {
         public boolean update(Verdict verdict, LocalDateTime at) {
             if (solved) return false;
             if (verdict == OK) {
-                penalty = (int) contest.getTimeSinceContestStart(at).toMinutes() + failTries * TRY_PENALTY_MINUTES;
+                int fromContestStart = (int) Duration.between(contest.getStartTime(), at).toMinutes();
+                penalty = fromContestStart + failTries * TRY_PENALTY_MINUTES;
                 return solved = true;
             }
             failTries++;

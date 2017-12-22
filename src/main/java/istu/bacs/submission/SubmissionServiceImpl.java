@@ -7,6 +7,7 @@ import java.util.List;
 
 import static istu.bacs.submission.Verdict.PENDING;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
@@ -30,13 +31,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public List<Submission> findAll() {
-        List<Submission> submissions = submissionRepository.findAll();
-        prepareSubmissions(submissions);
-        return submissions;
-    }
-
-    @Override
     public List<Submission> findAllByContest(int contestId) {
         List<Submission> submissions = submissionRepository.findAllByContest_ContestId(contestId);
         prepareSubmissions(submissions);
@@ -51,20 +45,15 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     private void prepareSubmissions(List<Submission> submissions) {
-        for (Submission submission : submissions)
-            if (submission.getVerdict() == PENDING)
-                externalApi.updateSubmissionDetails(submissions);
+        List<Submission> submissionsToCheck = submissions.stream()
+                .filter(s -> s.getVerdict() == PENDING)
+                .collect(toList());
+        externalApi.updateSubmissionDetails(submissionsToCheck);
     }
 
     @Override
     public void submit(Submission submission) {
         externalApi.submit(submission);
         submissionRepository.save(submission);
-    }
-
-    @Override
-    public void submitAll(List<Submission> submissions) {
-        externalApi.submitAll(submissions);
-        submissionRepository.saveAll(submissions);
     }
 }

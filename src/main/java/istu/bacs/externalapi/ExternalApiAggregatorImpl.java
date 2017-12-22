@@ -1,11 +1,13 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.submission.Language;
 import istu.bacs.problem.Problem;
 import istu.bacs.submission.Submission;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
@@ -18,11 +20,6 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     public ExternalApiAggregatorImpl(ExternalApi[] externalApis) {
         this.externalApis = externalApis;
-    }
-
-    @Override
-    public Problem getProblem(String problemId) {
-        return findApi(extractResource(problemId)).getProblem(problemId);
     }
 
     @Override
@@ -40,13 +37,6 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void submitAll(List<Submission> submissions) {
-        if (submissions.isEmpty()) return;
-        String submissionId = submissions.get(0).getExternalSubmissionId();
-        findApi(extractResource(submissionId)).submit(submissions);
-    }
-
-    @Override
     public void updateSubmissionDetails(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = submissions.stream()
                 .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
@@ -55,22 +45,6 @@ class ExternalApiAggregatorImpl implements ExternalApiAggregator {
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
             findApi(resource).updateSubmissionDetails(resourceSubmissions);
         });
-    }
-
-    @Override
-    public void updateProblemDetails(List<Problem> problems) {
-        Map<String, List<Problem>> byResource = problems.stream()
-                .collect(Collectors.groupingBy(s -> extractResource(s.getProblemId()), toList()));
-        byResource.entrySet().parallelStream().forEach(resourceAndProblems -> {
-            String resource = resourceAndProblems.getKey();
-            List<Problem> resourceProblems = resourceAndProblems.getValue();
-            findApi(resource).updateProblemDetails(resourceProblems);
-        });
-    }
-
-    @Override
-    public Set<Language> getSupportedLanguages(String resourceName) {
-        return findApi(resourceName).getSupportedLanguages();
     }
 
     private ExternalApi findApi(String resourceName) {

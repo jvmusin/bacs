@@ -1,20 +1,16 @@
-package istu.bacs.contest;
+package istu.bacs.problem;
 
-import istu.bacs.problem.Problem;
-import istu.bacs.problem.ProblemConverter;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Component
-@Converter(autoApply = true)
 public class ProblemListConverter implements AttributeConverter<List<Problem>, String> {
 
     private static final ProblemConverter problemConverter = new ProblemConverter();
@@ -26,7 +22,7 @@ public class ProblemListConverter implements AttributeConverter<List<Problem>, S
 
     @Override
     public List<Problem> convertToEntityAttribute(String dbData) {
-        if (dbData.isEmpty()) return new ArrayList<>();
+        if (dbData.isEmpty()) return emptyList();
         return Arrays.stream(dbData.split(","))
                 .map(problemConverter::convertToEntityAttribute)
                 .collect(toList());

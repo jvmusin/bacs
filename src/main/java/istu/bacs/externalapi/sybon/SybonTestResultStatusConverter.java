@@ -1,13 +1,14 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.submission.Verdict;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SybonTestResultStatusConverter implements Converter<SybonTestResultStatus, Verdict> {
     @Override
-    public Verdict convert(SybonTestResultStatus status) {
+    public Verdict convert(@NotNull SybonTestResultStatus status) {
         switch (status) {
             case OK:                                   return Verdict.OK;
             case WRONG_ANSWER:                         return Verdict.WRONG_ANSWER;

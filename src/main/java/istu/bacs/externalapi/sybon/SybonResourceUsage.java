@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 class SybonResourceUsage {
-    private Integer timeUsageMillis;
-    private Integer memoryUsageBytes;
+    private int timeUsageMillis;
+    private int memoryUsageBytes;
 }

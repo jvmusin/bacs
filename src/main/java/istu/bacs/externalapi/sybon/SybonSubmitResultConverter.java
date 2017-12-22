@@ -1,16 +1,10 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.submission.SubmissionResult;
-import istu.bacs.submission.TestGroupResult;
-import istu.bacs.submission.TestResult;
 import istu.bacs.submission.Verdict;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
@@ -56,7 +50,6 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         }
         if (verdict == Verdict.OK) testsPassed = null;
 
-        List<TestGroupResult> testGroups = submission.getTestGroupResults().stream().map(this::convertTestGroupResult).collect(toList());
         return SubmissionResult.builder()
                 .built(true)
                 .buildInfo(submission.getBuildResult().getOutput())
@@ -64,26 +57,6 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
                 .testsPassed(testsPassed)
                 .timeUsedMillis(maxTimeUsedMillis)
                 .memoryUsedBytes(maxMemoryUsedBytes)
-                .testGroupResults(testGroups)
-                .build();
-    }
-
-    private TestGroupResult convertTestGroupResult(SybonTestGroupResult result) {
-        List<TestResult> results = result.getTestResults().stream()
-                .map(this::convertTestResult)
-                .collect(toList());
-        return new TestGroupResult(result.getExecuted(), results);
-    }
-
-    private TestResult convertTestResult(SybonTestResult res) {
-        return TestResult.builder()
-                .verdict(testResultStatusConverter.convert(res.getStatus()))
-                .judgeMessage(res.getJudgeMessage())
-                .input(res.getInput())
-                .output(res.getActualResult())
-                .expected(res.getExpectedResult())
-                .timeUsedMillis(res.getMillis())
-                .memoryUsedBytes(res.getBytes())
                 .build();
     }
 }

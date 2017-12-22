@@ -8,8 +8,7 @@ import java.util.Comparator;
 @Data
 public class Problem implements Comparable<Problem> {
 
-	private String problemId;
-
+    private String problemId;
     private ProblemDetails details;
 
     private Comparator<Problem> comparator = Comparator.comparing(p -> p.problemId);

@@ -7,9 +7,6 @@ public class ProblemDetails {
     private String problemName;
     private String statementUrl;
 
-    private Integer pretestCount;
-    private Integer testCount;
-
-    private Integer timeLimitMillis;
-    private Integer memoryLimitBytes;
+    private int timeLimitMillis;
+    private int memoryLimitBytes;
 }

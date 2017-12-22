@@ -14,7 +14,6 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    //todo: return result
     public void signUp(@ModelAttribute User user) {
         userService.signUp(user);
     }

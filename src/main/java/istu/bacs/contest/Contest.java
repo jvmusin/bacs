@@ -1,55 +1,35 @@
 package istu.bacs.contest;
 
 import istu.bacs.problem.Problem;
+import istu.bacs.problem.ProblemListConverter;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.time.Duration;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.time.LocalDateTime.now;
 
 @Data
 @Entity
 public class Contest {
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer contestId;
-	
-	private String contestName;
-	
-	private LocalDateTime startTime;
-	private LocalDateTime finishTime;
+    @Id
+    @GeneratedValue
+    private Integer contestId;
 
-	private List<Problem> problems;
+    private String contestName;
 
-	public boolean isRunning() {
-        return isStarted() && !isFinished();
-    }
+    private LocalDateTime startTime;
+    private LocalDateTime finishTime;
 
-    public boolean isStarted() {
-	    return startTime != null && now().isBefore(startTime);
-    }
-
-    public boolean isFinished() {
-	    return finishTime != null && now().isAfter(finishTime);
-    }
-
-    public int getProblemIndex(Problem problem) {
-	    for (int i = 0; i < problems.size(); i++)
-	        if (problems.get(i).getProblemId().equals(problem.getProblemId()))
-	            return i;
-	    return -1;
-    }
-
-    public Duration getTimeSinceContestStart(LocalDateTime dateTime) {
-	    return Duration.between(startTime, dateTime);
-    }
+    @Convert(converter = ProblemListConverter.class)
+    private List<Problem> problems;
 
     @Override
     public boolean equals(Object other) {
-	    if (other == null) return false;
+        if (other == null) return false;
         Contest contest = (Contest) other;
         return contestId.equals(contest.contestId);
     }

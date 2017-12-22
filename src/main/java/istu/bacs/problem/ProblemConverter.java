@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 @Component
-@Converter(autoApply = true)
 public class ProblemConverter implements AttributeConverter<Problem, String> {
 
     private static ProblemService problemService;
