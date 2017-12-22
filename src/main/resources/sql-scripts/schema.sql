@@ -1,11 +1,13 @@
 CREATE TABLE IF NOT EXISTS user (
-  user_id  INT PRIMARY KEY AUTO_INCREMENT,
+  user_id     INT PRIMARY KEY AUTO_INCREMENT,
 
-  username VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL
+  username    VARCHAR(255) NOT NULL UNIQUE,
+  password    VARCHAR(255) NOT NULL,
+
+  authorities VARCHAR(255) NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_username
-  ON user (username);
+ON USER (username);
 
 CREATE TABLE IF NOT EXISTS contest (
   contest_id   INT PRIMARY KEY AUTO_INCREMENT,
@@ -32,8 +34,8 @@ CREATE TABLE IF NOT EXISTS submission (
 
   external_submission_id VARCHAR(255) NOT NULL,
 
-  FOREIGN KEY (author_id) REFERENCES user(user_id),
-  FOREIGN KEY (contest_id) REFERENCES contest(contest_id)
+  FOREIGN KEY (author_id) REFERENCES user (user_id),
+  FOREIGN KEY (contest_id) REFERENCES contest (contest_id)
 );
 CREATE INDEX IF NOT EXISTS idx_contest_author
-  ON submission (contest_id, author_id);
+ON submission (contest_id, author_id);

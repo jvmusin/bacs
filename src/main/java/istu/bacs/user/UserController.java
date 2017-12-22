@@ -1,8 +1,7 @@
 package istu.bacs.user;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -14,7 +13,13 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@ModelAttribute User user) {
+    public void signUp(@RequestBody User user) {
         userService.signUp(user);
+    }
+
+    @GetMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public User getUser(@PathVariable int userId) {
+        return userService.findById(userId);
     }
 }

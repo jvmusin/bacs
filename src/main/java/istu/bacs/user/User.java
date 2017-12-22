@@ -2,12 +2,12 @@ package istu.bacs.user;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,11 +20,8 @@ public class User {
     private String username;
     private String password;
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return username.equals("Musin")
-                ? AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN")
-                : AuthorityUtils.createAuthorityList("ROLE_USER");
-    }
+    @Convert(converter = GrantedAuthoritiesConverter.class)
+    private List<GrantedAuthority> authorities;
 
     @Override
     public boolean equals(Object other) {
