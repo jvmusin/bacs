@@ -1,6 +1,6 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.service.ProblemService;
+import istu.bacs.problem.ProblemService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

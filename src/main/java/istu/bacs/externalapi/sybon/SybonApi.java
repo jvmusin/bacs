@@ -2,10 +2,10 @@ package istu.bacs.externalapi.sybon;
 
 import istu.bacs.externalapi.ExternalApi;
 import istu.bacs.externalapi.NumberHeadComparator;
-import istu.bacs.domain.Language;
-import istu.bacs.domain.Problem;
-import istu.bacs.domain.Submission;
-import istu.bacs.domain.SubmissionResult;
+import istu.bacs.submission.Language;
+import istu.bacs.problem.Problem;
+import istu.bacs.submission.Submission;
+import istu.bacs.submission.SubmissionResult;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

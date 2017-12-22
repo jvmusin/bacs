@@ -40,11 +40,11 @@
                             </tr>
                             <tr>
                                 <th>Start time:</th>
-                                <td><input type="text" id="start" name="startTime" th:placeholder="${#temporals.format(#temporals.createNow(), T(istu.bacs.web.dto.DtoUtils).DATE_TIME_FORMAT)}"></td>
+                                <td><input type="text" id="start" name="startTime" th:placeholder="${#temporals.format(#temporals.createNow(), T(istu.bacs.DtoUtils).DATE_TIME_FORMAT)}"></td>
                             </tr>
                             <tr>
                                 <th>Finish time:</th>
-                                <td><input type="text" id="finish" name="finishTime" th:placeholder="${#temporals.format(#temporals.createNow().plus(5, T(java.time.temporal.ChronoUnit).HOURS), T(istu.bacs.web.dto.DtoUtils).DATE_TIME_FORMAT)}"></td>
+                                <td><input type="text" id="finish" name="finishTime" th:placeholder="${#temporals.format(#temporals.createNow().plus(5, T(java.time.temporal.ChronoUnit).HOURS), T(istu.bacs.DtoUtils).DATE_TIME_FORMAT)}"></td>
                             </tr>
                             <tr>
                                 <td>

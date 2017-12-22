@@ -1,8 +1,8 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.domain.Language;
-import istu.bacs.domain.Problem;
-import istu.bacs.domain.Submission;
+import istu.bacs.submission.Language;
+import istu.bacs.problem.Problem;
+import istu.bacs.submission.Submission;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,8 +1,8 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.externalapi.NumberHeadComparator;
-import istu.bacs.domain.Problem;
-import istu.bacs.domain.ProblemDetails;
+import istu.bacs.problem.Problem;
+import istu.bacs.problem.ProblemDetails;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

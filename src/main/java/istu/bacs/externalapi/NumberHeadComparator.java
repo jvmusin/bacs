@@ -1,6 +1,6 @@
 package istu.bacs.externalapi;
 
-import istu.bacs.domain.Problem;
+import istu.bacs.problem.Problem;
 
 import java.util.Comparator;
 
