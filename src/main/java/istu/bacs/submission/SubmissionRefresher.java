@@ -5,7 +5,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -31,7 +30,6 @@ public class SubmissionRefresher {
         int size = q.size();
         List<Submission> all = new ArrayList<>(size);
         for (int i = 0; i < size; i++) all.add(q.poll());
-        Collections.reverse(all);
 
         externalApi.updateSubmissionDetails(all);
 

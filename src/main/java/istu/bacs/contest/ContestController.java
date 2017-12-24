@@ -1,5 +1,6 @@
 package istu.bacs.contest;
 
+import istu.bacs.contest.dto.*;
 import istu.bacs.problem.Problem;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.StandingsService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/contests")
@@ -28,45 +31,56 @@ public class ContestController {
     }
 
     @GetMapping
-    public List<Contest> getContests() {
-        return contestService.findAll();
+    public List<ContestMetaDto> getContests() {
+        return contestService.findAll().stream()
+                .map(ContestMetaDto::new)
+                .collect(toList());
     }
 
     @GetMapping("{contestId}")
-    public Contest getContest(@PathVariable int contestId) {
-        return contestService.findById(contestId);
-    }
-
-    @GetMapping("{contestId}/problems")
-    public List<Problem> getProblems(@PathVariable int contestId) {
-        Contest contest = contestService.findById(contestId);
-        return contest.getProblems();
+    public FullContestDto getContest(@PathVariable int contestId) {
+        return new FullContestDto(contestService.findById(contestId));
     }
 
     @GetMapping("{contestId}/problems/{problemIndex}")
-    public Problem getProblem(@PathVariable int contestId, @PathVariable int problemIndex) {
+    public ProblemDto getProblem(@PathVariable int contestId, @PathVariable int problemIndex) {
         Contest contest = contestService.findById(contestId);
-        return contest.getProblems().get(problemIndex);
+        return new ProblemDto(contest.getProblems().get(problemIndex), problemIndex);
+    }
+
+    @GetMapping("{contestId}/problems/{problemIndex}/statement")
+    public String getStatementUrl(@PathVariable int contestId, @PathVariable int problemIndex) {
+        Contest contest = contestService.findById(contestId);
+        Problem problem = contest.getProblems().get(problemIndex);
+        return problem.getDetails().getStatementUrl();
     }
 
     @GetMapping("{contestId}/submissions")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public List<Submission> getAllSubmissions(@PathVariable int contestId) {
-        return submissionService.findAllByContest(contestId);
+    public List<SubmissionMetaDto> getAllSubmissions(@PathVariable int contestId) {
+        return submissionService.findAllByContest(contestId).stream()
+                .map(SubmissionMetaDto::new)
+                .collect(toList());
     }
 
     @GetMapping("{contestId}/submissions/my")
-    public List<Submission> getMySubmissions(@PathVariable int contestId, @AuthenticationPrincipal User author) {
-        return submissionService.findAllByContestAndAuthor(contestId, author.getUserId());
+    public List<SubmissionMetaDto> getMySubmissions(@PathVariable int contestId, @AuthenticationPrincipal User author) {
+        return submissionService.findAllByContestAndAuthor(contestId, author.getUserId()).stream()
+                .map(SubmissionMetaDto::new)
+                .collect(toList());
     }
 
     @GetMapping("{contestId}/submissions/{submissionId}")
-    public Submission getSubmission(@PathVariable int contestId, @PathVariable int submissionId) {
-        return submissionService.findById(submissionId);
+    public FullSubmissionDto getSubmission(@PathVariable int contestId, @PathVariable int submissionId) {
+        return new FullSubmissionDto(submissionService.findById(submissionId));
     }
 
     @PostMapping("{contestId}/problems/{problemIndex}")
-    public void submit(@PathVariable int contestId, @PathVariable int problemIndex, @RequestBody SubmitSolutionDto submission, @AuthenticationPrincipal User author) {
+    public void submit(@PathVariable int contestId,
+                       @PathVariable int problemIndex,
+                       @RequestBody SubmitSolutionDto submission,
+                       @AuthenticationPrincipal User author) {
+
         Contest contest = contestService.findById(contestId);
         Problem problem = contest.getProblems().get(problemIndex);
 
