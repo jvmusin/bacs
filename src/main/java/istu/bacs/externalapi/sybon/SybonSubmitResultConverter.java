@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import static istu.bacs.submission.Verdict.*;
+import static istu.bacs.externalapi.sybon.SybonBuildResult.Status.*;
+import static istu.bacs.submission.Verdict.COMPILE_ERROR;
+import static istu.bacs.submission.Verdict.OK;
 
 @Component
 class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
@@ -20,13 +22,14 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
     @NotNull
     @Override
     public SubmissionResult convert(@NotNull SybonSubmitResult submission) {
-        if (submission.getBuildResult() == null)
+        SybonBuildResult.Status status = submission.getBuildResult().getStatus();
+        if (status == PENDING)
             return SubmissionResult.builder()
                     .submissionId(submission.getId())
-                    .verdict(PENDING)
+                    .verdict(Verdict.PENDING)
                     .build();
 
-        if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.Failed)
+        if (status == FAILED || status == SERVER_ERROR)
             return SubmissionResult.builder()
                     .submissionId(submission.getId())
                     .buildInfo(submission.getBuildResult().getOutput())
