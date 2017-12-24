@@ -48,13 +48,6 @@ public class ContestController {
         return new ProblemDto(contest.getProblems().get(problemIndex), problemIndex);
     }
 
-    @GetMapping("{contestId}/problems/{problemIndex}/statement")
-    public String getStatementUrl(@PathVariable int contestId, @PathVariable int problemIndex) {
-        Contest contest = contestService.findById(contestId);
-        Problem problem = contest.getProblems().get(problemIndex);
-        return problem.getDetails().getStatementUrl();
-    }
-
     @GetMapping("{contestId}/submissions")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<SubmissionMetaDto> getAllSubmissions(@PathVariable int contestId) {

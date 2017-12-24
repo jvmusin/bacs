@@ -13,6 +13,7 @@ public class ProblemDto {
 
     private String name;
     private int indexInContest;
+    private String statementUrl;
 
     private int timeLimitMillis;
     private int memoryLimitBytes;
@@ -21,6 +22,7 @@ public class ProblemDto {
         ProblemDetails details = problem.getDetails();
 
         name = details.getProblemName();
+        statementUrl = details.getStatementUrl();
 
         timeLimitMillis = details.getTimeLimitMillis();
         memoryLimitBytes = details.getMemoryLimitBytes();
