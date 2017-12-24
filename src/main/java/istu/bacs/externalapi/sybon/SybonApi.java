@@ -86,8 +86,11 @@ class SybonApi implements ExternalApi {
 
         SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
         for (int i = 0; i < submissions.size(); i++) {
+            Submission submission = submissions.get(i);
+
             SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
-            submissions.get(i).setResult(result);
+            result.setSubmissionId(submission.getSubmissionId());
+            submission.setResult(result);
         }
     }
 

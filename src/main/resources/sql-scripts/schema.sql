@@ -39,3 +39,17 @@ CREATE TABLE IF NOT EXISTS submission (
 );
 CREATE INDEX IF NOT EXISTS idx_contest_author
 ON submission (contest_id, author_id);
+
+CREATE TABLE IF NOT EXISTS submission_result (
+  submission_id     INT PRIMARY KEY,
+
+  built             BOOLEAN      NOT NULL,
+  build_info        BLOB         NULL,
+  verdict           VARCHAR(255) NOT NULL,
+
+  tests_passed      INT          NULL,
+  time_used_millis  INT          NULL,
+  memory_used_bytes INT          NULL,
+
+  FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
+);

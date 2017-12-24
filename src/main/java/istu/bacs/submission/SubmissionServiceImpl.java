@@ -4,56 +4,61 @@ import istu.bacs.externalapi.ExternalApiAggregator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static istu.bacs.submission.Verdict.PENDING;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final ExternalApiAggregator externalApi;
+    private final SubmissionResultRepository submissionResultRepository;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ExternalApiAggregator externalApi) {
+    private final ExternalApiAggregator externalApi;
+    private final List<Consumer<Submission>> subscribers = new CopyOnWriteArrayList<>();
+
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, SubmissionResultRepository submissionResultRepository, ExternalApiAggregator externalApi) {
         this.submissionRepository = submissionRepository;
+        this.submissionResultRepository = submissionResultRepository;
         this.externalApi = externalApi;
     }
 
     @Override
     public Submission findById(int submissionId) {
-        return submissionRepository.findById(submissionId)
-                .map(submission -> {
-                    externalApi.updateSubmissionDetails(singletonList(submission));
-                    return submission;
-                })
-                .orElse(null);
+        return submissionRepository.findById(submissionId).orElse(null);
     }
 
     @Override
     public List<Submission> findAllByContest(int contestId) {
-        List<Submission> submissions = submissionRepository.findAllByContest_ContestId(contestId);
-        prepareSubmissions(submissions);
-        return submissions;
+        return submissionRepository.findAllByContest_ContestId(contestId);
     }
 
     @Override
     public List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId) {
-        List<Submission> submissions = submissionRepository.findAllByContest_ContestIdAndAuthor_UserId(contestId, authorUserId);
-        prepareSubmissions(submissions);
-        return submissions;
-    }
-
-    private void prepareSubmissions(List<Submission> submissions) {
-        List<Submission> submissionsToCheck = submissions.stream()
-                .filter(s -> s.getVerdict() == PENDING)
-                .collect(toList());
-        externalApi.updateSubmissionDetails(submissionsToCheck);
+        return submissionRepository.findAllByContest_ContestIdAndAuthor_UserId(contestId, authorUserId);
     }
 
     @Override
     public void submit(Submission submission) {
         externalApi.submit(submission);
+        submission.setResult(SubmissionResult.pending(submission.getSubmissionId()));
+        save(submission);
+        subscribers.forEach(f -> f.accept(submission));
+    }
+
+    @Override
+    public void save(Submission submission) {
+        SubmissionResult result = submission.getResult();
+        submission.setResult(null);
+
         submissionRepository.save(submission);
+
+        result.setSubmissionId(submission.getSubmissionId());
+        submissionResultRepository.save(result);
+        submission.setResult(result);
+    }
+
+    @Override
+    public void subscribeOnSubmit(Consumer<Submission> function) {
+        subscribers.add(function);
     }
 }

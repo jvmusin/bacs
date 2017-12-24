@@ -36,7 +36,8 @@ public class Submission {
 
     private String externalSubmissionId;
 
-    @Transient
+    @OneToOne
+    @JoinColumn(name = "submission_id")
     private SubmissionResult result;
 
     public Verdict getVerdict() {

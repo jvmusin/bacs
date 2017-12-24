@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import static istu.bacs.submission.Verdict.*;
+
 @Component
 class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
 
@@ -20,20 +22,20 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
     public SubmissionResult convert(@NotNull SybonSubmitResult submission) {
         if (submission.getBuildResult() == null)
             return SubmissionResult.builder()
-                    .built(false)
-                    .verdict(Verdict.PENDING)
+                    .submissionId(submission.getId())
+                    .verdict(PENDING)
                     .build();
 
         if (submission.getBuildResult().getStatus() == SybonBuildResult.Status.Failed)
             return SubmissionResult.builder()
-                    .built(false)
+                    .submissionId(submission.getId())
                     .buildInfo(submission.getBuildResult().getOutput())
-                    .verdict(Verdict.COMPILE_ERROR)
+                    .verdict(COMPILE_ERROR)
                     .build();
 
         int maxTimeUsedMillis = 0;
         int maxMemoryUsedBytes = 0;
-        Verdict verdict = Verdict.OK;
+        Verdict verdict = OK;
         Integer testsPassed = 0;
         for (SybonTestGroupResult testGroup : submission.getTestGroupResults()) {
             for (SybonTestResult result : testGroup.getTestResults()) {
@@ -46,11 +48,12 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
                 }
                 testsPassed++;
             }
-            if (verdict != Verdict.OK) break;
+            if (verdict != OK) break;
         }
-        if (verdict == Verdict.OK) testsPassed = null;
+        if (verdict == OK) testsPassed = null;
 
         return SubmissionResult.builder()
+                .submissionId(submission.getId())
                 .built(true)
                 .buildInfo(submission.getBuildResult().getOutput())
                 .verdict(verdict)

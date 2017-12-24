@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -65,9 +66,19 @@ public class ContestController {
     }
 
     @PostMapping("{contestId}/problems/{problemIndex}")
-    public void submit(@PathVariable int contestId, @PathVariable int problemIndex, @RequestBody Submission submission) {
-        //todo: Replace Submission with some DTO model
-        submissionService.submit(submission);
+    public void submit(@PathVariable int contestId, @PathVariable int problemIndex, @RequestBody SubmitSolutionDto submission, @AuthenticationPrincipal User author) {
+        Contest contest = contestService.findById(contestId);
+        Problem problem = contest.getProblems().get(problemIndex);
+
+        Submission sub = new Submission();
+        sub.setContest(contest);
+        sub.setProblem(problem);
+        sub.setAuthor(author);
+        sub.setCreationTime(LocalDateTime.now());
+        sub.setLanguage(submission.getLanguage());
+        sub.setSolution(submission.getSolution());
+
+        submissionService.submit(sub);
     }
 
     @GetMapping("{contestId}/standings")
