@@ -9,7 +9,7 @@ import javax.persistence.AttributeConverter;
 @Component
 public class ProblemConverter implements AttributeConverter<Problem, String> {
 
-    private static ProblemService problemService;
+    public static ProblemService problemService;
 
     @Override
     public String convertToDatabaseColumn(Problem problem) {

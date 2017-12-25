@@ -25,6 +25,10 @@ public class Standings {
         this.contest = contest;
     }
 
+    public Contest getContest() {
+        return contest;
+    }
+
     public List<ContestantRow> getRows() {
         return rows;
     }
@@ -100,10 +104,6 @@ public class Standings {
             while (at > 0) {
                 Submission prev = submissions.get(at - 1);
                 Submission cur = submissions.get(at);
-                if (cur.equals(prev)) {
-                    submissions.remove(--at);
-                    continue;
-                }
                 if (cur.getCreationTime().isBefore(prev.getCreationTime())) {
                     Collections.swap(submissions, at - 1, at);
                     at--;

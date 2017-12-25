@@ -89,10 +89,10 @@ public class ContestController {
     }
 
     @GetMapping("{contestId}/standings")
-    public Standings getStandings(@PathVariable int contestId) {
-        //todo: Replace with DTO
+    public StandingsDto getStandings(@PathVariable int contestId) {
         Contest contest = contestService.findById(contestId);
-        return standingsService.getStandings(contest);
+        Standings standings = standingsService.getStandings(contest);
+        return new StandingsDto(standings);
     }
 
     @PostMapping("editor")
