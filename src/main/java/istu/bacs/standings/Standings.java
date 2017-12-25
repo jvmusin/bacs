@@ -92,7 +92,7 @@ public class Standings {
             int failTries = 0;
             for (Submission submission : submissions) {
                 if (submission.getVerdict() == COMPILE_ERROR) continue;
-                if (submission.getVerdict() == OK) return SolvingResult.solved(failTries, submission);
+                if (submission.getVerdict() == OK) return result = SolvingResult.solved(failTries, submission);
                 else failTries++;
             }
 
