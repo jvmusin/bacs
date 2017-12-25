@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -31,7 +32,7 @@ public class Contest {
     public boolean equals(Object other) {
         if (other == null) return false;
         Contest contest = (Contest) other;
-        return contestId.equals(contest.contestId);
+        return Objects.equals(contestId, contest.contestId);
     }
 
     @Override

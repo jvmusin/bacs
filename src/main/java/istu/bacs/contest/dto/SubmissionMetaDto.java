@@ -1,7 +1,6 @@
 package istu.bacs.contest.dto;
 
 import istu.bacs.contest.Contest;
-import istu.bacs.problem.Problem;
 import istu.bacs.submission.Language;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionResult;
@@ -9,8 +8,6 @@ import istu.bacs.submission.Verdict;
 import lombok.Data;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
 
 @Data
 public class SubmissionMetaDto {
@@ -33,9 +30,8 @@ public class SubmissionMetaDto {
         id = submission.getSubmissionId();
 
         Contest contest0 = submission.getContest();
-
         contest = new ContestMetaDto(contest0);
-        problem = new ProblemDto(submission.getProblem(), getProblemIndex(contest0, submission.getProblem()));
+        problem = new ProblemDto(submission.getProblem(), contest0.getProblems().indexOf(submission.getProblem()));
         author = new UserDto(submission.getAuthor());
 
         created = submission.getCreationTime().format(DateTimeFormatter.ISO_DATE_TIME);
@@ -46,13 +42,5 @@ public class SubmissionMetaDto {
         testsPassed = result.getTestsPassed();
         timeUsedMillis = result.getTimeUsedMillis();
         memoryUsedBytes = result.getMemoryUsedBytes();
-    }
-
-    private int getProblemIndex(Contest contest, Problem problem) {
-        List<Problem> problems = contest.getProblems();
-        for (int i = 0; i < problems.size(); i++)
-            if (Objects.equals(problems.get(i).getProblemId(), problem.getProblemId()))
-                return i;
-        return -1;
     }
 }

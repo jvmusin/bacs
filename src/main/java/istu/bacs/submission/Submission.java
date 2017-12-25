@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -43,5 +44,17 @@ public class Submission {
     public Verdict getVerdict() {
         if (result == null) return Verdict.PENDING;
         return result.getVerdict();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        Submission submission = (Submission) other;
+        return Objects.equals(submissionId, submission.submissionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return submissionId;
     }
 }

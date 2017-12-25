@@ -18,11 +18,11 @@ public class SubmissionRefresher {
     private final ExternalApiAggregator externalApi;
     private final Queue<Submission> q = new ConcurrentLinkedDeque<>();
 
-    public SubmissionRefresher(SubmissionService submissionService, SubmissionService submissionService1, ExternalApiAggregator externalApi) {
-        this.submissionService = submissionService1;
+    public SubmissionRefresher(SubmissionService submissionService, ExternalApiAggregator externalApi) {
+        this.submissionService = submissionService;
         this.externalApi = externalApi;
 
-        submissionService.subscribeOnSubmit(q::add);
+        submissionService.subscribeOnSolutionSubmitted(q::add);
     }
 
     @Scheduled(fixedDelay = 1000)
@@ -35,7 +35,7 @@ public class SubmissionRefresher {
 
         for (Submission cur : all) {
             if (cur.getVerdict() == PENDING) q.add(cur);
-            else submissionService.save(cur);
+            else submissionService.solutionTested(cur);
         }
     }
 }
