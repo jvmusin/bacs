@@ -3,26 +3,28 @@ package istu.bacs.problem;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
-    private final Map<String, Problem> cache = new ConcurrentHashMap<>();
+    private final ProblemRepository problemRepository;
+
+    public ProblemServiceImpl(ProblemRepository problemRepository) {
+        this.problemRepository = problemRepository;
+    }
 
     @Override
     public Problem findById(String problemId) {
-        return cache.get(problemId);
+        return problemRepository.findById(problemId).orElse(null);
     }
 
     @Override
     public void save(Problem problem) {
-        cache.put(problem.getProblemId(), problem);
+        problemRepository.save(problem);
     }
 
     @Override
     public void saveAll(List<Problem> problems) {
-        problems.forEach(this::save);
+        problemRepository.saveAll(problems);
     }
 }

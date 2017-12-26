@@ -1,19 +1,21 @@
 package istu.bacs.contest;
 
 import istu.bacs.problem.Problem;
-import istu.bacs.problem.ProblemListConverter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Contest {
 
     @Id
@@ -25,7 +27,11 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @Convert(converter = ProblemListConverter.class)
+    @ManyToMany
+    @OrderColumn(name = "problem_index")
+    @JoinTable(name = "contest_problems",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "problem_id"))
     private List<Problem> problems;
 
     @Override

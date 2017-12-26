@@ -11,7 +11,7 @@ import static istu.bacs.submission.Verdict.COMPILE_ERROR;
 import static istu.bacs.submission.Verdict.OK;
 
 @Component
-class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
+public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
 
     private final SybonTestResultStatusConverter testResultStatusConverter;
 
@@ -25,13 +25,13 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         SybonBuildResult.Status status = submission.getBuildResult().getStatus();
         if (status == PENDING)
             return SubmissionResult.builder()
-                    .submissionId(submission.getId())
+//                    .submissionId(submission.getId())
                     .verdict(Verdict.PENDING)
                     .build();
 
         if (status == FAILED || status == SERVER_ERROR)
             return SubmissionResult.builder()
-                    .submissionId(submission.getId())
+//                    .submissionId(submission.getId())
                     .buildInfo(submission.getBuildResult().getOutput())
                     .verdict(COMPILE_ERROR)
                     .build();
@@ -56,8 +56,7 @@ class SybonSubmitResultConverter implements Converter<SybonSubmitResult, Submiss
         if (verdict == OK) testsPassed = null;
 
         return SubmissionResult.builder()
-                .submissionId(submission.getId())
-                .built(true)
+//                .submissionId(submission.getId())
                 .buildInfo(submission.getBuildResult().getOutput())
                 .verdict(verdict)
                 .testsPassed(testsPassed)

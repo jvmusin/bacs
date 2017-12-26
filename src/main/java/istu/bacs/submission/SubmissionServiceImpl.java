@@ -49,7 +49,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     public void submit(Submission submission) {
         //todo: If sybon fall down, we also fail =(
         externalApi.submit(submission);
-        submission.setResult(SubmissionResult.pending(submission.getSubmissionId()));
+        submission.setResult(SubmissionResult.pending(submission));
         save(submission);
         solutionSubmitted(submission);
     }
@@ -61,7 +61,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         submissionRepository.save(submission);
 
-        result.setSubmissionId(submission.getSubmissionId());
+        result.setSubmission(submission);
         submissionResultRepository.save(result);
         submission.setResult(result);
     }

@@ -11,7 +11,7 @@ import java.util.Map;
 import static istu.bacs.submission.Language.*;
 
 @Component
-class SybonLanguageConverter implements Converter<Language, Integer> {
+public class SybonLanguageConverter implements Converter<Language, Integer> {
 
     private static final Map<Language, Integer> supportedLanguages;
 

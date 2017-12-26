@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-class SybonProblemCollection {
+public class SybonProblemCollection {
     private Integer id;
     private String name;
     private String description;

@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import static istu.bacs.submission.Verdict.PENDING;
 
@@ -18,9 +20,12 @@ import static istu.bacs.submission.Verdict.PENDING;
 public class SubmissionResult {
 
     @Id
-    private Integer submissionId;
+    @GeneratedValue
+    private Integer submissionResultId;
 
-    private boolean built;
+    @OneToOne(mappedBy = "result")
+    private Submission submission;
+
     private String buildInfo;
 
     private Verdict verdict;
@@ -28,9 +33,9 @@ public class SubmissionResult {
     private Integer timeUsedMillis;
     private Integer memoryUsedBytes;
 
-    public static SubmissionResult pending(Integer submissionId) {
+    public static SubmissionResult pending(Submission submission) {
         return SubmissionResult.builder()
-                .submissionId(submissionId)
+                .submission(submission)
                 .verdict(PENDING)
                 .build();
     }

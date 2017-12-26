@@ -81,7 +81,7 @@ public class ContestController {
         sub.setContest(contest);
         sub.setProblem(problem);
         sub.setAuthor(author);
-        sub.setCreationTime(LocalDateTime.now());
+        sub.setCreated(LocalDateTime.now());
         sub.setLanguage(submission.getLanguage());
         sub.setSolution(submission.getSolution());
 

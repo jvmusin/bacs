@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-class SybonSubmitResult {
+public class SybonSubmitResult {
     private Integer id;
     private SybonBuildResult buildResult;
     private List<SybonTestGroupResult> testGroupResults;

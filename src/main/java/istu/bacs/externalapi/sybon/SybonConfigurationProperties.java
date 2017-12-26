@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "sybon")
 @Data
-class SybonConfigurationProperties {
+public class SybonConfigurationProperties {
     private String apiKey;
 
     private String problemsUrl;

@@ -14,7 +14,7 @@ import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
 import static java.util.stream.Collectors.toList;
 
 @Service
-class ExternalApiAggregatorImpl implements ExternalApiAggregator {
+public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     private final ExternalApi[] externalApis;
 

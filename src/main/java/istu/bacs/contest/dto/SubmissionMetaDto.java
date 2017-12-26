@@ -34,7 +34,7 @@ public class SubmissionMetaDto {
         problem = new ProblemDto(submission.getProblem(), contest0.getProblems().indexOf(submission.getProblem()));
         author = new UserDto(submission.getAuthor());
 
-        created = submission.getCreationTime().format(DateTimeFormatter.ISO_DATE_TIME);
+        created = submission.getCreated().format(DateTimeFormatter.ISO_DATE_TIME);
         language = submission.getLanguage();
         verdict = submission.getVerdict();
 

@@ -2,9 +2,11 @@ package istu.bacs.submission;
 
 import istu.bacs.contest.Contest;
 import istu.bacs.problem.Problem;
-import istu.bacs.problem.ProblemConverter;
 import istu.bacs.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +14,9 @@ import java.util.Objects;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Submission {
 
     @Id
@@ -26,12 +31,12 @@ public class Submission {
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
-    @Column(name = "problem_id")
-    @Convert(converter = ProblemConverter.class)
+    @ManyToOne
+    @JoinColumn(name = "problem_id")
     private Problem problem;
 
     private boolean pretestsOnly;
-    private LocalDateTime creationTime;
+    private LocalDateTime created;
     private Language language;
     private String solution;
 

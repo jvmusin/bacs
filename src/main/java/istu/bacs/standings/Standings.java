@@ -73,7 +73,7 @@ public class Standings {
 
         public static SolvingResult solved(int failTries, Submission last) {
             LocalDateTime startTime = last.getContest().getStartTime();
-            int penalty = (int) Duration.between(startTime, last.getCreationTime()).toMinutes();
+            int penalty = (int) Duration.between(startTime, last.getCreated()).toMinutes();
             return new SolvingResult(true, failTries, penalty + failTries * TRY_PENALTY_MINUTES);
         }
     }
@@ -104,7 +104,7 @@ public class Standings {
             while (at > 0) {
                 Submission prev = submissions.get(at - 1);
                 Submission cur = submissions.get(at);
-                if (cur.getCreationTime().isBefore(prev.getCreationTime())) {
+                if (cur.getCreated().isBefore(prev.getCreated())) {
                     Collections.swap(submissions, at - 1, at);
                     at--;
                 } else {

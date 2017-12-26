@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-class SybonTestGroupResult {
+public class SybonTestGroupResult {
     private Boolean executed;
     private List<SybonTestResult> testResults;
 }

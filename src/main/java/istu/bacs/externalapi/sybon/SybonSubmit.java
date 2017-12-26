@@ -3,7 +3,7 @@ package istu.bacs.externalapi.sybon;
 import lombok.Data;
 
 @Data
-class SybonSubmit {
+public class SybonSubmit {
     private int compilerId;
     private String solution;
     private String solutionFileType;

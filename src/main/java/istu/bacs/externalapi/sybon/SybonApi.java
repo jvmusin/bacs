@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Service
-class SybonApi implements ExternalApi {
+public class SybonApi implements ExternalApi {
 
     public static final String API_NAME = "SYBON";
 
@@ -82,7 +82,7 @@ class SybonApi implements ExternalApi {
             Submission submission = submissions.get(i);
 
             SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
-            result.setSubmissionId(submission.getSubmissionId());
+            result.setSubmission(submission);
             submission.setResult(result);
         }
     }

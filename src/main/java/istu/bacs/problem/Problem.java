@@ -1,32 +1,35 @@
 package istu.bacs.problem;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
+import lombok.NoArgsConstructor;
 
-import java.util.Comparator;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 
 @Data
-public class Problem implements Comparable<Problem> {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Problem {
 
+    @Id
     private String problemId;
-    @JsonUnwrapped
-    private ProblemDetails details;
 
-    @JsonIgnore
-    private Comparator<Problem> comparator = Comparator.comparing(p -> p.problemId);
+    private String problemName;
+    private String statementUrl;
 
-    @Override
-    public int compareTo(@NotNull Problem other) {
-        return comparator.compare(this, other);
-    }
+    private int timeLimitMillis;
+    private int memoryLimitBytes;
 
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
         Problem problem = (Problem) other;
-        return problemId.equals(problem.problemId);
+        return Objects.equals(problemId, problem.problemId);
     }
 
     @Override

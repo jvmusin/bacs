@@ -2,7 +2,6 @@ package istu.bacs.contest.dto;
 
 import istu.bacs.contest.Contest;
 import istu.bacs.problem.Problem;
-import istu.bacs.problem.ProblemDetails;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -19,13 +18,11 @@ public class ProblemDto {
     private int memoryLimitBytes;
 
     public ProblemDto(Problem problem, int index) {
-        ProblemDetails details = problem.getDetails();
+        name = problem.getProblemName();
+        statementUrl = problem.getStatementUrl();
 
-        name = details.getProblemName();
-        statementUrl = details.getStatementUrl();
-
-        timeLimitMillis = details.getTimeLimitMillis();
-        memoryLimitBytes = details.getMemoryLimitBytes();
+        timeLimitMillis = problem.getTimeLimitMillis();
+        memoryLimitBytes = problem.getMemoryLimitBytes();
         indexInContest = index;
     }
 

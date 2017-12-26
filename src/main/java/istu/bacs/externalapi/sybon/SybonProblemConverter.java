@@ -1,8 +1,6 @@
 package istu.bacs.externalapi.sybon;
 
-import istu.bacs.externalapi.NumberHeadComparator;
 import istu.bacs.problem.Problem;
-import istu.bacs.problem.ProblemDetails;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -10,20 +8,15 @@ import org.springframework.stereotype.Component;
 import static istu.bacs.externalapi.ExternalApiHelper.addResource;
 
 @Component
-class SybonProblemConverter implements Converter<SybonProblem, Problem> {
+public class SybonProblemConverter implements Converter<SybonProblem, Problem> {
     @Override
     public Problem convert(@NotNull SybonProblem sybonProblem) {
-        ProblemDetails details = new ProblemDetails();
-        details.setProblemName(sybonProblem.getName());
-        details.setStatementUrl(sybonProblem.getStatementUrl());
-        details.setTimeLimitMillis(sybonProblem.getResourceLimits().getTimeLimitMillis());
-        details.setMemoryLimitBytes(sybonProblem.getResourceLimits().getMemoryLimitBytes());
-
-        Problem problem = new Problem();
-        problem.setProblemId(addResource(sybonProblem.getId(), SybonApi.API_NAME));
-        problem.setComparator(NumberHeadComparator.getInstance());
-        problem.setDetails(details);
-
-        return problem;
+        return Problem.builder()
+                .problemId(addResource(sybonProblem.getId(), SybonApi.API_NAME))
+                .problemName(sybonProblem.getName())
+                .statementUrl(sybonProblem.getStatementUrl())
+                .timeLimitMillis(sybonProblem.getResourceLimits().getTimeLimitMillis())
+                .memoryLimitBytes(sybonProblem.getResourceLimits().getMemoryLimitBytes())
+                .build();
     }
 }

@@ -3,19 +3,11 @@ package istu.bacs.externalapi.sybon;
 import lombok.Data;
 
 @Data
-class SybonTestResult {
+public class SybonTestResult {
     private SybonTestResultStatus status;
     private String judgeMessage;
     private SybonResourceUsage resourceUsage;
     private String input;
     private String actualResult;
     private String expectedResult;
-
-    public Integer getMillis() {
-        return resourceUsage == null ? null : resourceUsage.getTimeUsageMillis();
-    }
-
-    public Integer getBytes() {
-        return resourceUsage == null ? null : resourceUsage.getMemoryUsageBytes();
-    }
 }
