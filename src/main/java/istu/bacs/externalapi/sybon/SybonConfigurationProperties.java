@@ -1,18 +1,35 @@
 package istu.bacs.externalapi.sybon;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix = "sybon")
-@Data
+@PropertySource("classpath:sybon.yml")
 public class SybonConfigurationProperties {
-    private String apiKey;
+    private String apiKey = "YBJY9zkkUUigNcYOlFoSg";
 
-    private String problemsUrl;
-    private String collectionsUrl;
+    private String collectionsUrl = "https://archive.sybon.org/api/Collections";
+    private String getCollectionUrl = "{id}";
 
-    private String compilersUrl;
-    private String submitsUrl;
+    private String submitsUrl = "https://checking.sybon.org/api/Submits";
+    private String submitUrl = "send";
+    private String getResultsUrl = "results";
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public String getCollectionUrl() {
+        return collectionsUrl + '/' + getCollectionUrl;
+    }
+
+    public String getSubmitUrl() {
+        return submitsUrl + '/' + submitUrl;
+    }
+
+    public String getResultsUrl() {
+        return submitsUrl + '/' + getResultsUrl;
+    }
 }

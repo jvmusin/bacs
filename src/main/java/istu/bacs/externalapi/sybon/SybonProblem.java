@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class SybonProblem {
-    private Integer id;
+    private int id;
     private String name;
     private String statementUrl;
-    private Integer collectionId;
-    private Integer testsCount;
+    private int collectionId;
+    private int testsCount;
     private SybonResourceLimits resourceLimits;
 }

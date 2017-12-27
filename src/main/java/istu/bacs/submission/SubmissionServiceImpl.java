@@ -56,14 +56,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public void save(Submission submission) {
-        SubmissionResult result = submission.getResult();
-        submission.setResult(null);
-
         submissionRepository.save(submission);
-
-        result.setSubmission(submission);
-        submissionResultRepository.save(result);
-        submission.setResult(result);
     }
 
     @Override

@@ -3,6 +3,7 @@ package istu.bacs.repository;
 import istu.bacs.problem.Problem;
 import istu.bacs.problem.ProblemRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,10 +14,12 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class ProblemRepositoryTests {
+@TestInstance(PER_CLASS)
+class ProblemRepositoryTests {
 
     @Autowired
     ProblemRepository problemRepository;

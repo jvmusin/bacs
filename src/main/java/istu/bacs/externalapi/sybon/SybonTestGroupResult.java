@@ -6,6 +6,6 @@ import java.util.List;
 
 @Data
 public class SybonTestGroupResult {
-    private Boolean executed;
+    private boolean executed;
     private List<SybonTestResult> testResults;
 }

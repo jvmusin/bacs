@@ -1,0 +1,9 @@
+sybon:
+  apiKey: YBJY9zkkUUigNcYOlFoSg
+
+  collectionsUrl: https://archive.sybon.org/api/Collections
+  getCollectionUrl: {id}
+
+  submitsUrl: https://checking.sybon.org/api/Submits
+  submitUrl: send
+  getResults: results

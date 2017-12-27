@@ -26,22 +26,19 @@ public class SybonApi implements ExternalApi {
     public static final String API_NAME = "SYBON";
 
     private final SybonConfigurationProperties config;
-    private final SybonSubmitResultConverter submitResultConverter;
-    private final SybonLanguageConverter languageConverter;
-    private final SybonProblemConverter problemConverter;
+    private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
+    private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
+    private static final SybonProblemConverter problemConverter = new SybonProblemConverter();
     private final RestTemplate restTemplate;
 
-    public SybonApi(SybonConfigurationProperties config, SybonSubmitResultConverter submitResultConverter, SybonLanguageConverter languageConverter, SybonProblemConverter problemConverter, RestTemplateBuilder restTemplateBuilder) {
+    public SybonApi(SybonConfigurationProperties config, RestTemplateBuilder restTemplateBuilder) {
         this.config = config;
-        this.submitResultConverter = submitResultConverter;
-        this.languageConverter = languageConverter;
-        this.problemConverter = problemConverter;
         this.restTemplate = restTemplateBuilder.build();
     }
 
     @Override
     public List<Problem> getAllProblems() {
-        String uri = buildUrl(config.getCollectionsUrl() + "/{id}", singletonMap("id", 1));
+        String uri = buildUrl(config.getCollectionUrl(), singletonMap("id", 1));
         List<SybonProblem> problems = restTemplate.getForObject(uri, SybonProblemCollection.class).getProblems();
         return problems.stream()
                 .map(problemConverter::convert)
@@ -51,7 +48,7 @@ public class SybonApi implements ExternalApi {
     @Override
     public void submit(Submission submission) {
         SybonSubmit submit = createSubmit(submission);
-        String url = buildUrl(config.getSubmitsUrl() + "/send", emptyMap());
+        String url = buildUrl(config.getSubmitUrl(), emptyMap());
         int submissionId = restTemplate.postForObject(url, submit, int.class);
         submission.setExternalSubmissionId(withResourceName(submissionId));
     }
@@ -75,7 +72,7 @@ public class SybonApi implements ExternalApi {
                 .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
                 .collect(joining(","));
 
-        String url = buildUrl(config.getSubmitsUrl() + "/results", emptyMap(), singletonMap("ids", ids));
+        String url = buildUrl(config.getResultsUrl(), emptyMap(), singletonMap("ids", ids));
 
         SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
         for (int i = 0; i < submissions.size(); i++) {

@@ -1,47 +1,52 @@
 package istu.bacs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class AuthTests {
 
     @Autowired
-    TestRestTemplate restTemplate;
+    MockMvc mvc;
 
     @Test
-    void testRegistrationAndJwtCorrectness() {
+    void testRegistrationAndJwtCorrectness() throws Exception {
         Map<String, Object> user = new HashMap<>();
         user.put("username", "user");
         user.put("password", "pass");
+        String userJson = new ObjectMapper().writeValueAsString(user);
 
-        ResponseEntity<Void> response = restTemplate.postForEntity("/sign-up", user, Void.class);
-        assertThat(response.getStatusCode(), is(equalTo(OK)));
+        mvc.perform(post("/sign-up").contentType(APPLICATION_JSON).content(userJson))
+                .andExpect(status().isOk());
 
-        String jwt = restTemplate.postForEntity("/login", user, Void.class).getHeaders().get("Authorization").get(0);
+        String jwt = mvc.perform(post("/login").contentType(APPLICATION_JSON).content(userJson))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getHeader("Authorization");
         assertThat(jwt, startsWith("Bearer "));
 
-        RequestEntity<Void> entity = RequestEntity.get(URI.create("/contests")).header("Authorization", jwt).build();
-        ResponseEntity<Object> exchange = restTemplate.exchange(entity, Object.class);
-        assertThat(exchange.getStatusCode(), is(equalTo(OK)));
+        mvc.perform(get("/contests").header("Authorization", jwt))
+                .andExpect(status().isOk());
     }
 }

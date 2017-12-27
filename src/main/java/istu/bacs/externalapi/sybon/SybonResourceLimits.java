@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SybonResourceLimits {
-    private Integer timeLimitMillis;
-    private Integer memoryLimitBytes;
+    private int timeLimitMillis;
+    private int memoryLimitBytes;
 }

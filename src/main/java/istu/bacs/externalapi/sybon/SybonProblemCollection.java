@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class SybonProblemCollection {
-    private Integer id;
+    private int id;
     private String name;
     private String description;
     private Integer problemsCount;
