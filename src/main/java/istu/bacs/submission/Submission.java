@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static istu.bacs.submission.Verdict.PENDING;
+
 @Data
 @Entity
 @Builder
@@ -47,7 +49,7 @@ public class Submission {
     private SubmissionResult result;
 
     public Verdict getVerdict() {
-        if (result == null) return Verdict.PENDING;
+        if (result == null) return PENDING;
         return result.getVerdict();
     }
 

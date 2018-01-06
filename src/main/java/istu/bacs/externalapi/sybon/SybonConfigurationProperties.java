@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ConfigurationProperties(prefix = "sybon")
-@PropertySource("classpath:sybon.yml")
+//@ConfigurationProperties(prefix = "sybon")
+//@PropertySource("classpath:sybon.yml")
 public class SybonConfigurationProperties {
     private String apiKey = "YBJY9zkkUUigNcYOlFoSg";
 
