@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.time.format.DateTimeFormatter;
 
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+
 @Data
 public class ContestMetaDto {
 
@@ -16,7 +18,7 @@ public class ContestMetaDto {
     public ContestMetaDto(Contest contest) {
         id = contest.getContestId();
         name = contest.getContestName();
-        startTime = contest.getStartTime().format(DateTimeFormatter.ISO_DATE_TIME);
-        finishTime = contest.getFinishTime().format(DateTimeFormatter.ISO_DATE_TIME);
+        startTime = contest.getStartTime().format(ISO_DATE_TIME);
+        finishTime = contest.getFinishTime().format(ISO_DATE_TIME);
     }
 }

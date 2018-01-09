@@ -1,5 +1,6 @@
 package istu.bacs.contest;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> findAll() {
-        return contestRepository.findAll();
+    public List<Contest> findAll(Pageable pageable) {
+        return contestRepository.findAll(pageable).getContent();
     }
 
     @Override

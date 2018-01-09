@@ -7,6 +7,9 @@ import istu.bacs.standings.StandingsService;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionService;
 import istu.bacs.user.User;
+import istu.bacs.util.OffsetBasedPageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +34,15 @@ public class ContestController {
     }
 
     @GetMapping
-    public List<ContestMetaDto> getContests() {
-        return contestService.findAll().stream()
+    public List<ContestMetaDto> getContests(
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) Integer limit) {
+
+        if (offset == null) offset = 0;
+        if (limit == null) limit = 500;
+        Pageable pageable = new OffsetBasedPageRequest(offset, limit, new Sort(Sort.Direction.DESC, "contestId"));
+
+        return contestService.findAll(pageable).stream()
                 .map(ContestMetaDto::new)
                 .collect(toList());
     }
