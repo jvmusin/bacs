@@ -12,8 +12,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static istu.bacs.submission.Verdict.PENDING;
-
 @Data
 @Entity
 @Builder
@@ -44,8 +42,7 @@ public class Submission {
 
     private String externalSubmissionId;
 
-    @OneToOne
-    @JoinColumn(name = "submission_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "submission")
     private SubmissionResult result;
 
     public Verdict getVerdict() {

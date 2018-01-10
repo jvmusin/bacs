@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static istu.bacs.submission.SubmissionResult.withVerdict;
+import static istu.bacs.submission.Verdict.PENDING;
 import static java.lang.String.format;
 
 @Component
@@ -38,7 +39,7 @@ public class SubmissionSubmitter {
             try {
                 externalApi.submit(submission);
 
-                submission.setResult(withVerdict(submission, Verdict.PENDING));
+                submission.getResult().setVerdict(PENDING);
                 submissionService.save(submission);
 
                 submissionService.solutionSubmitted(submission);

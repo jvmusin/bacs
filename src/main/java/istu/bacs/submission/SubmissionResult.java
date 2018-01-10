@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -21,7 +18,8 @@ public class SubmissionResult {
     @GeneratedValue
     private Integer submissionResultId;
 
-    @OneToOne(mappedBy = "result")
+    @OneToOne
+    @JoinColumn(name = "submission_id")
     private Submission submission;
 
     private String buildInfo;

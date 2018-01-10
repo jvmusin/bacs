@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS submission (
 CREATE INDEX IF NOT EXISTS idx_submission_contestId_authorId ON submission (contest_id, author_id);
 
 CREATE TABLE IF NOT EXISTS submission_result (
-  submission_result_id INT PRIMARY KEY,
+  submission_result_id INT PRIMARY KEY AUTO_INCREMENT,
 
   submission_id        INT          NOT NULL,
 

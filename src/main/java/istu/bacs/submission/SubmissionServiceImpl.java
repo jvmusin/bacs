@@ -42,7 +42,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public void submit(Submission submission) {
-        submissionRepository.save(submission);
+        save(submission);
         solutionScheduled(submission);
     }
 

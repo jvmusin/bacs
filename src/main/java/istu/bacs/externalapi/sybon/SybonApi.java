@@ -79,6 +79,8 @@ public class SybonApi implements ExternalApi {
             Submission submission = submissions.get(i);
 
             SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
+            result.setSubmissionResultId(submission.getResult().getSubmissionResultId());
+
             result.setSubmission(submission);
             submission.setResult(result);
         }

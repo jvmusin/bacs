@@ -27,7 +27,7 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn(name = "problem_index")
     @JoinTable(name = "contest_problems",
             joinColumns = @JoinColumn(name = "contest_id"),
