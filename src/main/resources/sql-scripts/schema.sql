@@ -75,4 +75,4 @@ CREATE TABLE IF NOT EXISTS submission_result (
 
   FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
 );
-CREATE INDEX IF NOT EXISTS idx_submissionResult_submissionId ON submission (contest_id, author_id);
+CREATE INDEX IF NOT EXISTS idx_submissionResult_submissionId ON submission (submission_id);
