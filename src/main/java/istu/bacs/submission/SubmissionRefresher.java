@@ -1,6 +1,7 @@
 package istu.bacs.submission;
 
 import istu.bacs.externalapi.ExternalApiAggregator;
+import lombok.extern.java.Log;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static istu.bacs.submission.Verdict.PENDING;
+import static java.lang.String.format;
 
 @Service
+@Log
 public class SubmissionRefresher {
 
     private final SubmissionService submissionService;
@@ -35,7 +38,15 @@ public class SubmissionRefresher {
 
         for (Submission cur : all) {
             if (cur.getVerdict() == PENDING) q.add(cur);
-            else submissionService.solutionTested(cur);
+            else {
+                submissionService.save(cur);
+                submissionService.solutionTested(cur);
+                log.info(format("Solution %d successfully tested", cur.getSubmissionId()));
+            }
         }
+    }
+
+    public void addAll(List<Submission> submissions) {
+        q.addAll(submissions);
     }
 }

@@ -1,28 +1,23 @@
 package istu.bacs.submission;
 
-import istu.bacs.externalapi.ExternalApiAggregator;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final SubmissionResultRepository submissionResultRepository;
-    private final ExternalApiAggregator externalApi;
 
-    private final List<Consumer<Submission>> onSubmittedSubscribers = new CopyOnWriteArrayList<>();
-    private final List<Consumer<Submission>> onTestedSubscribers = new CopyOnWriteArrayList<>();
+    private final List<Consumer<Submission>> onScheduledSubscribers = Collections.synchronizedList(new ArrayList<>());
+    private final List<Consumer<Submission>> onSubmittedSubscribers = Collections.synchronizedList(new ArrayList<>());
+    private final List<Consumer<Submission>> onTestedSubscribers = Collections.synchronizedList(new ArrayList<>());
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, SubmissionResultRepository submissionResultRepository, ExternalApiAggregator externalApi) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository) {
         this.submissionRepository = submissionRepository;
-        this.submissionResultRepository = submissionResultRepository;
-        this.externalApi = externalApi;
-
-        subscribeOnSolutionTested(this::save);
     }
 
     @Override
@@ -47,16 +42,23 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public void submit(Submission submission) {
-        //todo: If sybon fall down, we also fail =(
-        externalApi.submit(submission);
-        submission.setResult(SubmissionResult.pending(submission));
-        save(submission);
-        solutionSubmitted(submission);
+        submissionRepository.save(submission);
+        solutionScheduled(submission);
     }
 
     @Override
     public void save(Submission submission) {
         submissionRepository.save(submission);
+    }
+
+    @Override
+    public void subscribeOnSolutionScheduled(Consumer<Submission> function) {
+        onScheduledSubscribers.add(function);
+    }
+
+    @Override
+    public void solutionScheduled(Submission submission) {
+        onScheduledSubscribers.forEach(f -> f.accept(submission));
     }
 
     @Override

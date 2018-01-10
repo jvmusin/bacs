@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import static istu.bacs.submission.Verdict.PENDING;
-
 @Data
 @Entity
 @Builder
@@ -33,10 +31,10 @@ public class SubmissionResult {
     private Integer timeUsedMillis;
     private Integer memoryUsedBytes;
 
-    public static SubmissionResult pending(Submission submission) {
+    public static SubmissionResult withVerdict(Submission submission, Verdict verdict) {
         return SubmissionResult.builder()
                 .submission(submission)
-                .verdict(PENDING)
+                .verdict(verdict)
                 .build();
     }
 }

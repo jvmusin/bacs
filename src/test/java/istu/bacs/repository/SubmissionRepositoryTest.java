@@ -7,7 +7,6 @@ import istu.bacs.problem.ProblemRepository;
 import istu.bacs.submission.Language;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionRepository;
-import istu.bacs.submission.SubmissionResult;
 import istu.bacs.user.User;
 import istu.bacs.user.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static istu.bacs.submission.Language.Python3;
+import static istu.bacs.submission.SubmissionResult.withVerdict;
+import static istu.bacs.submission.Verdict.PENDING;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -91,7 +92,7 @@ class SubmissionRepositoryTest {
                 .solution(solution)
                 .externalSubmissionId(externalSubmissionId)
                 .build();
-        submission.setResult(SubmissionResult.pending(submission));
+        submission.setResult(withVerdict(submission, PENDING));
 
         submissionRepository.save(submission);
         assertThat(submission.getSubmissionId(), is(notNullValue()));

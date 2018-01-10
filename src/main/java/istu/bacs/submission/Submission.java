@@ -49,7 +49,6 @@ public class Submission {
     private SubmissionResult result;
 
     public Verdict getVerdict() {
-        if (result == null) return PENDING;
         return result.getVerdict();
     }
 

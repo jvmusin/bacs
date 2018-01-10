@@ -5,7 +5,9 @@ import istu.bacs.problem.Problem;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.StandingsService;
 import istu.bacs.submission.Submission;
+import istu.bacs.submission.SubmissionResult;
 import istu.bacs.submission.SubmissionService;
+import istu.bacs.submission.Verdict;
 import istu.bacs.user.User;
 import istu.bacs.util.OffsetBasedPageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static istu.bacs.submission.SubmissionResult.withVerdict;
+import static istu.bacs.submission.Verdict.NOT_SUBMITTED;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -94,6 +98,7 @@ public class ContestController {
         sub.setCreated(LocalDateTime.now());
         sub.setLanguage(submission.getLanguage());
         sub.setSolution(submission.getSolution());
+        sub.setResult(withVerdict(sub, NOT_SUBMITTED));
 
         submissionService.submit(sub);
     }

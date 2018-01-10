@@ -11,6 +11,9 @@ public interface SubmissionService {
     void submit(Submission submission);
     void save(Submission submission);
 
+    void subscribeOnSolutionScheduled(Consumer<Submission> function);
+    void solutionScheduled(Submission submission);
+
     void subscribeOnSolutionSubmitted(Consumer<Submission> function);
     void solutionSubmitted(Submission submission);
 

@@ -6,6 +6,7 @@ import istu.bacs.externalapi.sybon.SybonApi;
 import istu.bacs.externalapi.sybon.SybonConfigurationProperties;
 import istu.bacs.problem.Problem;
 import istu.bacs.submission.Submission;
+import istu.bacs.submission.SubmissionResult;
 import istu.bacs.user.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import java.util.List;
 
 import static com.fasterxml.jackson.databind.MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES;
 import static istu.bacs.submission.Language.Python3;
-import static istu.bacs.submission.SubmissionResult.pending;
+import static istu.bacs.submission.SubmissionResult.withVerdict;
 import static istu.bacs.submission.Verdict.OK;
 import static istu.bacs.submission.Verdict.PENDING;
 import static java.util.Collections.singletonList;
@@ -74,7 +75,7 @@ class SybonApiTests {
                 .language(Python3)
                 .solution("print(sum(map(int, input().split())))")
                 .build();
-        submission.setResult(pending(submission));
+        submission.setResult(withVerdict(submission, PENDING));
 
         sybonApi.submit(submission);
         assertThat(submission.getExternalSubmissionId(), is(not(isEmptyOrNullString())));
