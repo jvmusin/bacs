@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS submission (
   language               VARCHAR(255) NOT NULL,
   solution               BLOB         NOT NULL,
 
-  external_submission_id VARCHAR(255) NOT NULL,
+  external_submission_id VARCHAR(255) NULL,
 
   FOREIGN KEY (author_id) REFERENCES user (user_id),
   FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
