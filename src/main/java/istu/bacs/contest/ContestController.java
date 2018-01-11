@@ -83,7 +83,7 @@ public class ContestController {
     }
 
     @PostMapping("{contestId}/problems/{problemIndex}")
-    public void submit(@PathVariable int contestId,
+    public int submit(@PathVariable int contestId,
                        @PathVariable int problemIndex,
                        @RequestBody SubmitSolutionDto submission,
                        @AuthenticationPrincipal User author) {
@@ -100,7 +100,7 @@ public class ContestController {
         sub.setSolution(submission.getSolution());
         sub.setResult(withVerdict(sub, NOT_SUBMITTED));
 
-        submissionService.submit(sub);
+        return submissionService.submit(sub);
     }
 
     @GetMapping("{contestId}/standings")

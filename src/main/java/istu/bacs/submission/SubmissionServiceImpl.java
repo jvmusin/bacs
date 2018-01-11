@@ -41,9 +41,10 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public void submit(Submission submission) {
+    public int submit(Submission submission) {
         save(submission);
         solutionScheduled(submission);
+        return submission.getSubmissionId();
     }
 
     @Override

@@ -8,7 +8,7 @@ public interface SubmissionService {
     List<Submission> findAll();
     List<Submission> findAllByContest(int contestId);
     List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId);
-    void submit(Submission submission);
+    int submit(Submission submission);
     void save(Submission submission);
 
     void subscribeOnSolutionScheduled(Consumer<Submission> function);
