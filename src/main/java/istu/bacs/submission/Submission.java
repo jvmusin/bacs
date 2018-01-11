@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static javax.persistence.EnumType.STRING;
+
 @Data
 @Entity
 @Builder
@@ -37,6 +39,7 @@ public class Submission {
 
     private boolean pretestsOnly;
     private LocalDateTime created;
+    @Enumerated(STRING)
     private Language language;
     private String solution;
 
