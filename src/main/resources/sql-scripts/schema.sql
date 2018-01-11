@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS user (
 
   authorities VARCHAR(255) NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_user_username ON USER (username);
+CREATE INDEX IF NOT EXISTS idx_user_username ON user (username);
 
 
 CREATE TABLE IF NOT EXISTS problem (
