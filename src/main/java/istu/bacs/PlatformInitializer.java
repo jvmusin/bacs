@@ -46,11 +46,8 @@ public class PlatformInitializer {
     }
 
     private void initStandings() {
-        //todo: works slow cause of checking all submissions
-        List<Submission> submissions = submissionRepository.findAll().stream()
-                .filter(sub -> sub.getVerdict() != NOT_SUBMITTED && sub.getVerdict() != PENDING)
-                .collect(toList());
-        standingsService.update(submissions);
+        //todo: works slow cause of fetching all submissions
+        standingsService.update(submissionRepository.findAll());
     }
 
     private List<Submission> findByVerdict(Verdict verdict) {
