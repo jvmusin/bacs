@@ -1,6 +1,7 @@
 package istu.bacs.repository;
 
 import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
 import istu.bacs.contest.ContestRepository;
 import istu.bacs.problem.Problem;
 import istu.bacs.problem.ProblemRepository;
@@ -20,6 +21,8 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @ExtendWith(SpringExtension.class)
@@ -42,6 +45,12 @@ class ContestRepositoryTests {
             Problem.builder().problemId("ProC").problemName("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
     );
 
+    List<ContestProblem> contestProblems = Arrays.asList(
+            ContestProblem.builder().problem(problems.get(0)).problemIndex("A").build(),
+            ContestProblem.builder().problem(problems.get(1)).problemIndex("B").build(),
+            ContestProblem.builder().problem(problems.get(2)).problemIndex("C").build()
+    );
+
     @BeforeAll
     void init() {
         problemRepository.saveAll(problems);
@@ -57,20 +66,21 @@ class ContestRepositoryTests {
                 .contestName(contestName)
                 .startTime(startTime)
                 .finishTime(finishTime)
-                .problems(problems)
+                .problems(contestProblems)
                 .build();
+        contestProblems.forEach(p -> p.setContest(contest));
 
         contestRepository.save(contest);
         assertThat(contest.getContestId(), is(notNullValue()));
 
         Optional<Contest> resultOpt = contestRepository.findById(contest.getContestId());
-        assertThat(resultOpt.isPresent(), is(true));
+        assertTrue(resultOpt.isPresent());
 
         Contest result = resultOpt.get();
         assertThat(result.getContestId(), is(equalTo(contest.getContestId())));
         assertThat(result.getContestName(), is(equalTo(contestName)));
         assertThat(result.getStartTime(), is(equalTo(startTime)));
         assertThat(result.getFinishTime(), is(equalTo(finishTime)));
-        assertThat(result.getProblems(), equalTo(problems));
+        assertEquals(contestProblems, result.getProblems());
     }
 }

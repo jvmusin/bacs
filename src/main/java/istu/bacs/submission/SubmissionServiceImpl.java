@@ -1,5 +1,9 @@
 package istu.bacs.submission;
 
+import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
+import istu.bacs.contest.ContestProblemRepository;
+import istu.bacs.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,13 +15,15 @@ import java.util.function.Consumer;
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
+    private final ContestProblemRepository contestProblemRepository;
 
     private final List<Consumer<Submission>> onScheduledSubscribers = Collections.synchronizedList(new ArrayList<>());
     private final List<Consumer<Submission>> onSubmittedSubscribers = Collections.synchronizedList(new ArrayList<>());
     private final List<Consumer<Submission>> onTestedSubscribers = Collections.synchronizedList(new ArrayList<>());
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestProblemRepository contestProblemRepository) {
         this.submissionRepository = submissionRepository;
+        this.contestProblemRepository = contestProblemRepository;
     }
 
     @Override
@@ -32,12 +38,17 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public List<Submission> findAllByContest(int contestId) {
-        return submissionRepository.findAllByContest_ContestId(contestId);
+        Contest contest = Contest.builder().contestId(contestId).build();
+        List<ContestProblem> problems = contestProblemRepository.findAllByContest(contest);
+        return submissionRepository.findAllByContestProblems(problems);
     }
 
     @Override
     public List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId) {
-        return submissionRepository.findAllByContest_ContestIdAndAuthor_UserId(contestId, authorUserId);
+        User author = User.builder().userId(authorUserId).build();
+        Contest contest = Contest.builder().contestId(contestId).build();
+        List<ContestProblem> problems = contestProblemRepository.findAllByContest(contest);
+        return submissionRepository.findAllByAuthorAndContestProblem(author, problems);
     }
 
     @Override

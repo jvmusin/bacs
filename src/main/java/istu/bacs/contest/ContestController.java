@@ -1,13 +1,10 @@
 package istu.bacs.contest;
 
 import istu.bacs.contest.dto.*;
-import istu.bacs.problem.Problem;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.StandingsService;
 import istu.bacs.submission.Submission;
-import istu.bacs.submission.SubmissionResult;
 import istu.bacs.submission.SubmissionService;
-import istu.bacs.submission.Verdict;
 import istu.bacs.user.User;
 import istu.bacs.util.OffsetBasedPageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,9 +54,9 @@ public class ContestController {
     }
 
     @GetMapping("{contestId}/problems/{problemIndex}")
-    public ProblemDto getProblem(@PathVariable int contestId, @PathVariable int problemIndex) {
-        Contest contest = contestService.findById(contestId);
-        return new ProblemDto(contest.getProblems().get(problemIndex), problemIndex);
+    public ProblemDto getProblem(@PathVariable int contestId, @PathVariable String problemIndex) {
+        Contest contest = Contest.builder().contestId(contestId).build();
+        return new ProblemDto(contestService.findProblem(contest, problemIndex));
     }
 
     @GetMapping("{contestId}/submissions")
@@ -77,6 +74,7 @@ public class ContestController {
                 .collect(toList());
     }
 
+    //todo: Move to submission controller (later)
     @GetMapping("{contestId}/submissions/{submissionId}")
     public FullSubmissionDto getSubmission(@PathVariable int contestId, @PathVariable int submissionId) {
         return new FullSubmissionDto(submissionService.findById(submissionId));
@@ -84,16 +82,16 @@ public class ContestController {
 
     @PostMapping("{contestId}/problems/{problemIndex}")
     public int submit(@PathVariable int contestId,
-                       @PathVariable int problemIndex,
-                       @RequestBody SubmitSolutionDto submission,
-                       @AuthenticationPrincipal User author) {
+                      @PathVariable String problemIndex,
+                      @RequestBody SubmitSolutionDto submission,
+                      @AuthenticationPrincipal User author) {
 
-        Contest contest = contestService.findById(contestId);
-        Problem problem = contest.getProblems().get(problemIndex);
+        //todo: Method shouldn't have any logic
+        Contest contest = Contest.builder().contestId(contestId).build();
+        ContestProblem problem = contestService.findProblem(contest, problemIndex);
 
         Submission sub = new Submission();
-        sub.setContest(contest);
-        sub.setProblem(problem);
+        sub.setContestProblem(problem);
         sub.setAuthor(author);
         sub.setCreated(LocalDateTime.now());
         sub.setLanguage(submission.getLanguage());

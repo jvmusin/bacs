@@ -1,6 +1,8 @@
 package istu.bacs.repository;
 
 import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
+import istu.bacs.contest.ContestProblemRepository;
 import istu.bacs.contest.ContestRepository;
 import istu.bacs.problem.Problem;
 import istu.bacs.problem.ProblemRepository;
@@ -30,12 +32,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @TestInstance(PER_CLASS)
-class SubmissionRepositoryTest {
+class SubmissionRepositoryTests {
 
     @Autowired
     SubmissionRepository submissionRepository;
@@ -47,6 +50,9 @@ class SubmissionRepositoryTest {
     ProblemRepository problemRepository;
 
     @Autowired
+    ContestProblemRepository contestProblemRepository;
+
+    @Autowired
     ContestRepository contestRepository;
 
     User author = User.builder()
@@ -54,28 +60,37 @@ class SubmissionRepositoryTest {
             .password("pass")
             .authorities(AuthorityUtils.createAuthorityList("ROLE_USER"))
             .build();
+
+    Contest contest = Contest.builder()
+            .contestName("Test Contest")
+            .startTime(LocalDateTime.now())
+            .finishTime(LocalDateTime.now().plusHours(5))
+            .build();
+
     List<Problem> problems = Arrays.asList(
             Problem.builder().problemId("ProA").problemName("Problem A").statementUrl("urlA").timeLimitMillis(1010).memoryLimitBytes(1000).build(),
             Problem.builder().problemId("ProB").problemName("Problem B").statementUrl("urlB").timeLimitMillis(1020).memoryLimitBytes(2000).build(),
             Problem.builder().problemId("ProC").problemName("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
     );
-    Contest contest = Contest.builder()
-            .contestName("Test Contest")
-            .startTime(LocalDateTime.now())
-            .finishTime(LocalDateTime.now().plusHours(5))
-            .problems(problems)
-            .build();
+
+    List<ContestProblem> contestProblems = Arrays.asList(
+            ContestProblem.builder().contest(contest).problem(problems.get(0)).problemIndex("A").build(),
+            ContestProblem.builder().contest(contest).problem(problems.get(1)).problemIndex("B").build(),
+            ContestProblem.builder().contest(contest).problem(problems.get(2)).problemIndex("C").build()
+    );
 
     @BeforeAll
     void init() {
         userRepository.save(author);
         problemRepository.saveAll(problems);
+
+        contest.setProblems(contestProblems);
         contestRepository.save(contest);
     }
 
     @Test
     void saveSubmission() {
-        Problem problem = problems.get(1);
+        ContestProblem problem = contest.getProblems().get(1);
         boolean pretestsOnly = false;
         LocalDateTime created = contest.getStartTime().plusMinutes(5);
         Language language = Python3;
@@ -84,8 +99,7 @@ class SubmissionRepositoryTest {
 
         Submission submission = Submission.builder()
                 .author(author)
-                .contest(contest)
-                .problem(problem)
+                .contestProblem(problem)
                 .pretestsOnly(pretestsOnly)
                 .created(created)
                 .language(language)
@@ -98,13 +112,13 @@ class SubmissionRepositoryTest {
         assertThat(submission.getSubmissionId(), is(notNullValue()));
 
         Optional<Submission> resultOpt = submissionRepository.findById(submission.getSubmissionId());
-        assertThat(resultOpt.isPresent(), is(true));
+        assertTrue(resultOpt.isPresent());
 
         Submission result = resultOpt.get();
         assertThat(result.getSubmissionId(), is(equalTo(submission.getSubmissionId())));
         assertThat(result.getAuthor(), is(equalTo(author)));
         assertThat(result.getContest(), is(equalTo(contest)));
-        assertThat(result.getProblem(), is(equalTo(problem)));
+        assertThat(result.getContestProblem(), is(equalTo(problem)));
         assertThat(result.isPretestsOnly(), is(equalTo(pretestsOnly)));
         assertThat(result.getCreated(), is(equalTo(created)));
         assertThat(result.getLanguage(), is(equalTo(language)));

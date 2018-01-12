@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static istu.bacs.submission.SubmissionResult.withVerdict;
 import static istu.bacs.submission.Verdict.PENDING;
 import static java.lang.String.format;
 

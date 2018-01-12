@@ -8,4 +8,6 @@ public interface ContestService {
     Contest findById(int contestId);
     List<Contest> findAll(Pageable pageable);
     void save(Contest contest);
+
+    ContestProblem findProblem(Contest contest, String problemIndex);
 }

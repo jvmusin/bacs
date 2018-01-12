@@ -1,6 +1,7 @@
 package istu.bacs.submission;
 
 import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
 import istu.bacs.problem.Problem;
 import istu.bacs.user.User;
 import lombok.AllArgsConstructor;
@@ -30,12 +31,8 @@ public class Submission {
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "contest_id")
-    private Contest contest;
-
-    @ManyToOne
-    @JoinColumn(name = "problem_id")
-    private Problem problem;
+    @JoinColumn(name = "contest_problem_id")
+    private ContestProblem contestProblem;
 
     private boolean pretestsOnly;
     private LocalDateTime created;
@@ -50,6 +47,14 @@ public class Submission {
 
     public Verdict getVerdict() {
         return result.getVerdict();
+    }
+
+    public Contest getContest() {
+        return contestProblem.getContest();
+    }
+
+    public Problem getProblem() {
+        return contestProblem.getProblem();
     }
 
     @Override

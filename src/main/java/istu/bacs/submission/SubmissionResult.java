@@ -35,4 +35,16 @@ public class SubmissionResult {
                 .verdict(verdict)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "SubmissionResult{" +
+                "submissionResultId=" + submissionResultId +
+                ", buildInfo='" + buildInfo + '\'' +
+                ", verdict=" + verdict +
+                ", testsPassed=" + testsPassed +
+                ", timeUsedMillis=" + timeUsedMillis +
+                ", memoryUsedBytes=" + memoryUsedBytes +
+                '}';
+    }
 }

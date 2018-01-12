@@ -1,13 +1,12 @@
 package istu.bacs.contest.dto;
 
-import istu.bacs.contest.Contest;
 import istu.bacs.submission.Language;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionResult;
 import istu.bacs.submission.Verdict;
 import lombok.Data;
 
-import java.time.format.DateTimeFormatter;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Data
 public class SubmissionMetaDto {
@@ -29,12 +28,11 @@ public class SubmissionMetaDto {
     public SubmissionMetaDto(Submission submission) {
         id = submission.getSubmissionId();
 
-        Contest contest0 = submission.getContest();
-        contest = new ContestMetaDto(contest0);
-        problem = new ProblemDto(submission.getProblem(), contest0.getProblems().indexOf(submission.getProblem()));
+        contest = new ContestMetaDto(submission.getContest());
+        problem = new ProblemDto(submission.getContestProblem());
         author = new UserDto(submission.getAuthor());
 
-        created = submission.getCreated().format(DateTimeFormatter.ISO_DATE_TIME);
+        created = submission.getCreated().format(ISO_DATE_TIME);
         language = submission.getLanguage();
         verdict = submission.getVerdict();
 

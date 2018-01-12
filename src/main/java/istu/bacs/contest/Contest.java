@@ -1,6 +1,5 @@
 package istu.bacs.contest;
 
-import istu.bacs.problem.Problem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Data
 @Entity
@@ -27,12 +28,10 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @OrderColumn(name = "problem_index")
-    @JoinTable(name = "contest_problems",
-            joinColumns = @JoinColumn(name = "contest_id"),
-            inverseJoinColumns = @JoinColumn(name = "problem_id"))
-    private List<Problem> problems;
+    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
+    @OrderBy("problemIndex ASC")
+    @JoinColumn(name = "contest_id")
+    private List<ContestProblem> problems;
 
     @Override
     public boolean equals(Object other) {

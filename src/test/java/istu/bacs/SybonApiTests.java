@@ -2,11 +2,11 @@ package istu.bacs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
 import istu.bacs.externalapi.sybon.SybonApi;
 import istu.bacs.externalapi.sybon.SybonConfigurationProperties;
 import istu.bacs.problem.Problem;
 import istu.bacs.submission.Submission;
-import istu.bacs.submission.SubmissionResult;
 import istu.bacs.user.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.fasterxml.jackson.databind.MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES;
 import static istu.bacs.submission.Language.Python3;
@@ -46,8 +45,7 @@ class SybonApiTests {
 
     @Test
     void fetchProblems() {
-        List<Problem> problems = sybonApi.getAllProblems();
-        assertThat(problems, is(not(empty())));
+        assertThat(sybonApi.getAllProblems(), is(not(empty())));
     }
 
     @Test
@@ -57,19 +55,27 @@ class SybonApiTests {
                 .username("admin")
                 .password("password")
                 .build();
+
         Problem problem = sybonApi.getAllProblems().get(0);
+        ContestProblem contestProblem = ContestProblem.builder()
+                .contestProblemId(0)
+                .problem(problem)
+                .problemIndex("A")
+                .build();
+
         Contest contest = Contest.builder()
                 .contestId(123)
                 .contestName("Test contest")
                 .startTime(LocalDateTime.now())
                 .finishTime(LocalDateTime.now().plusHours(5))
-                .problems(singletonList(problem))
+                .problems(singletonList(contestProblem))
                 .build();
+        contestProblem.setContest(contest);
+
         Submission submission = Submission.builder()
                 .submissionId(5)
                 .author(author)
-                .contest(contest)
-                .problem(problem)
+                .contestProblem(contestProblem)
                 .pretestsOnly(false)
                 .created(contest.getStartTime().plusMinutes(7))
                 .language(Python3)

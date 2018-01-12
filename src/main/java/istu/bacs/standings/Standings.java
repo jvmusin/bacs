@@ -1,6 +1,7 @@
 package istu.bacs.standings;
 
 import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
 import istu.bacs.submission.Submission;
 import istu.bacs.user.User;
 import lombok.Data;
@@ -10,9 +11,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static istu.bacs.standings.Standings.SolvingResult.notSolved;
+import static istu.bacs.standings.Standings.SolvingResult.solved;
 import static istu.bacs.submission.Verdict.COMPILE_ERROR;
 import static istu.bacs.submission.Verdict.OK;
 import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.toMap;
 
 public class Standings {
 
@@ -82,7 +86,7 @@ public class Standings {
     public static class ProblemProgress {
         private final List<Submission> submissions = new ArrayList<>();
 
-        private SolvingResult result = SolvingResult.notSolved(0);
+        private SolvingResult result = notSolved(0);
 
         public SolvingResult update(Submission newSubmission) {
             submissions.add(newSubmission);
@@ -92,11 +96,12 @@ public class Standings {
             int failTries = 0;
             for (Submission submission : submissions) {
                 if (submission.getVerdict() == COMPILE_ERROR) continue;
-                if (submission.getVerdict() == OK) return result = SolvingResult.solved(failTries, submission);
+                if (submission.getVerdict() == OK)
+                    return result = solved(failTries, submission);
                 else failTries++;
             }
 
-            return result = SolvingResult.notSolved(failTries);
+            return result = notSolved(failTries);
         }
 
         private void shiftUpLast() {
@@ -117,7 +122,7 @@ public class Standings {
     @Data
     public class ContestantRow implements Comparable<ContestantRow> {
         private User contestant;
-        private ProblemProgress[] progresses;
+        private Map<String, ProblemProgress> progresses;
         private int solvedCount;
         private int penalty;
 
@@ -125,15 +130,12 @@ public class Standings {
 
         public ContestantRow(User contestant) {
             this.contestant = contestant;
-            int problemCount = contest.getProblems().size();
-            progresses = new ProblemProgress[problemCount];
-            for (int i = 0; i < problemCount; i++)
-                progresses[i] = new ProblemProgress();
+            progresses = contest.getProblems().stream()
+                    .collect(toMap(ContestProblem::getProblemIndex, p -> new ProblemProgress()));
         }
 
         public void update(Submission submission) {
-            int problemIndex = contest.getProblems().indexOf(submission.getProblem());
-            ProblemProgress progress = progresses[problemIndex];
+            ProblemProgress progress = progresses.get(submission.getContestProblem().getProblemIndex());
 
             SolvingResult wasResult = progress.result;
             if (wasResult.solved) {

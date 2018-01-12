@@ -28,25 +28,24 @@ CREATE TABLE IF NOT EXISTS contest (
   finish_time  DATETIME     NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS contest_problems (
-  id            INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS contest_problem (
+  contest_problem_id INT PRIMARY KEY AUTO_INCREMENT,
 
-  contest_id    INT          NOT NULL,
-  problem_id    VARCHAR(255) NOT NULL,
-  problem_index INT          NOT NULL,
+  contest_id         INT          NOT NULL,
+  problem_id         VARCHAR(255) NOT NULL,
+  problem_index      CHAR(3)      NOT NULL,
 
   FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
   FOREIGN KEY (problem_id) REFERENCES problem (problem_id)
 );
-CREATE INDEX IF NOT EXISTS idx_contestProblems_contestId_problemId ON contest_problems (contest_id, problem_id);
+CREATE INDEX IF NOT EXISTS idx_contestProblem_contestId_problemIndex ON contest_problem (contest_id, problem_index);
 
 
 CREATE TABLE IF NOT EXISTS submission (
   submission_id          INT PRIMARY KEY AUTO_INCREMENT,
 
   author_id              INT          NOT NULL,
-  contest_id             INT          NOT NULL,
-  problem_id             VARCHAR(255) NOT NULL,
+  contest_problem_id     INT          NOT NULL,
 
   pretests_only          BOOLEAN      NOT NULL,
   created                DATETIME     NOT NULL,
@@ -56,10 +55,8 @@ CREATE TABLE IF NOT EXISTS submission (
   external_submission_id VARCHAR(255) NULL,
 
   FOREIGN KEY (author_id) REFERENCES user (user_id),
-  FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
-  FOREIGN KEY (problem_id) REFERENCES problem (problem_id)
+  FOREIGN KEY (contest_problem_id) REFERENCES contest_problem (contest_problem_id)
 );
-CREATE INDEX IF NOT EXISTS idx_submission_contestId_authorId ON submission (contest_id, author_id);
 
 CREATE TABLE IF NOT EXISTS submission_result (
   submission_result_id INT PRIMARY KEY AUTO_INCREMENT,
