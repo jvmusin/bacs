@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface StandingsService {
     void update(List<Submission> submissions);
+    void update(Submission submission);
     Standings getStandings(Contest contest);
 }

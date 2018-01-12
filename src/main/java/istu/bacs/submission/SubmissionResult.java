@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.STRING;
+
 @Data
 @Entity
 @Builder
@@ -24,6 +26,7 @@ public class SubmissionResult {
 
     private String buildInfo;
 
+    @Enumerated(STRING)
     private Verdict verdict;
     private Integer testsPassed;
     private Integer timeUsedMillis;

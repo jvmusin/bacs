@@ -28,9 +28,8 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
+    @OneToMany(cascade = ALL, mappedBy = "contest")
     @OrderBy("problemIndex ASC")
-    @JoinColumn(name = "contest_id")
     private List<ContestProblem> problems;
 
     @Override

@@ -11,18 +11,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
+    private final SubmissionResultRepository submissionResultRepository;
     private final ContestProblemRepository contestProblemRepository;
 
     private final List<Consumer<Submission>> onScheduledSubscribers = Collections.synchronizedList(new ArrayList<>());
     private final List<Consumer<Submission>> onSubmittedSubscribers = Collections.synchronizedList(new ArrayList<>());
     private final List<Consumer<Submission>> onTestedSubscribers = Collections.synchronizedList(new ArrayList<>());
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestProblemRepository contestProblemRepository) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, SubmissionResultRepository submissionResultRepository, ContestProblemRepository contestProblemRepository) {
         this.submissionRepository = submissionRepository;
+        this.submissionResultRepository = submissionResultRepository;
         this.contestProblemRepository = contestProblemRepository;
     }
 
@@ -49,6 +53,13 @@ public class SubmissionServiceImpl implements SubmissionService {
         Contest contest = Contest.builder().contestId(contestId).build();
         List<ContestProblem> problems = contestProblemRepository.findAllByContest(contest);
         return submissionRepository.findAllByAuthorAndContestProblem(author, problems);
+    }
+
+    @Override
+    public List<Submission> findAllByVerdict(Verdict verdict) {
+        return submissionResultRepository.findByVerdict(verdict).stream()
+                .map(SubmissionResult::getSubmission)
+                .collect(toList());
     }
 
     @Override

@@ -8,6 +8,7 @@ public interface SubmissionService {
     List<Submission> findAll();
     List<Submission> findAllByContest(int contestId);
     List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId);
+    List<Submission> findAllByVerdict(Verdict verdict);
     int submit(Submission submission);
     void save(Submission submission);
 

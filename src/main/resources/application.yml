@@ -12,3 +12,6 @@ spring:
   jackson:
     mapper:
       ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+logging:
+  level:
+    org.springframework.transaction.interceptor: TRACE
