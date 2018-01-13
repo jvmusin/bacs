@@ -1,6 +1,5 @@
 package istu.bacs.security;
 
-import istu.bacs.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,12 +22,10 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final UserService userService;
     private final MyCorsFilter corsFilter;
 
-    public SecurityConfig(UserDetailsService userDetailsService, UserService userService, MyCorsFilter corsFilter) {
+    public SecurityConfig(UserDetailsService userDetailsService, MyCorsFilter corsFilter) {
         this.userDetailsService = userDetailsService;
-        this.userService = userService;
         this.corsFilter = corsFilter;
     }
 
@@ -45,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), userService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(STATELESS);

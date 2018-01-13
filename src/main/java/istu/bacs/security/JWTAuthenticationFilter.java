@@ -3,8 +3,9 @@ package istu.bacs.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import istu.bacs.user.EnhancedUserDetails;
 import istu.bacs.user.User;
-import istu.bacs.user.UserService;
+import lombok.extern.java.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,15 +22,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static istu.bacs.security.SecurityConstants.*;
+import static java.lang.String.format;
+import static java.lang.System.currentTimeMillis;
 
+@Log
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
     }
 
     @Override
@@ -38,11 +40,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
 
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getUsername(),
-                            user.getPassword())
-            );
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    user.getUsername(),
+                    user.getPassword());
+
+            log.info(format("User attempts to login %s with password(pss) %s", user.getUsername(), user.getPassword()));
+
+            return authenticationManager.authenticate(token);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,17 +58,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) {
 
-        String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
-        int usedId = userService.findByUsername(username).getUserId();
-        List<String> authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        EnhancedUserDetails user = (EnhancedUserDetails) auth.getPrincipal();
+        List<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
         String token = Jwts.builder()
-                .setSubject(username)
-                .claim("userId", usedId)
+                .setSubject(user.getUsername())
+                .claim("userId", user.getUserId())
                 .claim("authorities", authorities)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+        log.info(format("User logged in %d:%s:%s", user.getUserId(), user.getUsername(), authorities));
     }
 }
