@@ -28,7 +28,7 @@ public class SubmissionSubmitter {
         submissionService.subscribeOnSolutionScheduled(q::add);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     public void submitAll() {
         log.info("SUBMISSION SUBMITTER TICK STARTED");
         int size = q.size();

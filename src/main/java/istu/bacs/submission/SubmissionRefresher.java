@@ -28,7 +28,7 @@ public class SubmissionRefresher {
         submissionService.subscribeOnSolutionSubmitted(q::add);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     public void refreshAll() {
         log.info("SUBMISSION REFRESHER TICK STARTED");
         int size = q.size();
