@@ -47,10 +47,25 @@ public class SybonApi implements ExternalApi {
 
     @Override
     public void submit(Submission submission) {
-        SybonSubmit submit = createSubmit(submission);
+        SybonSubmit sybonSubmit = createSubmit(submission);
+
         String url = buildUrl(config.getSubmitUrl(), emptyMap());
-        int submissionId = restTemplate.postForObject(url, submit, int.class);
+        int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
+
         submission.setExternalSubmissionId(withResourceName(submissionId));
+    }
+
+    @Override
+    public void submit(List<Submission> submissions) {
+        List<SybonSubmit> sybonSubmits = submissions.stream()
+                .map(this::createSubmit)
+                .collect(toList());
+
+        String url = buildUrl(config.getSubmitAllUrl(), emptyMap());
+        int[] submissionIds = restTemplate.postForObject(url, sybonSubmits, int[].class);
+
+        for (int i = 0; i < submissions.size(); i++)
+            submissions.get(i).setExternalSubmissionId(withResourceName(submissionIds[i]));
     }
 
     private SybonSubmit createSubmit(Submission submission) {

@@ -6,4 +6,5 @@ sybon:
 
   submitsUrl: https://checking.sybon.org/api/Submits
   submitUrl: send
+  submitAllUrl: sendall
   getResults: results

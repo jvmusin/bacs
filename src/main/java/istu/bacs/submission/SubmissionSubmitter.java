@@ -34,22 +34,20 @@ public class SubmissionSubmitter {
         List<Submission> all = new ArrayList<>(size);
         for (int i = 0; i < size; i++) all.add(q.poll());
 
-        all.forEach(submission -> {
-            try {
-                externalApi.submit(submission);
+        externalApi.submit(all);
 
-                submission.getResult().setVerdict(PENDING);
-                submissionService.save(submission);
+        for (Submission cur : all) {
+            if (cur.getExternalSubmissionId() == null) {
+                log.warning("Unable to submit solution " + cur.getSubmissionId());
+                q.add(cur);
+            } else {
+                cur.getResult().setVerdict(PENDING);
+                submissionService.save(cur);
 
-                submissionService.solutionSubmitted(submission);
-
-                log.info(format("Solution %d successfully submitted", submission.getSubmissionId()));
-            } catch (Exception e) {
-                log.warning(format("Unable to submit solution #%d: %s", submission.getSubmissionId(), e.getMessage()));
-                log.warning(e.toString());
-                q.add(submission);
+                log.info(format("Solution %d successfully submitted", cur.getSubmissionId()));
+                submissionService.solutionSubmitted(cur);
             }
-        });   //todo: replace with submit all
+        }
     }
 
     public void addAll(List<Submission> submissions) {

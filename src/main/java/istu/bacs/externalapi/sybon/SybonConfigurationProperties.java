@@ -15,6 +15,7 @@ public class SybonConfigurationProperties {
 
     private String submitsUrl = "https://checking.sybon.org/api/Submits";
     private String submitUrl = "send";
+    private String submitAllUrl = "sendall";
     private String getResultsUrl = "results";
 
     public String getApiKey() {
@@ -27,6 +28,10 @@ public class SybonConfigurationProperties {
 
     public String getSubmitUrl() {
         return submitsUrl + '/' + submitUrl;
+    }
+
+    public String getSubmitAllUrl() {
+        return submitsUrl + "/" + submitAllUrl;
     }
 
     public String getResultsUrl() {

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -37,9 +38,20 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
+    public void submit(List<Submission> submissions) {
+        Map<String, List<Submission>> byResource = submissions.stream()
+                .collect(groupingBy(s -> extractResource(s.getProblem().getProblemId()), toList()));
+        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
+            String resource = resourceAndSubmissions.getKey();
+            List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
+            findApi(resource).submit(resourceSubmissions);
+        });
+    }
+
+    @Override
     public void updateSubmissionDetails(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = submissions.stream()
-                .collect(Collectors.groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
+                .collect(groupingBy(s -> extractResource(s.getExternalSubmissionId()), toList()));
         byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();

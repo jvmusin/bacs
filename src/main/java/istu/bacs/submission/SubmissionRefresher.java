@@ -40,8 +40,9 @@ public class SubmissionRefresher {
             if (cur.getVerdict() == PENDING) q.add(cur);
             else {
                 submissionService.save(cur);
-                submissionService.solutionTested(cur);
+
                 log.info(format("Solution %d successfully tested", cur.getSubmissionId()));
+                submissionService.solutionTested(cur);
             }
         }
     }

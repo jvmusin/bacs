@@ -8,6 +8,7 @@ import java.util.List;
 public interface ExternalApi {
     List<Problem> getAllProblems();
     void submit(Submission submission);
+    void submit(List<Submission> submissions);
     void updateSubmissionDetails(List<Submission> submissions);
 
     String getResourceName();
