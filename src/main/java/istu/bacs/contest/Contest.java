@@ -28,7 +28,7 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @OneToMany(cascade = ALL, mappedBy = "contest")
+    @OneToMany(cascade = ALL, mappedBy = "contest", fetch = FetchType.EAGER)    //todo: Make fetch LAZY
     @OrderBy("problemIndex ASC")
     private List<ContestProblem> problems;
 

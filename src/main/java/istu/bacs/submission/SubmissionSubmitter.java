@@ -30,6 +30,7 @@ public class SubmissionSubmitter {
 
     @Scheduled(fixedDelay = 1000)
     public void submitAll() {
+        log.info("SUBMISSION SUBMITTER TICK STARTED");
         int size = q.size();
         List<Submission> all = new ArrayList<>(size);
         for (int i = 0; i < size; i++) all.add(q.poll());
@@ -48,6 +49,7 @@ public class SubmissionSubmitter {
                 submissionService.solutionSubmitted(cur);
             }
         }
+        log.info("SUBMISSION SUBMITTER TICK FINISHED");
     }
 
     public void addAll(List<Submission> submissions) {

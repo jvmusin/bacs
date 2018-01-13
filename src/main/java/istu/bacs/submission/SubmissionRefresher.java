@@ -30,6 +30,7 @@ public class SubmissionRefresher {
 
     @Scheduled(fixedDelay = 1000)
     public void refreshAll() {
+        log.info("SUBMISSION REFRESHER TICK STARTED");
         int size = q.size();
         List<Submission> all = new ArrayList<>(size);
         for (int i = 0; i < size; i++) all.add(q.poll());
@@ -45,6 +46,7 @@ public class SubmissionRefresher {
                 submissionService.solutionTested(cur);
             }
         }
+        log.info("SUBMISSION REFRESHER TICK FINISHED");
     }
 
     public void addAll(List<Submission> submissions) {
