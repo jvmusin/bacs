@@ -9,7 +9,6 @@ import istu.bacs.standings.StandingsService;
 import istu.bacs.standings.dto.StandingsDto;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionService;
-import istu.bacs.submission.dto.FullSubmissionDto;
 import istu.bacs.submission.dto.SubmissionMetaDto;
 import istu.bacs.user.User;
 import istu.bacs.util.OffsetBasedPageRequest;
@@ -76,12 +75,6 @@ public class ContestController {
         return submissionService.findAllByContestAndAuthor(contestId, author.getUserId()).stream()
                 .map(SubmissionMetaDto::new)
                 .collect(toList());
-    }
-
-    //todo: Move to submission controller (later)
-    @GetMapping("{contestId}/submissions/{submissionId}")
-    public FullSubmissionDto getSubmission(@PathVariable int contestId, @PathVariable int submissionId) {
-        return new FullSubmissionDto(submissionService.findById(submissionId));
     }
 
     @PostMapping("{contestId}/problems/{problemIndex}")
