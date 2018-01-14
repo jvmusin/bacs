@@ -2,10 +2,13 @@ package istu.bacs.user;
 
 import istu.bacs.user.dto.NewUserDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 public class UserController {
@@ -24,15 +27,9 @@ public class UserController {
 
         try {
             userService.signUp(u);
-            return ResponseEntity.ok().build();
+            return ok().build();
         } catch (UsernameAlreadyTakenException e) {
-            return ResponseEntity.status(CONFLICT).body(e.getMessage());
+            return status(CONFLICT).body(e.getMessage());
         }
-    }
-
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User getUser(@PathVariable int userId) {
-        return userService.findById(userId);
     }
 }

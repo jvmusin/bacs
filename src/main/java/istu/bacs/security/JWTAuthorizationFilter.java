@@ -33,45 +33,49 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader(HEADER_STRING);
 
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-            log.info(format("User authorization failed, Authorization header = '%s'", header));
+        if (header == null) {
+            log.info("User authorization failed. Authorization header is null");
             chain.doFilter(req, res);
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+        if (!header.startsWith(TOKEN_PREFIX)) {
+            log.info(format("User authorization failed. Authorization header has incorrect format: '%s'", header));
+            chain.doFilter(req, res);
+            return;
+        }
+
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(header.replaceFirst(TOKEN_PREFIX, ""));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         if (authentication != null) {
             User user = (User) authentication.getPrincipal();
-            log.info(format("User authorized: %d:%s:%s", user.getUserId(), user.getUsername(), user.getAuthorities()));
+            log.info(format("User authorized: %d:'%s':%s", user.getUserId(), user.getUsername(), user.getAuthorities()));
         }
 
         chain.doFilter(req, res);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
-            try {
-                Claims body = Jwts.parser()
-                        .setSigningKey(SECRET)
-                        .parseClaimsJws(token.replaceFirst(TOKEN_PREFIX, ""))
-                        .getBody();
+    private UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token.replaceFirst(TOKEN_PREFIX, ""))
+                    .getBody();
 
-                User user = new User();
-                user.setUsername(body.getSubject());
-                user.setUserId(body.get("userId", Integer.class));
-                List<?> authorities = body.get("authorities", List.class);
-                user.setAuthorities(authorities.stream().map(Object::toString).map(SimpleGrantedAuthority::new).collect(toList()));
+            User user = new User();
+            user.setUsername(body.getSubject());
+            user.setUserId(body.get("userId", Integer.class));
+            List<?> authorities = body.get("authorities", List.class);
+            user.setAuthorities(authorities.stream()
+                    .map(Object::toString)
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(toList()));
 
-                return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
-                log.info("Unable to parse token: %s, the reason is " + e.getMessage());
-            }
-        } else {
-            log.info("Unable to parse null token");
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
+            log.info(format("User authorization failed. Token: '%s'. Reason: %s", token, e.getMessage()));
+            return null;
         }
-        return null;
     }
 }
