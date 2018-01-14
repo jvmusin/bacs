@@ -1,6 +1,7 @@
 package istu.bacs.contest.dto;
 
 import istu.bacs.contest.Contest;
+import istu.bacs.problem.dto.ProblemDto;
 import lombok.Data;
 
 import java.util.List;

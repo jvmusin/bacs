@@ -14,17 +14,22 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
+    public List<Problem> findAll() {
+        return problemRepository.findAll();
+    }
+
+    @Override
     public Problem findById(String problemId) {
         return problemRepository.findById(problemId).orElse(null);
     }
 
     @Override
-    public void save(Problem problem) {
-        problemRepository.save(problem);
+    public Problem save(Problem problem) {
+        return problemRepository.save(problem);
     }
 
     @Override
-    public void saveAll(List<Problem> problems) {
-        problemRepository.saveAll(problems);
+    public List<Problem> saveAll(List<Problem> problems) {
+        return problemRepository.saveAll(problems);
     }
 }

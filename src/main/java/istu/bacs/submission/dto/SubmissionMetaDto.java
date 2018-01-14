@@ -1,9 +1,12 @@
-package istu.bacs.contest.dto;
+package istu.bacs.submission.dto;
 
+import istu.bacs.contest.dto.ContestMetaDto;
+import istu.bacs.problem.dto.ProblemDto;
 import istu.bacs.submission.Language;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionResult;
 import istu.bacs.submission.Verdict;
+import istu.bacs.user.dto.UserDto;
 import lombok.Data;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;

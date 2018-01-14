@@ -3,7 +3,8 @@ package istu.bacs.problem;
 import java.util.List;
 
 public interface ProblemService {
+    List<Problem> findAll();
     Problem findById(String problemId);
-    void save(Problem problem);
-	void saveAll(List<Problem> problems);
+    Problem save(Problem problem);
+    List<Problem> saveAll(List<Problem> problems);
 }

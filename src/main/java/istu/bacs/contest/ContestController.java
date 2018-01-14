@@ -1,15 +1,20 @@
 package istu.bacs.contest;
 
-import istu.bacs.contest.dto.*;
+import istu.bacs.contest.dto.ContestMetaDto;
+import istu.bacs.contest.dto.FullContestDto;
+import istu.bacs.contest.dto.SubmitSolutionDto;
+import istu.bacs.problem.dto.ProblemDto;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.StandingsService;
+import istu.bacs.standings.dto.StandingsDto;
 import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionService;
+import istu.bacs.submission.dto.FullSubmissionDto;
+import istu.bacs.submission.dto.SubmissionMetaDto;
 import istu.bacs.user.User;
 import istu.bacs.util.OffsetBasedPageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +26,7 @@ import static istu.bacs.submission.Verdict.NOT_SUBMITTED;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/contests")
+@RequestMapping("contests")
 public class ContestController {
 
     private final ContestService contestService;
@@ -60,7 +65,6 @@ public class ContestController {
     }
 
     @GetMapping("{contestId}/submissions")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<SubmissionMetaDto> getAllSubmissions(@PathVariable int contestId) {
         return submissionService.findAllByContest(contestId).stream()
                 .map(SubmissionMetaDto::new)
@@ -106,11 +110,5 @@ public class ContestController {
         Contest contest = contestService.findById(contestId);
         Standings standings = standingsService.getStandings(contest);
         return new StandingsDto(standings);
-    }
-
-    @PostMapping("editor")
-    public void createContest(@ModelAttribute Contest contest) {
-        //todo: Replace with DTO
-        contestService.save(contest);
     }
 }

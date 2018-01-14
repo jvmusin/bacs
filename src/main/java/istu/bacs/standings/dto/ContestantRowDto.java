@@ -1,7 +1,8 @@
-package istu.bacs.contest.dto;
+package istu.bacs.standings.dto;
 
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.Standings.ProblemProgress;
+import istu.bacs.user.dto.UserDto;
 import lombok.Data;
 
 import java.util.List;

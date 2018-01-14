@@ -35,7 +35,11 @@ public class SubmissionSubmitter {
         List<Submission> all = new ArrayList<>(size);
         for (int i = 0; i < size; i++) all.add(q.poll());
 
-        externalApi.submit(all);
+        try {
+            externalApi.submit(all);
+        } catch (Exception e) {
+            log.warning("Unable to submit problems: " + e.getMessage());
+        }
 
         for (Submission cur : all) {
             if (cur.getExternalSubmissionId() == null) {

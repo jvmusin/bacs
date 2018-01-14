@@ -1,4 +1,4 @@
-package istu.bacs.contest.dto;
+package istu.bacs.problem.dto;
 
 import istu.bacs.contest.Contest;
 import istu.bacs.contest.ContestProblem;
@@ -20,9 +20,11 @@ public class ProblemDto {
     private int memoryLimitBytes;
 
     public ProblemDto(ContestProblem contestProblem) {
-        Problem problem = contestProblem.getProblem();
-
+        this(contestProblem.getProblem());
         index = contestProblem.getProblemIndex();
+    }
+
+    public ProblemDto(Problem problem) {
         name = problem.getProblemName();
         statementUrl = problem.getStatementUrl();
 

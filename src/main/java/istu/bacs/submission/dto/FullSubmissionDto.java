@@ -1,4 +1,4 @@
-package istu.bacs.contest.dto;
+package istu.bacs.submission.dto;
 
 import istu.bacs.submission.Submission;
 import lombok.Data;

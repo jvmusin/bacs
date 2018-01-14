@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
 import static java.util.stream.Collectors.groupingBy;

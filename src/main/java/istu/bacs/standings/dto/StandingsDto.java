@@ -1,5 +1,6 @@
-package istu.bacs.contest.dto;
+package istu.bacs.standings.dto;
 
+import istu.bacs.contest.dto.ContestMetaDto;
 import istu.bacs.standings.Standings;
 import lombok.Data;
 

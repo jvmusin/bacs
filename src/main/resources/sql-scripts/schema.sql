@@ -5,19 +5,20 @@ CREATE TABLE IF NOT EXISTS user (
   password    VARCHAR(255) NOT NULL,
 
   authorities VARCHAR(255) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_user_username ON user (username);
+)
+  CHARACTER SET 'utf8';
 
 
 CREATE TABLE IF NOT EXISTS problem (
   problem_id         VARCHAR(255) PRIMARY KEY,
 
   problem_name       VARCHAR(255) NOT NULL,
-  statement_url      VARCHAR(255) NOT NULL,
+  statement_url      TEXT         NOT NULL,
 
   time_limit_millis  INT          NOT NULL,
   memory_limit_bytes INT          NOT NULL
-);
+)
+  CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS contest (
   contest_id   INT PRIMARY KEY AUTO_INCREMENT,
@@ -26,7 +27,8 @@ CREATE TABLE IF NOT EXISTS contest (
 
   start_time   DATETIME     NOT NULL,
   finish_time  DATETIME     NOT NULL
-);
+)
+  CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS contest_problem (
   contest_problem_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -37,9 +39,8 @@ CREATE TABLE IF NOT EXISTS contest_problem (
 
   FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
   FOREIGN KEY (problem_id) REFERENCES problem (problem_id)
-);
-CREATE INDEX IF NOT EXISTS idx_contestProblem_contestId_problemIndex ON contest_problem (contest_id, problem_index);
-
+)
+  CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS submission (
   submission_id          INT PRIMARY KEY AUTO_INCREMENT,
@@ -56,7 +57,8 @@ CREATE TABLE IF NOT EXISTS submission (
 
   FOREIGN KEY (author_id) REFERENCES user (user_id),
   FOREIGN KEY (contest_problem_id) REFERENCES contest_problem (contest_problem_id)
-);
+)
+  CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS submission_result (
   submission_result_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -71,5 +73,5 @@ CREATE TABLE IF NOT EXISTS submission_result (
   memory_used_bytes    INT          NULL,
 
   FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
-);
-CREATE INDEX IF NOT EXISTS idx_submissionResult_submissionId ON submission (submission_id);
+)
+  CHARACTER SET 'utf8';
