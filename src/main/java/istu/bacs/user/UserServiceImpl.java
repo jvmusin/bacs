@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import static java.lang.String.format;
 import static org.springframework.security.core.authority.AuthorityUtils.createAuthorityList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 @Log
@@ -34,6 +35,18 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             log.info(format("Registration failed: Username is already taken: '%s':'%s'", user.getUsername(), user.getPassword()));
             throw new UsernameAlreadyTakenException(user.getUsername());
+        }
+
+        if (isEmpty(user.getUsername())) {
+            String message = "Registration failed: Username shouldn't be empty";
+            log.info(message);
+            throw new IllegalArgumentException(message);
+        }
+
+        if (isEmpty(user.getPassword())) {
+            String message = "Registration failed: Password shouldn't be empty";
+            log.info(message);
+            throw new IllegalArgumentException(message);
         }
 
         String pass = user.getPassword();
