@@ -1,10 +1,11 @@
 package istu.bacs.user;
 
+import istu.bacs.user.dto.NewUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.security.core.authority.AuthorityUtils.createAuthorityList;
+import static org.springframework.http.HttpStatus.CONFLICT;
 
 @RestController
 public class UserController {
@@ -15,18 +16,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("sign-up")
     public ResponseEntity<?> signUp(@RequestBody NewUserDto user) {
         User u = new User();
         u.setUsername(user.getUsername());
         u.setPassword(user.getPassword());
-        u.setAuthorities(createAuthorityList("ROLE_USER"));
 
         try {
             userService.signUp(u);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(403).body(e.getMessage());
+        } catch (UsernameAlreadyTakenException e) {
+            return ResponseEntity.status(CONFLICT).body(e.getMessage());
         }
     }
 
