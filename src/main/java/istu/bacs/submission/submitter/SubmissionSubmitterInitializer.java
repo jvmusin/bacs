@@ -1,5 +1,6 @@
-package istu.bacs.submission;
+package istu.bacs.submission.submitter;
 
+import istu.bacs.submission.SubmissionService;
 import istu.bacs.util.PlatformUnitInitializer;
 import org.springframework.stereotype.Component;
 
