@@ -3,14 +3,18 @@ package istu.bacs.submission;
 import istu.bacs.contest.Contest;
 import istu.bacs.contest.ContestProblem;
 import istu.bacs.contest.ContestProblemRepository;
+import istu.bacs.submission.dto.EnhancedSubmitSolutionDto;
 import istu.bacs.user.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static istu.bacs.submission.SubmissionResult.withVerdict;
+import static istu.bacs.submission.Verdict.NOT_SUBMITTED;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -63,10 +67,25 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public int submit(Submission submission) {
-        save(submission);
-        solutionScheduled(submission);
-        return submission.getSubmissionId();
+    public int submit(EnhancedSubmitSolutionDto submission) {
+        LocalDateTime now = LocalDateTime.now();
+
+        Contest contest = Contest.builder().contestId(submission.getContestId()).build();
+        ContestProblem contestProblem = contestProblemRepository.findByContestAndProblemIndex(contest, submission.getProblemIndex());
+
+        Submission sub = Submission.builder()
+                .author(submission.getAuthor())
+                .contestProblem(contestProblem)
+                .pretestsOnly(false)
+                .created(now)
+                .language(submission.getSubmission().getLanguage())
+                .solution(submission.getSubmission().getSolution())
+                .build();
+        sub.setResult(withVerdict(sub, NOT_SUBMITTED));
+
+        save(sub);
+        solutionScheduled(sub);
+        return sub.getSubmissionId();
     }
 
     @Override

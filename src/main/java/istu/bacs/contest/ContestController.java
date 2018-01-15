@@ -2,13 +2,14 @@ package istu.bacs.contest;
 
 import istu.bacs.contest.dto.ContestMetaDto;
 import istu.bacs.contest.dto.FullContestDto;
-import istu.bacs.contest.dto.SubmitSolutionDto;
+import istu.bacs.problem.ProblemService;
 import istu.bacs.problem.dto.ProblemDto;
+import istu.bacs.problem.dto.SubmitSolutionDto;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.StandingsService;
 import istu.bacs.standings.dto.StandingsDto;
-import istu.bacs.submission.Submission;
 import istu.bacs.submission.SubmissionService;
+import istu.bacs.submission.dto.EnhancedSubmitSolutionDto;
 import istu.bacs.submission.dto.SubmissionMetaDto;
 import istu.bacs.user.User;
 import istu.bacs.util.OffsetBasedPageRequest;
@@ -17,23 +18,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static istu.bacs.submission.SubmissionResult.withVerdict;
-import static istu.bacs.submission.Verdict.NOT_SUBMITTED;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @RequestMapping("contests")
 public class ContestController {
 
     private final ContestService contestService;
+    private final ProblemService problemService;
     private final SubmissionService submissionService;
     private final StandingsService standingsService;
 
-    public ContestController(ContestService contestService, SubmissionService submissionService, StandingsService standingsService) {
+    public ContestController(ContestService contestService, ProblemService problemService, SubmissionService submissionService, StandingsService standingsService) {
         this.contestService = contestService;
+        this.problemService = problemService;
         this.submissionService = submissionService;
         this.standingsService = standingsService;
     }
@@ -45,7 +46,7 @@ public class ContestController {
 
         if (offset == null) offset = 0;
         if (limit == null) limit = 500;
-        Pageable pageable = new OffsetBasedPageRequest(offset, limit, new Sort(Sort.Direction.DESC, "contestId"));
+        Pageable pageable = new OffsetBasedPageRequest(offset, limit, new Sort(DESC, "contestId"));
 
         return contestService.findAll(pageable).stream()
                 .map(ContestMetaDto::new)
@@ -59,8 +60,7 @@ public class ContestController {
 
     @GetMapping("{contestId}/problems/{problemIndex}")
     public ProblemDto getProblem(@PathVariable int contestId, @PathVariable String problemIndex) {
-        Contest contest = Contest.builder().contestId(contestId).build();
-        return new ProblemDto(contestService.findProblem(contest, problemIndex));
+        return new ProblemDto(problemService.findByContestAndProblemIndex(contestId, problemIndex));
     }
 
     @GetMapping("{contestId}/submissions")
@@ -83,19 +83,7 @@ public class ContestController {
                       @RequestBody SubmitSolutionDto submission,
                       @AuthenticationPrincipal User author) {
 
-        //todo: Method shouldn't have any logic
-        Contest contest = Contest.builder().contestId(contestId).build();
-        ContestProblem problem = contestService.findProblem(contest, problemIndex);
-
-        Submission sub = new Submission();
-        sub.setContestProblem(problem);
-        sub.setAuthor(author);
-        sub.setCreated(LocalDateTime.now());
-        sub.setLanguage(submission.getLanguage());
-        sub.setSolution(submission.getSolution());
-        sub.setResult(withVerdict(sub, NOT_SUBMITTED));
-
-        return submissionService.submit(sub);
+        return submissionService.submit(new EnhancedSubmitSolutionDto(contestId, problemIndex, author, submission));
     }
 
     @GetMapping("{contestId}/standings")

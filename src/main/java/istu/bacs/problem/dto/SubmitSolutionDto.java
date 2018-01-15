@@ -1,4 +1,4 @@
-package istu.bacs.contest.dto;
+package istu.bacs.problem.dto;
 
 import istu.bacs.submission.Language;
 import lombok.Data;

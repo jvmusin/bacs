@@ -9,11 +9,9 @@ import java.util.List;
 public class ContestServiceImpl implements ContestService {
 
     private final ContestRepository contestRepository;
-    private final ContestProblemRepository contestProblemRepository;
 
-    public ContestServiceImpl(ContestRepository contestRepository, ContestProblemRepository contestProblemRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository) {
         this.contestRepository = contestRepository;
-        this.contestProblemRepository = contestProblemRepository;
     }
 
     @Override
@@ -29,10 +27,5 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public void save(Contest contest) {
         contestRepository.save(contest);
-    }
-
-    @Override
-    public ContestProblem findProblem(Contest contest, String problemIndex) {
-        return contestProblemRepository.findByContestAndProblemIndex(contest, problemIndex);
     }
 }

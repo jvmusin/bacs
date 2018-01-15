@@ -1,5 +1,7 @@
 package istu.bacs.submission;
 
+import istu.bacs.submission.dto.EnhancedSubmitSolutionDto;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -9,7 +11,7 @@ public interface SubmissionService {
     List<Submission> findAllByContest(int contestId);
     List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId);
     List<Submission> findAllByVerdict(Verdict verdict);
-    int submit(Submission submission);
+    int submit(EnhancedSubmitSolutionDto submission);
     void save(Submission submission);
 
     void subscribeOnSolutionScheduled(Consumer<Submission> function);

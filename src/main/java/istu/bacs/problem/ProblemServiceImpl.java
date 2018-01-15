@@ -1,5 +1,8 @@
 package istu.bacs.problem;
 
+import istu.bacs.contest.Contest;
+import istu.bacs.contest.ContestProblem;
+import istu.bacs.contest.ContestProblemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,9 +11,11 @@ import java.util.List;
 public class ProblemServiceImpl implements ProblemService {
 
     private final ProblemRepository problemRepository;
+    private final ContestProblemRepository contestProblemRepository;
 
-    public ProblemServiceImpl(ProblemRepository problemRepository) {
+    public ProblemServiceImpl(ProblemRepository problemRepository, ContestProblemRepository contestProblemRepository) {
         this.problemRepository = problemRepository;
+        this.contestProblemRepository = contestProblemRepository;
     }
 
     @Override
@@ -21,6 +26,12 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Problem findById(String problemId) {
         return problemRepository.findById(problemId).orElse(null);
+    }
+
+    @Override
+    public ContestProblem findByContestAndProblemIndex(int contestId, String problemIndex) {
+        Contest contest = Contest.builder().contestId(contestId).build();
+        return contestProblemRepository.findByContestAndProblemIndex(contest, problemIndex);
     }
 
     @Override
