@@ -1,4 +1,4 @@
-package istu.bacs.web.externalapi;
+package istu.bacs.externalapi;
 
 public class ExternalApiHelper {
     public static String extractResource(String s) {

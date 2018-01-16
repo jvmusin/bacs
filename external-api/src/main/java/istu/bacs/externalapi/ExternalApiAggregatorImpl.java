@@ -1,4 +1,4 @@
-package istu.bacs.web.externalapi;
+package istu.bacs.externalapi;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static istu.bacs.web.externalapi.ExternalApiHelper.extractResource;
+import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 

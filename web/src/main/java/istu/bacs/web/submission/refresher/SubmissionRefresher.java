@@ -1,7 +1,7 @@
 package istu.bacs.web.submission.refresher;
 
 import istu.bacs.db.submission.Submission;
-import istu.bacs.web.externalapi.ExternalApiAggregator;
+import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.web.submission.SubmissionService;
 import lombok.extern.java.Log;
 import org.springframework.scheduling.annotation.Scheduled;

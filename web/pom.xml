@@ -27,6 +27,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!--External API-->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>external-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Web (REST) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,14 +60,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

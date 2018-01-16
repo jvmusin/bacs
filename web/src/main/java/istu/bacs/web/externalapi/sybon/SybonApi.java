@@ -2,8 +2,8 @@ package istu.bacs.web.externalapi.sybon;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
-import istu.bacs.web.externalapi.ExternalApi;
 import istu.bacs.db.submission.SubmissionResult;
+import istu.bacs.externalapi.ExternalApi;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,8 +13,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import static istu.bacs.web.externalapi.ExternalApiHelper.addResource;
-import static istu.bacs.web.externalapi.ExternalApiHelper.removeResource;
+import static istu.bacs.externalapi.ExternalApiHelper.addResource;
+import static istu.bacs.externalapi.ExternalApiHelper.removeResource;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.joining;
@@ -24,11 +24,10 @@ import static java.util.stream.Collectors.toList;
 public class SybonApi implements ExternalApi {
 
     public static final String API_NAME = "SYBON";
-
-    private final SybonConfigurationProperties config;
     private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
     private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
     private static final SybonProblemConverter problemConverter = new SybonProblemConverter();
+    private final SybonConfigurationProperties config;
     private final RestTemplate restTemplate;
 
     public SybonApi(SybonConfigurationProperties config, RestTemplateBuilder restTemplateBuilder) {
