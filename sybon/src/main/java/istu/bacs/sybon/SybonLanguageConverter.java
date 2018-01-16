@@ -1,4 +1,4 @@
-package istu.bacs.web.externalapi.sybon;
+package istu.bacs.sybon;
 
 import istu.bacs.db.submission.Language;
 import org.springframework.core.convert.converter.Converter;

@@ -1,4 +1,4 @@
-package istu.bacs.web;
+package istu.bacs.sybon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import istu.bacs.db.contest.Contest;
@@ -6,8 +6,6 @@ import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.user.User;
-import istu.bacs.web.externalapi.sybon.SybonApi;
-import istu.bacs.web.externalapi.sybon.SybonConfigurationProperties;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

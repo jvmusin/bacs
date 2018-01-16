@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan({"istu.bacs.db", "istu.bacs.web"})
+@ComponentScan({"istu.bacs.db", "istu.bacs.web", "istu.bacs.externalapi", "istu.bacs.sybon"})
 @EntityScan("istu.bacs.db")
 public class WebApplication {
     public static void main(String[] args) {

@@ -12,6 +12,7 @@
         <module>db</module>
         <module>web</module>
         <module>external-api</module>
+        <module>sybon</module>
     </modules>
 
     <parent>
@@ -43,6 +44,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- JSON support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
         <!-- TESTING -->

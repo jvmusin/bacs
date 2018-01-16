@@ -1,4 +1,4 @@
-package istu.bacs.web.externalapi.sybon;
+package istu.bacs.sybon;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;

@@ -1,11 +1,11 @@
-package istu.bacs.web.externalapi.sybon;
+package istu.bacs.sybon;
 
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.submission.Verdict;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import static istu.bacs.web.externalapi.sybon.SybonBuildResult.Status.*;
+import static istu.bacs.sybon.SybonBuildResult.Status.*;
 
 @Component
 public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {

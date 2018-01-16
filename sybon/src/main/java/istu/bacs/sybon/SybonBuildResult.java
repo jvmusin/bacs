@@ -1,4 +1,4 @@
-package istu.bacs.web.externalapi.sybon;
+package istu.bacs.sybon;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ public class SybonBuildResult {
     private Status status;
     private String output;
 
-    enum Status {
+    public enum Status {
         OK,
         FAILED,
         PENDING,
