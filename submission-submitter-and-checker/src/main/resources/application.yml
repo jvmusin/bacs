@@ -4,7 +4,7 @@ spring:
     password: root
     url: jdbc:mysql://localhost:3306/bacs
     tomcat:
-      max-active: 3
+      max-active: 6
     hikari:
       maximum-pool-size: ${spring.datasource.tomcat.max-active}
   jpa:

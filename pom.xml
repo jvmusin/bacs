@@ -22,6 +22,7 @@
         <module>rabbit</module>
         <module>submission-submitter</module>
         <module>submission-checker</module>
+        <module>submission-submitter-and-checker</module>
 
     </modules>
 
