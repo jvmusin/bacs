@@ -1,6 +1,8 @@
 package istu.bacs.externalapi;
 
-public class ExternalApiHelper {
+public final class ExternalApiHelper {
+    private ExternalApiHelper() {}
+
     public static String extractResource(String s) {
         return s.split("@", 2)[0];
     }

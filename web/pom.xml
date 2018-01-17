@@ -20,6 +20,13 @@
 
     <dependencies>
 
+        <!-- Commons -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Database -->
         <dependency>
             <groupId>istu.bacs</groupId>
@@ -49,8 +56,9 @@
 
         <!-- RabbitMQ -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
+            <groupId>istu.bacs</groupId>
+            <artifactId>rabbit</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Security -->
@@ -67,5 +75,4 @@
         </dependency>
 
     </dependencies>
-
 </project>

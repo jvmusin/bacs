@@ -25,9 +25,4 @@ public class ContestServiceImpl implements ContestService {
     public List<Contest> findAll(Pageable pageable) {
         return contestRepository.findAll(pageable).getContent();
     }
-
-    @Override
-    public void save(Contest contest) {
-        contestRepository.save(contest);
-    }
 }

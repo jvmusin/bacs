@@ -2,8 +2,8 @@ package istu.bacs.web.problem;
 
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
-import istu.bacs.db.problem.Problem;
 import istu.bacs.db.contest.ContestProblemRepository;
+import istu.bacs.db.problem.Problem;
 import istu.bacs.db.problem.ProblemRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +37,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public Problem save(Problem problem) {
-        return problemRepository.save(problem);
-    }
-
-    @Override
-    public List<Problem> saveAll(List<Problem> problems) {
-        return problemRepository.saveAll(problems);
+    public void saveAll(List<Problem> problems) {
+        problemRepository.saveAll(problems);
     }
 }

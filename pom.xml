@@ -9,10 +9,20 @@
     <packaging>pom</packaging>
 
     <modules>
+
+        <module>commons</module>
+
         <module>db</module>
+
         <module>web</module>
+
         <module>external-api</module>
         <module>sybon</module>
+
+        <module>rabbit</module>
+        <module>submission-submitter</module>
+        <module>submission-checker</module>
+
     </modules>
 
     <parent>
@@ -52,7 +62,7 @@
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
-        <!-- TESTING -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

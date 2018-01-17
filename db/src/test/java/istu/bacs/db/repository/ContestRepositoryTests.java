@@ -2,8 +2,8 @@ package istu.bacs.db.repository;
 
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
-import istu.bacs.db.problem.Problem;
 import istu.bacs.db.contest.ContestRepository;
+import istu.bacs.db.problem.Problem;
 import istu.bacs.db.problem.ProblemRepository;
 import istu.bacs.db.submission.SubmissionRepository;
 import org.junit.jupiter.api.BeforeAll;

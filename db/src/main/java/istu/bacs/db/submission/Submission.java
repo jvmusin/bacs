@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
@@ -27,11 +28,11 @@ public class Submission {
     @GeneratedValue
     private Integer submissionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "contest_problem_id")
     private ContestProblem contestProblem;
 
@@ -43,7 +44,7 @@ public class Submission {
 
     private String externalSubmissionId;
 
-    @OneToOne(cascade = ALL, mappedBy = "submission")
+    @OneToOne(cascade = ALL, mappedBy = "submission", fetch = LAZY)
     private SubmissionResult result;
 
     public Verdict getVerdict() {

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
@@ -20,7 +21,7 @@ public class SubmissionResult {
     @GeneratedValue
     private Integer submissionResultId;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "submission_id")
     private Submission submission;
 

@@ -3,36 +3,31 @@ package istu.bacs.web.submission;
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.contest.ContestProblemRepository;
-import istu.bacs.db.submission.*;
+import istu.bacs.db.submission.Submission;
+import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.user.User;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static istu.bacs.db.submission.SubmissionResult.withVerdict;
 import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
-import static java.util.Collections.synchronizedList;
-import static java.util.stream.Collectors.toList;
+import static istu.bacs.rabbit.QueueNames.SCHEDULED_SUBMISSIONS;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final SubmissionResultRepository submissionResultRepository;
     private final ContestProblemRepository contestProblemRepository;
+    private final RabbitTemplate rabbitTemplate;
 
-    private final List<Consumer<Submission>> onScheduledSubscribers = synchronizedList(new ArrayList<>());
-    private final List<Consumer<Submission>> onSubmittedSubscribers = synchronizedList(new ArrayList<>());
-    private final List<Consumer<Submission>> onTestedSubscribers = synchronizedList(new ArrayList<>());
-
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, SubmissionResultRepository submissionResultRepository, ContestProblemRepository contestProblemRepository) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestProblemRepository contestProblemRepository, RabbitTemplate rabbitTemplate) {
         this.submissionRepository = submissionRepository;
-        this.submissionResultRepository = submissionResultRepository;
         this.contestProblemRepository = contestProblemRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -61,13 +56,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public List<Submission> findAllByVerdict(Verdict verdict) {
-        return submissionResultRepository.findAllByVerdict(verdict).stream()
-                .map(SubmissionResult::getSubmission)
-                .collect(toList());
-    }
-
-    @Override
     public int submit(EnhancedSubmitSolutionDto submission) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -84,43 +72,8 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .build();
         sub.setResult(withVerdict(sub, NOT_SUBMITTED));
 
-        save(sub);
-        solutionScheduled(sub);
+        submissionRepository.save(sub);
+        rabbitTemplate.convertAndSend(SCHEDULED_SUBMISSIONS, sub.getSubmissionId());
         return sub.getSubmissionId();
-    }
-
-    @Override
-    public void save(Submission submission) {
-        submissionRepository.save(submission);
-    }
-
-    @Override
-    public void subscribeOnSolutionScheduled(Consumer<Submission> function) {
-        onScheduledSubscribers.add(function);
-    }
-
-    @Override
-    public void solutionScheduled(Submission submission) {
-        onScheduledSubscribers.forEach(f -> f.accept(submission));
-    }
-
-    @Override
-    public void subscribeOnSolutionSubmitted(Consumer<Submission> function) {
-        onSubmittedSubscribers.add(function);
-    }
-
-    @Override
-    public void solutionSubmitted(Submission submission) {
-        onSubmittedSubscribers.forEach(f -> f.accept(submission));
-    }
-
-    @Override
-    public void subscribeOnSolutionTested(Consumer<Submission> function) {
-        onTestedSubscribers.add(function);
-    }
-
-    @Override
-    public void solutionTested(Submission submission) {
-        onTestedSubscribers.forEach(f -> f.accept(submission));
     }
 }

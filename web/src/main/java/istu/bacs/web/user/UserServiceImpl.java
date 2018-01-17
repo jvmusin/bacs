@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
     public void signUp(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             log.info(format("Registration failed: Username is already taken: '%s':'%s'", user.getUsername(), user.getPassword()));

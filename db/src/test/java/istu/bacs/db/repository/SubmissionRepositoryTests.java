@@ -2,14 +2,14 @@ package istu.bacs.db.repository;
 
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
-import istu.bacs.db.problem.Problem;
-import istu.bacs.db.submission.Language;
-import istu.bacs.db.submission.Submission;
-import istu.bacs.db.user.User;
 import istu.bacs.db.contest.ContestProblemRepository;
 import istu.bacs.db.contest.ContestRepository;
+import istu.bacs.db.problem.Problem;
 import istu.bacs.db.problem.ProblemRepository;
+import istu.bacs.db.submission.Language;
+import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.db.user.User;
 import istu.bacs.db.user.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

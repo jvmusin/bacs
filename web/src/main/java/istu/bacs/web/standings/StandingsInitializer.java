@@ -1,7 +1,7 @@
 package istu.bacs.web.standings;
 
+import istu.bacs.commons.initializer.PlatformUnitInitializer;
 import istu.bacs.web.submission.SubmissionService;
-import istu.bacs.web.util.PlatformUnitInitializer;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,6 @@ public class StandingsInitializer implements PlatformUnitInitializer {
     @Override
     @Transactional
     public void init() {
-        standingsService.update(submissionService.findAll());
-        submissionService.subscribeOnSolutionTested(standingsService::update);
+        submissionService.findAll().forEach(standingsService::update);
     }
 }

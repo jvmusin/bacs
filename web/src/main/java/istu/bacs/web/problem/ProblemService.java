@@ -10,6 +10,5 @@ public interface ProblemService {
     Problem findById(String problemId);
     ContestProblem findByContestAndProblemIndex(int contestId, String problemIndex);
 
-    Problem save(Problem problem);
-    List<Problem> saveAll(List<Problem> problems);
+    void saveAll(List<Problem> problems);
 }

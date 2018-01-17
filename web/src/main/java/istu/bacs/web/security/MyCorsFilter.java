@@ -1,6 +1,5 @@
 package istu.bacs.web.security;
 
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -8,8 +7,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(HIGHEST_PRECEDENCE)
 public class MyCorsFilter implements Filter {
 
     public MyCorsFilter() {
@@ -31,10 +32,9 @@ public class MyCorsFilter implements Filter {
 
     @Override
     public void destroy() {
-
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 }

@@ -31,12 +31,6 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
     }
 
     @Override
-    public void submit(Submission submission) {
-        String problemId = submission.getProblem().getProblemId();
-        findApi(extractResource(problemId)).submit(submission);
-    }
-
-    @Override
     public void submit(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = submissions.stream()
                 .collect(groupingBy(s -> extractResource(s.getProblem().getProblemId()), toList()));
