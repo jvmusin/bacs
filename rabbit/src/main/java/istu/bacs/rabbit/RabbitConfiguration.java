@@ -1,6 +1,7 @@
 package istu.bacs.rabbit;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,8 @@ import java.net.URISyntaxException;
 import static istu.bacs.rabbit.QueueNames.*;
 
 @Configuration
-public class RabbitConfig {
+@EnableRabbit
+public class RabbitConfiguration {
 
     private static boolean isNotBlank(String s) {
         return s != null && !s.isEmpty();

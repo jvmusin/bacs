@@ -4,13 +4,6 @@ import lombok.Data;
 
 @Data
 public class SybonBuildResult {
-    private Status status;
+    private SybonBuildResultStatus status;
     private String output;
-
-    public enum Status {
-        OK,
-        FAILED,
-        PENDING,
-        SERVER_ERROR
-    }
 }

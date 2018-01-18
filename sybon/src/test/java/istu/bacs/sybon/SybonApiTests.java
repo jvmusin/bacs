@@ -38,7 +38,7 @@ class SybonApiTests {
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         restTemplateBuilder.messageConverters(new MappingJackson2HttpMessageConverter(om));
 
-        sybonApi = new SybonApi(new SybonConfigurationProperties(), restTemplateBuilder);
+        sybonApi = new SybonApi(new SybonApiEndpointConfiguration(), restTemplateBuilder);
     }
 
     @Test

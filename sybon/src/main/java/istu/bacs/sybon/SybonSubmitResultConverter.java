@@ -3,24 +3,20 @@ package istu.bacs.sybon;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.submission.Verdict;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import static istu.bacs.sybon.SybonBuildResult.Status.*;
-
-@Component
 public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
 
     private static final SybonTestResultStatusConverter testResultStatusConverter = new SybonTestResultStatusConverter();
 
     @Override
     public SubmissionResult convert(SybonSubmitResult submission) {
-        SybonBuildResult.Status status = submission.getBuildResult().getStatus();
-        if (status == PENDING)
+        SybonBuildResultStatus status = submission.getBuildResult().getStatus();
+        if (status == SybonBuildResultStatus.PENDING)
             return SubmissionResult.builder()
                     .verdict(Verdict.PENDING)
                     .build();
 
-        if (status == FAILED || status == SERVER_ERROR)
+        if (status == SybonBuildResultStatus.FAILED || status == SybonBuildResultStatus.SERVER_ERROR)
             return SubmissionResult.builder()
                     .buildInfo(submission.getBuildResult().getOutput())
                     .verdict(Verdict.COMPILE_ERROR)

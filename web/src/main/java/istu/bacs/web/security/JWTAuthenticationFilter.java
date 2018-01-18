@@ -44,7 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     user.getUsername(),
                     user.getPassword());
 
-            log.info(format("User attempts to login '%s' with password(tss) '%s'", user.getUsername(), user.getPassword()));
+            log.info(format("User attempts to login '%s':'%s'", user.getUsername(), user.getPassword()));
 
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {

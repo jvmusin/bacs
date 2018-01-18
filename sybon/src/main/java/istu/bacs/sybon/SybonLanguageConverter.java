@@ -2,14 +2,12 @@ package istu.bacs.sybon;
 
 import istu.bacs.db.submission.Language;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 import static istu.bacs.db.submission.Language.*;
 
-@Component
 public class SybonLanguageConverter implements Converter<Language, Integer> {
 
     private static final Map<Language, Integer> supportedLanguages;

@@ -1,10 +1,7 @@
 package istu.bacs.commons.initializer;
 
-import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 
-@Component
 public class PlatformInitializer {
 
     private final PlatformUnitInitializer[] initializers;

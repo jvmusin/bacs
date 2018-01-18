@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
 
     <modules>
-
         <module>commons</module>
 
         <module>db</module>
@@ -23,7 +22,6 @@
         <module>submission-submitter</module>
         <module>submission-checker</module>
         <module>submission-submitter-and-checker</module>
-
     </modules>
 
     <parent>
@@ -90,25 +88,6 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <repositories>
         <repository>

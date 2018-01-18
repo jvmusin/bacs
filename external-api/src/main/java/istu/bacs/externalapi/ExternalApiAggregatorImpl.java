@@ -2,7 +2,6 @@ package istu.bacs.externalapi;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +12,6 @@ import static istu.bacs.externalapi.ExternalApiHelper.extractResource;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-@Service
 public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     private final ExternalApi[] externalApis;

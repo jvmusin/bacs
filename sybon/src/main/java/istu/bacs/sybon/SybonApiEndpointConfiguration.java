@@ -1,11 +1,6 @@
 package istu.bacs.sybon;
 
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-//@ConfigurationProperties(prefix = "sybon")
-//@PropertySource("classpath:sybon.yml")
-public class SybonConfigurationProperties {
+public class SybonApiEndpointConfiguration {
     private String apiKey = "YBJY9zkkUUigNcYOlFoSg";
 
     private String collectionsUrl = "https://archive.sybon.org/api/Collections";

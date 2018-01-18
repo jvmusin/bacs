@@ -27,10 +27,10 @@ public class SybonApi implements ExternalApi {
     private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
     private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
     private static final SybonProblemConverter problemConverter = new SybonProblemConverter();
-    private final SybonConfigurationProperties config;
+    private final SybonApiEndpointConfiguration config;
     private final RestTemplate restTemplate;
 
-    public SybonApi(SybonConfigurationProperties config, RestTemplateBuilder restTemplateBuilder) {
+    public SybonApi(SybonApiEndpointConfiguration config, RestTemplateBuilder restTemplateBuilder) {
         this.config = config;
         this.restTemplate = restTemplateBuilder.build();
     }
