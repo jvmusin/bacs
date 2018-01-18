@@ -47,7 +47,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- RabbitMQ -->
+        <!-- RabbitMQ todo: move to monitor module -->
         <dependency>
             <groupId>istu.bacs</groupId>
             <artifactId>rabbit</artifactId>

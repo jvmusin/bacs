@@ -1,14 +1,6 @@
 spring:
+  profiles:
+    include: 'db'
   datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/bacs
     hikari:
       maximum-pool-size: 2
-  jpa:
-    hibernate:
-      use-new-id-generator-mappings: false
-    show-sql: true
-logging:
-  level:
-    org.springframework.transaction.interceptor: TRACE
