@@ -22,13 +22,6 @@
 
     <dependencies>
 
-        <!-- Commons -->
-        <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
         <!-- Database -->
         <dependency>
             <groupId>istu.bacs</groupId>

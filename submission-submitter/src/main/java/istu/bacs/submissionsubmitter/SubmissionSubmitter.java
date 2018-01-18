@@ -1,12 +1,13 @@
 package istu.bacs.submissionsubmitter;
 
-import istu.bacs.commons.initializer.PlatformUnitInitializer;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.externalapi.ExternalApiAggregator;
 import istu.bacs.submissionsubmitter.db.SubmissionService;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ import static java.lang.String.format;
 
 @Component
 @Log
-public class SubmissionSubmitter implements PlatformUnitInitializer {
+public class SubmissionSubmitter implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final String INCOMING_QUEUE_NAME = SCHEDULED_SUBMISSIONS;
     private static final String OUTCOMING_QUEUE_NAME = SUBMITTED_SUBMISSIONS;
@@ -83,7 +84,7 @@ public class SubmissionSubmitter implements PlatformUnitInitializer {
     }
 
     @Override
-    public void init() {
+    public void onApplicationEvent(ContextRefreshedEvent event) {
         submissionService.findAllByVerdict(NOT_SUBMITTED)
                 .forEach(s -> q.add(s.getSubmissionId()));
     }

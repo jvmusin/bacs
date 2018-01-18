@@ -9,8 +9,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>commons</module>
-
         <module>db</module>
 
         <module>web</module>

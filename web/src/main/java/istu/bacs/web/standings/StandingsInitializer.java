@@ -1,12 +1,13 @@
 package istu.bacs.web.standings;
 
-import istu.bacs.commons.initializer.PlatformUnitInitializer;
 import istu.bacs.web.submission.SubmissionService;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class StandingsInitializer implements PlatformUnitInitializer {
+public class StandingsInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
     private final StandingsService standingsService;
     private final SubmissionService submissionService;
@@ -18,7 +19,7 @@ public class StandingsInitializer implements PlatformUnitInitializer {
 
     @Override
     @Transactional
-    public void init() {
+    public void onApplicationEvent(ContextRefreshedEvent event) {
         submissionService.findAll().forEach(standingsService::update);
     }
 }
