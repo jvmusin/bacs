@@ -44,7 +44,7 @@ public class Submission {
 
     private String externalSubmissionId;
 
-    @OneToOne(cascade = ALL, mappedBy = "submission", fetch = LAZY)
+    @OneToOne(cascade = ALL, mappedBy = "submission")
     private SubmissionResult result;
 
     public Verdict getVerdict() {
