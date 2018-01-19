@@ -13,7 +13,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.externalapi.sybon.SybonContinueCondition.Always;
 import static java.lang.Integer.parseInt;
@@ -56,18 +55,7 @@ public class SybonApi implements ExternalApi {
 
     @Override
     public void submit(Submission submission) {
-        SybonSubmit sybonSubmit = createSubmit(submission);
-
-        String url = buildUrl(config.getSubmitUrl(), emptyMap());
-
-        try {
-            int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
-            submission.getResult().setVerdict(PENDING);
-            submission.setExternalSubmissionId(submissionId);
-        } catch (Exception e) {
-            log.warning(format("Unable to submit submission %d: %s", submission.getSubmissionId(), e.getMessage()));
-            submission.getResult().setVerdict(NOT_SUBMITTED);
-        }
+        submit(singletonList(submission));
     }
 
     @Override
@@ -77,10 +65,18 @@ public class SybonApi implements ExternalApi {
                 .collect(toList());
 
         String url = buildUrl(config.getSubmitAllUrl(), emptyMap());
-        int[] submissionIds = restTemplate.postForObject(url, sybonSubmits, int[].class);
 
-        for (int i = 0; i < submissions.size(); i++)
-            submissions.get(i).setExternalSubmissionId(submissionIds[i]);
+        try {
+            int[] submissionIds = restTemplate.postForObject(url, sybonSubmits, int[].class);
+            for (int i = 0; i < submissions.size(); i++) {
+                Submission submission = submissions.get(i);
+                submission.getResult().setVerdict(PENDING);
+                submission.setExternalSubmissionId(submissionIds[i]);
+            }
+        } catch (Exception e) {
+            log.warning("Unable to submit submissions: " + e.getMessage());
+            log.throwing("SybonApi", "submit(List<Submission>)", e);
+        }
     }
 
     private SybonSubmit createSubmit(Submission submission) {
@@ -109,15 +105,19 @@ public class SybonApi implements ExternalApi {
 
         String url = buildUrl(config.getResultsUrl(), emptyMap(), singletonMap("ids", ids));
 
-        SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
-        for (int i = 0; i < submissions.size(); i++) {
-            Submission submission = submissions.get(i);
+        try {
+            SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
+            for (int i = 0; i < submissions.size(); i++) {
+                Submission submission = submissions.get(i);
 
-            SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
-            result.setSubmissionResultId(submission.getResult().getSubmissionResultId());
+                SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
+                result.setSubmissionResultId(submission.getResult().getSubmissionResultId());
 
-            result.setSubmission(submission);
-            submission.setResult(result);
+                result.setSubmission(submission);
+                submission.setResult(result);
+            }
+        } catch (Exception e) {
+            log.warning("Unable to check submission results: " + e.getMessage());
         }
     }
 

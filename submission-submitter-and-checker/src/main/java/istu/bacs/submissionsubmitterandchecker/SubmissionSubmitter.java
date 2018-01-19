@@ -62,11 +62,7 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
         while (!q.isEmpty()) ids.add(q.poll());
 
         List<Submission> submissions = submissionService.findAllByIds(ids);
-        try {
-            externalApi.submit(submissions);
-        } catch (Exception e) {
-            log.warning("Unable to submit submissions: " + e.getMessage());
-        }
+        externalApi.submit(submissions);
 
         for (Submission submission : submissions) {
             int submissionId = submission.getSubmissionId();
@@ -75,7 +71,7 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
                 rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
                 log.info(format("Submission %d submitted", submissionId));
             } else {
-                log.warning("Unable to submit submission " + submissionId);
+                log.warning(format("Submission %d is not submitted yet", submissionId));
                 q.add(submissionId);
             }
         }

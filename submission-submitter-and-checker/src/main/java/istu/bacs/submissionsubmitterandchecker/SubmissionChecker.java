@@ -18,7 +18,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static istu.bacs.db.submission.Verdict.COMPILE_ERROR;
-import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.rabbit.QueueNames.CHECKED_SUBMISSIONS;
 import static istu.bacs.rabbit.QueueNames.SUBMITTED_SUBMISSIONS;
@@ -64,15 +63,11 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
         while (!q.isEmpty()) ids.add(q.poll());
 
         List<Submission> submissions = submissionService.findAllByIds(ids);
-        try {
-            externalApi.updateSubmissionDetails(submissions);
-        } catch (Exception e) {
-            log.warning("Unable to check submissions: " + e.getMessage());
-        }
+        externalApi.updateSubmissionDetails(submissions);
 
         for (Submission submission : submissions) {
             int submissionId = submission.getSubmissionId();
-            if (submission.getVerdict() != NOT_SUBMITTED) {
+            if (submission.getVerdict() != PENDING) {
                 submissionService.save(submission);
                 rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
 
@@ -81,7 +76,7 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
 
                 log.info(format("Submission %d checked: %s", submissionId, shortInfo));
             } else {
-                log.info("Unable to check submission " + submissionId);
+                log.info(format("Submission %d is in PENDING", submissionId));
                 q.add(submissionId);
             }
         }

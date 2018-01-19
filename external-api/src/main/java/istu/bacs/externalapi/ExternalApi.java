@@ -13,7 +13,7 @@ public interface ExternalApi {
     /**
      * Submits solution.
      * <p>
-     * If submission fails, sets {@link SubmissionResult#verdict submission.result.verdict} to {@link Verdict#NOT_SUBMITTED}.<br/>
+     * If submission fails, does nothing.<br/>
      * If submission succeeds, sets {@link SubmissionResult#verdict submission.result.verdict} to {@link Verdict#PENDING}
      * and {@link Submission#externalSubmissionId submission.externalSubmissionId} to actual external submission id.<br/>
      *
