@@ -37,13 +37,13 @@ public class SybonFakeApi implements ExternalApi {
     }
 
     @Override
-    public void updateSubmissionDetails(Submission submission) {
+    public void checkSubmissionResult(Submission submission) {
         submissionResultUpdater.updateSubmissionResult(submission);
     }
 
     @Override
-    public void updateSubmissionDetails(List<Submission> submissions) {
-        submissions.forEach(this::updateSubmissionDetails);
+    public void checkSubmissionResult(List<Submission> submissions) {
+        submissions.forEach(this::checkSubmissionResult);
     }
 
     @Override

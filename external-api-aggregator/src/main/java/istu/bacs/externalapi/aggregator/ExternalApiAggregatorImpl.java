@@ -47,7 +47,7 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
         byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
-            findApi(resource).updateSubmissionDetails(resourceSubmissions);
+            findApi(resource).checkSubmissionResult(resourceSubmissions);
         });
     }
 
