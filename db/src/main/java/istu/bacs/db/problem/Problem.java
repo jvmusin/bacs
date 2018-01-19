@@ -19,11 +19,15 @@ public class Problem {
     @Id
     private String problemId;
 
-    private String problemName;
+    private String name;
     private String statementUrl;
 
     private int timeLimitMillis;
     private int memoryLimitBytes;
+
+    public String getResourceName() {
+        return problemId.split("@")[0];
+    }
 
     @Override
     public boolean equals(Object other) {

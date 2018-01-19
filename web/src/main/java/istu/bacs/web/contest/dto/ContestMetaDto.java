@@ -15,7 +15,7 @@ public class ContestMetaDto {
 
     public ContestMetaDto(Contest contest) {
         id = contest.getContestId();
-        name = contest.getContestName();
+        name = contest.getName();
         startTime = contest.getStartTime().format(ISO_DATE_TIME);
         finishTime = contest.getFinishTime().format(ISO_DATE_TIME);
     }

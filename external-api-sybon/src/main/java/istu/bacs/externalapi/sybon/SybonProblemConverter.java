@@ -10,7 +10,7 @@ public class SybonProblemConverter implements Converter<SybonProblem, Problem> {
     public Problem convert(SybonProblem sybonProblem) {
         return Problem.builder()
                 .problemId(addResource(sybonProblem.getId(), SybonApi.API_NAME))
-                .problemName(sybonProblem.getName())
+                .name(sybonProblem.getName())
                 .statementUrl(sybonProblem.getStatementUrl())
                 .timeLimitMillis(sybonProblem.getResourceLimits().getTimeLimitMillis())
                 .memoryLimitBytes(sybonProblem.getResourceLimits().getMemoryLimitBytes())

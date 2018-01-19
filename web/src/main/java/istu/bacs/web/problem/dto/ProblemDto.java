@@ -25,7 +25,7 @@ public class ProblemDto {
     }
 
     public ProblemDto(Problem problem) {
-        name = problem.getProblemName();
+        name = problem.getName();
         statementUrl = problem.getStatementUrl();
 
         timeLimitMillis = problem.getTimeLimitMillis();

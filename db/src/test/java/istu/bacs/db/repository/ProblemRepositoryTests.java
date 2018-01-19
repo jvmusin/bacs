@@ -34,7 +34,7 @@ class ProblemRepositoryTests {
 
         Problem problem = Problem.builder()
                 .problemId(problemId)
-                .problemName(problemName)
+                .name(problemName)
                 .statementUrl(statementUrl)
                 .timeLimitMillis(timeLimitMillis)
                 .memoryLimitBytes(memoryLimitBytes)
@@ -47,7 +47,7 @@ class ProblemRepositoryTests {
 
         Problem result = resultOpt.get();
         assertThat(result.getProblemId(), is(equalTo(problemId)));
-        assertThat(result.getProblemName(), is(equalTo(problemName)));
+        assertThat(result.getName(), is(equalTo(problemName)));
         assertThat(result.getStatementUrl(), is(equalTo(statementUrl)));
         assertThat(result.getTimeLimitMillis(), is(equalTo(timeLimitMillis)));
         assertThat(result.getMemoryLimitBytes(), is(equalTo(memoryLimitBytes)));

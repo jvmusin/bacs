@@ -6,7 +6,6 @@ import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.externalapi.ExternalApi;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,7 +23,6 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-@Service
 @Log
 public class SybonApi implements ExternalApi {
 
@@ -57,7 +55,7 @@ public class SybonApi implements ExternalApi {
 
         try {
             int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
-            submission.setExternalSubmissionId(withResourceName(submissionId));
+            submission.setExternalSubmissionId(submissionId);
             submission.setResult(withVerdict(submission, PENDING));
         } catch (Exception e) {
             log.warning(format("Unable to submit submission %d: %s", submission.getSubmissionId(), e.getMessage()));
@@ -76,7 +74,7 @@ public class SybonApi implements ExternalApi {
         int[] submissionIds = restTemplate.postForObject(url, sybonSubmits, int[].class);
 
         for (int i = 0; i < submissions.size(); i++)
-            submissions.get(i).setExternalSubmissionId(withResourceName(submissionIds[i]));
+            submissions.get(i).setExternalSubmissionId(submissionIds[i]);
     }
 
     private SybonSubmit createSubmit(Submission submission) {
@@ -100,7 +98,7 @@ public class SybonApi implements ExternalApi {
     @Override
     public void checkSubmissionResult(List<Submission> submissions) {
         String ids = submissions.stream()
-                .map(sub -> getSybonId(sub.getExternalSubmissionId()) + "")
+                .map(sub -> sub.getExternalSubmissionId() + "")
                 .collect(joining(","));
 
         String url = buildUrl(config.getResultsUrl(), emptyMap(), singletonMap("ids", ids));

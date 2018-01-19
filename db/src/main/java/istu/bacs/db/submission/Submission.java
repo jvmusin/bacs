@@ -42,21 +42,25 @@ public class Submission {
     private Language language;
     private String solution;
 
-    private String externalSubmissionId;
+    private Integer externalSubmissionId;
 
     @OneToOne(cascade = ALL, mappedBy = "submission")
     private SubmissionResult result;
 
     public Verdict getVerdict() {
-        return result.getVerdict();
+        return getResult().getVerdict();
     }
 
     public Contest getContest() {
-        return contestProblem.getContest();
+        return getContestProblem().getContest();
     }
 
     public Problem getProblem() {
-        return contestProblem.getProblem();
+        return getContestProblem().getProblem();
+    }
+
+    public String getResourceName() {
+        return getProblem().getResourceName();
     }
 
     @Override

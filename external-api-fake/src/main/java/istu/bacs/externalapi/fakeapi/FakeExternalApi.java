@@ -23,7 +23,7 @@ public class FakeExternalApi implements ExternalApi {
 
     @Override
     public void submit(Submission submission) {
-        submission.setExternalSubmissionId("FAKE@" + rnd.nextInt(Integer.MAX_VALUE));
+        submission.setExternalSubmissionId(rnd.nextInt(Integer.MAX_VALUE));
         submission.getResult().setVerdict(PENDING);
     }
 

@@ -24,7 +24,7 @@ public class Contest {
     @GeneratedValue
     private Integer contestId;
 
-    private String contestName;
+    private String name;
 
     private LocalDateTime startTime;
     private LocalDateTime finishTime;

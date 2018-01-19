@@ -8,11 +8,10 @@ CREATE TABLE IF NOT EXISTS user (
 )
   CHARACTER SET 'utf8';
 
-
 CREATE TABLE IF NOT EXISTS problem (
-  problem_id         VARCHAR(255) PRIMARY KEY,
+  problem_id         VARCHAR(255),
 
-  problem_name       VARCHAR(255) NOT NULL,
+  name               VARCHAR(255) NOT NULL,
   statement_url      TEXT         NOT NULL,
 
   time_limit_millis  INT          NOT NULL,
@@ -21,12 +20,12 @@ CREATE TABLE IF NOT EXISTS problem (
   CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS contest (
-  contest_id   INT PRIMARY KEY AUTO_INCREMENT,
+  contest_id  INT PRIMARY KEY AUTO_INCREMENT,
 
-  contest_name VARCHAR(255) NOT NULL,
+  name        VARCHAR(255) NOT NULL,
 
-  start_time   DATETIME     NOT NULL,
-  finish_time  DATETIME     NOT NULL
+  start_time  DATETIME     NOT NULL,
+  finish_time DATETIME     NOT NULL
 )
   CHARACTER SET 'utf8';
 
@@ -35,10 +34,10 @@ CREATE TABLE IF NOT EXISTS contest_problem (
 
   contest_id         INT          NOT NULL,
   problem_id         VARCHAR(255) NOT NULL,
-  problem_index      CHAR(3)      NOT NULL,
+  problem_index      CHAR(3)      NOT NULL
 
-  FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
-  FOREIGN KEY (problem_id) REFERENCES problem (problem_id)
+  #   FOREIGN KEY (contest_id) REFERENCES contest (contest_id),
+  #   FOREIGN KEY (problem_id) REFERENCES problem (problem_id)
 )
   CHARACTER SET 'utf8';
 
@@ -51,12 +50,12 @@ CREATE TABLE IF NOT EXISTS submission (
   pretests_only          BOOLEAN      NOT NULL,
   created                DATETIME     NOT NULL,
   language               VARCHAR(255) NOT NULL,
-  solution               BLOB         NOT NULL,
+  solution               TEXT         NOT NULL,
 
-  external_submission_id VARCHAR(255) NULL,
+  external_submission_id INT          NULL
 
-  FOREIGN KEY (author_id) REFERENCES user (user_id),
-  FOREIGN KEY (contest_problem_id) REFERENCES contest_problem (contest_problem_id)
+  #   FOREIGN KEY (author_id) REFERENCES user (user_id),
+  #   FOREIGN KEY (contest_problem_id) REFERENCES contest_problem (contest_problem_id)
 )
   CHARACTER SET 'utf8';
 
@@ -70,8 +69,8 @@ CREATE TABLE IF NOT EXISTS submission_result (
 
   tests_passed         INT          NULL,
   time_used_millis     INT          NULL,
-  memory_used_bytes    INT          NULL,
+  memory_used_bytes    INT          NULL
 
-  FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
+  #   FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
 )
   CHARACTER SET 'utf8';

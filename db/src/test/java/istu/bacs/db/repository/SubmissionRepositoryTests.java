@@ -62,15 +62,15 @@ class SubmissionRepositoryTests {
             .build();
 
     Contest contest = Contest.builder()
-            .contestName("Test Contest")
+            .name("Test Contest")
             .startTime(LocalDateTime.now())
             .finishTime(LocalDateTime.now().plusHours(5))
             .build();
 
     List<Problem> problems = Arrays.asList(
-            Problem.builder().problemId("ProA").problemName("Problem A").statementUrl("urlA").timeLimitMillis(1010).memoryLimitBytes(1000).build(),
-            Problem.builder().problemId("ProB").problemName("Problem B").statementUrl("urlB").timeLimitMillis(1020).memoryLimitBytes(2000).build(),
-            Problem.builder().problemId("ProC").problemName("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
+            Problem.builder().problemId("TEST@ProA").name("Problem A").statementUrl("urlA").timeLimitMillis(1010).memoryLimitBytes(1000).build(),
+            Problem.builder().problemId("TEST@ProB").name("Problem B").statementUrl("urlB").timeLimitMillis(1020).memoryLimitBytes(2000).build(),
+            Problem.builder().problemId("TEST@ProC").name("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
     );
 
     List<ContestProblem> contestProblems = Arrays.asList(
@@ -95,7 +95,7 @@ class SubmissionRepositoryTests {
         LocalDateTime created = contest.getStartTime().plusMinutes(5);
         Language language = Python3;
         String solution = "from python import solution";
-        String externalSubmissionId = "EXT";
+        int externalSubmissionId = 666;
 
         Submission submission = Submission.builder()
                 .author(author)

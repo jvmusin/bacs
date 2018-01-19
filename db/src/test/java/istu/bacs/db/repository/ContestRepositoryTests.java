@@ -40,9 +40,9 @@ class ContestRepositoryTests {
     ContestRepository contestRepository;
 
     List<Problem> problems = Arrays.asList(
-            Problem.builder().problemId("ProA").problemName("Problem A").statementUrl("urlA").timeLimitMillis(1010).memoryLimitBytes(1000).build(),
-            Problem.builder().problemId("ProB").problemName("Problem B").statementUrl("urlB").timeLimitMillis(1020).memoryLimitBytes(2000).build(),
-            Problem.builder().problemId("ProC").problemName("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
+            Problem.builder().problemId("TEST@ProA").name("Problem A").statementUrl("urlA").timeLimitMillis(1010).memoryLimitBytes(1000).build(),
+            Problem.builder().problemId("TEST@ProB").name("Problem B").statementUrl("urlB").timeLimitMillis(1020).memoryLimitBytes(2000).build(),
+            Problem.builder().problemId("TEST@ProC").name("Problem C").statementUrl("urlC").timeLimitMillis(1030).memoryLimitBytes(3000).build()
     );
 
     List<ContestProblem> contestProblems = Arrays.asList(
@@ -63,7 +63,7 @@ class ContestRepositoryTests {
         LocalDateTime finishTime = startTime.plusHours(5);
 
         Contest contest = Contest.builder()
-                .contestName(contestName)
+                .name(contestName)
                 .startTime(startTime)
                 .finishTime(finishTime)
                 .problems(contestProblems)
@@ -78,7 +78,7 @@ class ContestRepositoryTests {
 
         Contest result = resultOpt.get();
         assertThat(result.getContestId(), is(equalTo(contest.getContestId())));
-        assertThat(result.getContestName(), is(equalTo(contestName)));
+        assertThat(result.getName(), is(equalTo(contestName)));
         assertThat(result.getStartTime(), is(equalTo(startTime)));
         assertThat(result.getFinishTime(), is(equalTo(finishTime)));
         assertEquals(contestProblems, result.getProblems());
