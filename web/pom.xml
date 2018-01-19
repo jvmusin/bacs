@@ -29,15 +29,20 @@
 
         <!-- External API Aggregator -->
         <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>external-api-aggregator</artifactId>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- External APIs -->
         <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>external-api-sybon</artifactId>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>sybon</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>sybon-fake</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

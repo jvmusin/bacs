@@ -16,6 +16,7 @@
         <module>external-api</module>
         <module>external-api-aggregator</module>
         <module>external-api-sybon</module>
+        <module>external-api-sybon-fake</module>
 
         <module>rabbit</module>
         <module>submission-submitter-and-checker</module>
