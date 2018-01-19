@@ -14,7 +14,7 @@ INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (1, 'Runni
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (2, 'Future contest',        '2050-01-01 09:00', '2050-01-02 13:00');
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (3, 'Previous contest',      '2017-01-02 12:30', '2017-02-02 13:30');
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (4, 'Running fake contest',  '2017-12-31 12:00', '2047-04-23 17:30');
-INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (5, 'Running sybon test',    '2017-12-31 12:00', '2047-04-23 17:30');
+INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (5, 'Running sybon contest', '2017-12-31 12:00', '2047-04-23 17:30');
 
 
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (1, 2, 'FAKE@1' , 'A');
@@ -28,4 +28,4 @@ INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 4, 'FAKE@11', 'E');
 
 
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 5, 'SYBON@1', 'XXX');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (8, 5, 'SYBON@1', 'XXX');
