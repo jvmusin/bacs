@@ -23,11 +23,9 @@ public class SubmissionResultUpdater {
             submission.setResult(timeLimit(submission));
         } else if (solution.contains("ml")) {
             submission.setResult(memoryLimit(submission));
-        } else if (solution.contains("ce")) {
-            submission.setResult(compileError(submission));
         } else {
             Verdict verdict = tryFindVerdict(solution);
-            if (verdict == null) submission.setResult(compileError(submission));
+            if (verdict == null || verdict == COMPILE_ERROR) submission.setResult(compileError(submission));
             else submission.setResult(withVerdict(submission, verdict));
         }
         submission.getResult().setSubmissionResultId(oldSubmissionResultId);
