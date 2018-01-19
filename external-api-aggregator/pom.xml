@@ -3,10 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>submission-submitter-and-checker</artifactId>
+    <artifactId>external-api-aggregator</artifactId>
     <packaging>jar</packaging>
-
-    <name>submission-submitter-and-checker</name>
 
     <parent>
         <groupId>istu.bacs</groupId>
@@ -22,36 +20,12 @@
 
     <dependencies>
 
-        <!-- Database -->
+        <!-- External API interface -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>db</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <!-- External API Aggregator -->
-        <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>external-api-aggregator</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <!-- RabbitMQ -->
-        <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>rabbit</artifactId>
+            <artifactId>external-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

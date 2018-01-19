@@ -27,17 +27,17 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- External API interface -->
+        <!-- External API Aggregator -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>external-api</artifactId>
+            <artifactId>external-api-aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- External APIs -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>sybon</artifactId>
+            <artifactId>external-api-sybon</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

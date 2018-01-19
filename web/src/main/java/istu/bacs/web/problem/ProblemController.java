@@ -1,6 +1,6 @@
 package istu.bacs.web.problem;
 
-import istu.bacs.externalapi.ExternalApiAggregator;
+import istu.bacs.externalapi.aggregator.ExternalApiAggregator;
 import istu.bacs.web.problem.dto.ProblemDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

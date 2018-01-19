@@ -1,7 +1,7 @@
 package istu.bacs.submissionsubmitterandchecker;
 
 import istu.bacs.db.submission.Submission;
-import istu.bacs.externalapi.ExternalApiAggregator;
+import istu.bacs.externalapi.aggregator.ExternalApiAggregator;
 import istu.bacs.submissionsubmitterandchecker.db.SubmissionService;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
