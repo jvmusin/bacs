@@ -62,6 +62,7 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
         while (!q.isEmpty()) ids.add(q.poll());
 
         List<Submission> submissions = submissionService.findAllByIds(ids);
+        submissions.removeIf(s -> s.getVerdict() != NOT_SUBMITTED);
         externalApi.submit(submissions);
 
         for (Submission submission : submissions) {

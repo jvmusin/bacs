@@ -63,6 +63,7 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
         while (!q.isEmpty()) ids.add(q.poll());
 
         List<Submission> submissions = submissionService.findAllByIds(ids);
+        submissions.removeIf(s -> s.getVerdict() != PENDING);
         externalApi.updateSubmissionDetails(submissions);
 
         for (Submission submission : submissions) {
