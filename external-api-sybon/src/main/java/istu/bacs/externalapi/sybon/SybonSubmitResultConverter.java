@@ -24,7 +24,7 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
 
         int maxTimeUsedMillis = 0;
         int maxMemoryUsedBytes = 0;
-        Verdict verdict = Verdict.OK;
+        Verdict verdict = Verdict.ACCEPTED;
         Integer testsPassed = 0;
         for (SybonTestGroupResult testGroup : submission.getTestGroupResults()) {
             for (SybonTestResult result : testGroup.getTestResults()) {
@@ -37,9 +37,9 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
                 }
                 testsPassed++;
             }
-            if (verdict != Verdict.OK) break;
+            if (verdict != Verdict.ACCEPTED) break;
         }
-        if (verdict == Verdict.OK) testsPassed = null;
+        if (verdict == Verdict.ACCEPTED) testsPassed = null;
 
         return SubmissionResult.builder()
                 .buildInfo(submission.getBuildResult().getOutput())

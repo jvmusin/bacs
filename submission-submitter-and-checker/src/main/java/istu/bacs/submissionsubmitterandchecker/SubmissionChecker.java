@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import static istu.bacs.db.submission.Verdict.COMPILE_ERROR;
 import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.rabbit.QueueNames.CHECKED_SUBMISSIONS;
@@ -74,7 +75,11 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
             if (submission.getVerdict() != NOT_SUBMITTED) {
                 submissionService.save(submission);
                 rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
-                log.info(format("Submission %d checked", submissionId));
+
+                String shortInfo = submission.getVerdict().name();
+                if (submission.getVerdict() == COMPILE_ERROR) shortInfo += ": " + submission.getResult().getBuildInfo();
+
+                log.info(format("Submission %d checked: %s", submissionId, shortInfo));
             } else {
                 log.info("Unable to check submission " + submissionId);
                 q.add(submissionId);

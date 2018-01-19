@@ -7,6 +7,7 @@ import istu.bacs.web.submission.SubmissionService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class StandingsServiceImpl implements StandingsService {
     }
 
     @RabbitListener(queues = CHECKED_SUBMISSIONS)
+    @Transactional
     public void update(int submissionId) {
         update(submissionService.findById(submissionId));
     }

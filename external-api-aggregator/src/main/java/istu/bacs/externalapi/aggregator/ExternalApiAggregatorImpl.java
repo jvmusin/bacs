@@ -53,7 +53,7 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     private ExternalApi findApi(String resourceName) {
         for (ExternalApi api : externalApis)
-            if (api.getResourceName().equals(resourceName))
+            if (api.getApiName().equals(resourceName))
                 return api;
         throw new RuntimeException("No such api: " + resourceName);
     }

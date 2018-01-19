@@ -4,6 +4,7 @@ import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.externalapi.ExternalApi;
+import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,14 +14,18 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import static istu.bacs.db.submission.SubmissionResult.withVerdict;
+import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
+import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.externalapi.ExternalApiHelper.addResource;
 import static istu.bacs.externalapi.ExternalApiHelper.removeResource;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
+import static java.lang.String.format;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Service
+@Log
 public class SybonApi implements ExternalApi {
 
     public static final String API_NAME = "SYBON";
@@ -49,9 +54,16 @@ public class SybonApi implements ExternalApi {
         SybonSubmit sybonSubmit = createSubmit(submission);
 
         String url = buildUrl(config.getSubmitUrl(), emptyMap());
-        int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
 
-        submission.setExternalSubmissionId(withResourceName(submissionId));
+        try {
+            int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
+            submission.setExternalSubmissionId(withResourceName(submissionId));
+            submission.setResult(withVerdict(submission, PENDING));
+        } catch (Exception e) {
+            log.warning(format("Unable to submit submission %d: %s", submission.getSubmissionId(), e.getMessage()));
+            submission.setExternalSubmissionId(null);
+            submission.setResult(withVerdict(submission, NOT_SUBMITTED));
+        }
     }
 
     @Override
@@ -78,6 +90,11 @@ public class SybonApi implements ExternalApi {
         submit.setContinueCondition(SybonContinueCondition.Always);
 
         return submit;
+    }
+
+    @Override
+    public void updateSubmissionDetails(Submission submission) {
+        updateSubmissionDetails(singletonList(submission));
     }
 
     @Override
@@ -114,12 +131,12 @@ public class SybonApi implements ExternalApi {
     }
 
     @Override
-    public String getResourceName() {
+    public String getApiName() {
         return API_NAME;
     }
 
     private String withResourceName(Object o) {
-        return addResource(o, getResourceName());
+        return addResource(o, getApiName());
     }
 
     private int getSybonId(String s) {

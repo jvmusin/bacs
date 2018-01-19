@@ -12,7 +12,7 @@ public class SybonTestResultStatusConverter implements Converter<SybonTestResult
 
     static {
         mappings = new EnumMap<>(SybonTestResultStatus.class);
-        mappings.put(SybonTestResultStatus.OK,                                   Verdict.OK);
+        mappings.put(SybonTestResultStatus.OK,                                   Verdict.ACCEPTED);
         mappings.put(SybonTestResultStatus.WRONG_ANSWER,                         Verdict.WRONG_ANSWER);
         mappings.put(SybonTestResultStatus.PRESENTATION_ERROR,                   Verdict.PRESENTATION_ERROR);
         mappings.put(SybonTestResultStatus.QUERIES_LIMIT_EXCEEDED,               Verdict.QUERIES_LIMIT_EXCEEDED);

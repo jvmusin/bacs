@@ -3,7 +3,7 @@ package istu.bacs.db.submission;
 public enum Verdict {
     NOT_SUBMITTED,
 
-    OK,
+    ACCEPTED,
     WRONG_ANSWER,
     PRESENTATION_ERROR,
     QUERIES_LIMIT_EXCEEDED,

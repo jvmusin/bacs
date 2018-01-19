@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static istu.bacs.db.submission.Verdict.COMPILE_ERROR;
-import static istu.bacs.db.submission.Verdict.OK;
+import static istu.bacs.db.submission.Verdict.ACCEPTED;
 import static istu.bacs.web.standings.Standings.SolvingResult.notSolved;
 import static istu.bacs.web.standings.Standings.SolvingResult.solved;
 import static java.util.Comparator.naturalOrder;
@@ -95,7 +95,7 @@ public class Standings {
             int failTries = 0;
             for (Submission submission : submissions) {
                 if (submission.getVerdict() == COMPILE_ERROR) continue;
-                if (submission.getVerdict() == OK)
+                if (submission.getVerdict() == ACCEPTED)
                     return result = solved(failTries, submission);
                 else failTries++;
             }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: 'db'
+    include: 'db,sybon-fake'
   datasource:
     hikari:
       maximum-pool-size: 2

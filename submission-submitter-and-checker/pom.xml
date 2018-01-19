@@ -36,6 +36,18 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- External APIs -->
+        <dependency>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>sybon</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>sybon-fake</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- RabbitMQ -->
         <dependency>
             <groupId>istu.bacs</groupId>
