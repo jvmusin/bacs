@@ -1,7 +1,8 @@
 package istu.bacs.web.standings.dto;
 
+import istu.bacs.db.contest.Contest;
+import istu.bacs.standings.Standings;
 import istu.bacs.web.contest.dto.ContestMetaDto;
-import istu.bacs.web.standings.Standings;
 import lombok.Data;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public class StandingsDto {
     private ContestMetaDto contest;
     private List<ContestantRowDto> contestants;
 
-    public StandingsDto(Standings standings) {
-        contest = new ContestMetaDto(standings.getContest());
+    public StandingsDto(Contest contest, Standings standings) {
+        this.contest = new ContestMetaDto(contest);
         contestants = standings.getRows().stream()
                 .map(ContestantRowDto::new)
                 .collect(toList());

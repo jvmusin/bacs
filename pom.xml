@@ -12,6 +12,7 @@
         <module>db</module>
 
         <module>web</module>
+        <module>standings</module>
 
         <module>external-api</module>
         <module>external-api-aggregator</module>

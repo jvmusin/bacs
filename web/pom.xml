@@ -27,6 +27,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!--Standings-->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>standings</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- External API Aggregator -->
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>

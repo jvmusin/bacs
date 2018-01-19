@@ -7,11 +7,14 @@ INSERT INTO problem(problem_id, name, statement_url, time_limit_millis, memory_l
 INSERT INTO problem(problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('FAKE@10', '', '', 0, 0);
 INSERT INTO problem(problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('FAKE@11', '', '', 0, 0);
 
+INSERT INTO problem(problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('SYBON@1', '', '', 0, 0);
+
 
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (1, 'Running empty contest', '2017-01-02 23:01', '2018-03-04 23:02');
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (2, 'Future contest',        '2050-01-01 09:00', '2050-01-02 13:00');
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (3, 'Previous contest',      '2017-01-02 12:30', '2017-02-02 13:30');
-INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (4, 'Running contest',       '2017-12-31 12:00', '2047-04-23 17:30');
+INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (4, 'Running fake contest',  '2017-12-31 12:00', '2047-04-23 17:30');
+INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (5, 'Running sybon test',    '2017-12-31 12:00', '2047-04-23 17:30');
 
 
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (1, 2, 'FAKE@1' , 'A');
@@ -23,3 +26,6 @@ INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (5, 4, 'FAKE@5',  'Q');
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (6, 4, 'FAKE@10', 'W');
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 4, 'FAKE@11', 'E');
+
+
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 5, 'SYBON@1', 'XXX');
