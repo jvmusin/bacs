@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("fake-api")
 @AutoConfigureBefore(name = "istu.bacs.externalapi.aggregator.ExternalApiAggregatorConfiguration")
-public class FakeExternalApiConfiguration {
+public class FakeApiConfiguration {
 
     @Bean
     public ExternalApi fakeApi() {
-        return new FakeExternalApi();
+        return new FakeApi();
     }
 }

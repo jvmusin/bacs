@@ -9,7 +9,7 @@ import java.util.Random;
 
 import static istu.bacs.db.submission.Verdict.PENDING;
 
-public class FakeExternalApi implements ExternalApi {
+public class FakeApi implements ExternalApi {
 
     private final Random rnd = new Random();
 
