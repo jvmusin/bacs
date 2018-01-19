@@ -9,5 +9,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan
 @EnableJpaRepositories
 @EnableTransactionManagement
-public class DbConfig {
+public class DbConfiguration {
 }

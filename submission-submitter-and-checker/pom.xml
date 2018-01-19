@@ -39,12 +39,12 @@
         <!-- External APIs -->
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>sybon</artifactId>
+            <artifactId>fake-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>sybon-fake</artifactId>
+            <artifactId>sybon-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

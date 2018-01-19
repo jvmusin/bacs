@@ -1,4 +1,4 @@
-package istu.bacs.externalapi.sybonfake;
+package istu.bacs.externalapi.fakeapi;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
@@ -7,10 +7,9 @@ import istu.bacs.externalapi.ExternalApi;
 import java.util.List;
 import java.util.Random;
 
-import static istu.bacs.db.submission.SubmissionResult.withVerdict;
 import static istu.bacs.db.submission.Verdict.PENDING;
 
-public class SybonFakeApi implements ExternalApi {
+public class FakeExternalApi implements ExternalApi {
 
     private final Random rnd = new Random();
 
@@ -24,11 +23,8 @@ public class SybonFakeApi implements ExternalApi {
 
     @Override
     public void submit(Submission submission) {
-        submission.setExternalSubmissionId("SYBON@" + rnd.nextInt(Integer.MAX_VALUE));
-
-        int oldSubmissionResultId = submission.getResult().getSubmissionResultId();
-        submission.setResult(withVerdict(submission, PENDING));
-        submission.getResult().setSubmissionResultId(oldSubmissionResultId);
+        submission.setExternalSubmissionId("FAKE@" + rnd.nextInt(Integer.MAX_VALUE));
+        submission.getResult().setVerdict(PENDING);
     }
 
     @Override
@@ -48,6 +44,6 @@ public class SybonFakeApi implements ExternalApi {
 
     @Override
     public String getApiName() {
-        return "SYBON";
+        return "FAKE";
     }
 }

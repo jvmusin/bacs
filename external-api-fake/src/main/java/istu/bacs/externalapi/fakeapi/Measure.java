@@ -1,4 +1,4 @@
-package istu.bacs.externalapi.sybonfake;
+package istu.bacs.externalapi.fakeapi;
 
 public final class Measure {
 

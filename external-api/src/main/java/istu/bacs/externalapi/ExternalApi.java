@@ -13,12 +13,9 @@ public interface ExternalApi {
     /**
      * Submits solution.
      * <p>
-     * If submission fails, sets {@link Submission#result submission.result} to {@link Verdict#NOT_SUBMITTED}
-     * and {@link Submission#externalSubmissionId submission.externalSubmissionId} to {@code null}.<br/>
-     * If submission succeeded, sets {@link Submission#result submission.result} to {@link Verdict#PENDING}
-     * and {@link Submission#result submission.result} to actual external submission id.<br/>
-     * <p>
-     * This method shouldn't change {@link SubmissionResult#submissionResultId submission.result.submissionResultId}.
+     * If submission fails, sets {@link SubmissionResult#verdict submission.result.verdict} to {@link Verdict#NOT_SUBMITTED}.<br/>
+     * If submission succeeds, sets {@link SubmissionResult#verdict submission.result.verdict} to {@link Verdict#PENDING}
+     * and {@link Submission#externalSubmissionId submission.externalSubmissionId} to actual external submission id.<br/>
      *
      * @param submission Submission to send.
      */
@@ -28,8 +25,8 @@ public interface ExternalApi {
     /**
      * Checks submission result.
      * <p>
-     * If submission is not checked yet, sets {@link Submission#result submission.result} to {@link Verdict#PENDING}.<br/>
-     * If submission is checked, updates its {@link Submission#result submission.result} accordingly to the real result.
+     * If submission is not checked yet, sets {@link SubmissionResult#verdict submission.result.verdict} to {@link Verdict#PENDING}.<br/>
+     * If submission is checked, updates {@link Submission#result submission.result} accordingly to the real result.
      *
      * @param submission Submission to check.
      */

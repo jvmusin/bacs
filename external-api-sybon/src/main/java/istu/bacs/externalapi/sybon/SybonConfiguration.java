@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @AutoConfigureBefore(name = "istu.bacs.externalapi.aggregator.ExternalApiAggregatorConfiguration")
-@Profile("sybon")
+@Profile("sybon-api")
 public class SybonConfiguration {
 
     @Bean

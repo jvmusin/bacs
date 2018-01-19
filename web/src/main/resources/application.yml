@@ -2,7 +2,7 @@ server:
   port: 80
 spring:
   profiles:
-    include: 'db,sybon-fake'
+    include: 'db,sybon-api,fake-api'
   datasource:
     hikari:
       maximum-pool-size: 7
