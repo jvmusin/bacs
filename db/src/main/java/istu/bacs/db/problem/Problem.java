@@ -29,6 +29,10 @@ public class Problem {
         return problemId.split("@")[0];
     }
 
+    public String getRawProblemName() {
+        return problemId.split("@")[1];
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;

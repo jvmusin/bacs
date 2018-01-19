@@ -5,6 +5,7 @@ import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.contest.ContestProblemRepository;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.user.User;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static istu.bacs.db.submission.SubmissionResult.withVerdict;
 import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
 import static istu.bacs.rabbit.QueueNames.SCHEDULED_SUBMISSIONS;
 
@@ -70,7 +70,11 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .language(submission.getSubmission().getLanguage())
                 .solution(submission.getSubmission().getSolution())
                 .build();
-        sub.setResult(withVerdict(sub, NOT_SUBMITTED));
+        SubmissionResult result = new SubmissionResult();
+
+        result.setVerdict(NOT_SUBMITTED);
+        result.setSubmission(sub);
+        sub.setResult(result);
 
         submissionRepository.save(sub);
         rabbitTemplate.convertAndSend(SCHEDULED_SUBMISSIONS, sub.getSubmissionId());

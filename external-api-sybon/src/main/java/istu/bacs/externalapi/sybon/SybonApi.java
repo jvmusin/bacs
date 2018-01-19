@@ -13,11 +13,10 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import static istu.bacs.db.submission.SubmissionResult.withVerdict;
 import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
 import static istu.bacs.db.submission.Verdict.PENDING;
-import static istu.bacs.externalapi.ExternalApiHelper.addResource;
-import static istu.bacs.externalapi.ExternalApiHelper.removeResource;
+import static istu.bacs.externalapi.sybon.SybonContinueCondition.Always;
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.joining;
@@ -27,9 +26,11 @@ import static java.util.stream.Collectors.toList;
 public class SybonApi implements ExternalApi {
 
     public static final String API_NAME = "SYBON";
+
     private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
     private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
     private static final SybonProblemConverter problemConverter = new SybonProblemConverter();
+
     private final SybonApiEndpointConfiguration config;
     private final RestTemplate restTemplate;
 
@@ -40,11 +41,17 @@ public class SybonApi implements ExternalApi {
 
     @Override
     public List<Problem> getAllProblems() {
-        String uri = buildUrl(config.getCollectionUrl(), singletonMap("id", 1));
-        List<SybonProblem> problems = restTemplate.getForObject(uri, SybonProblemCollection.class).getProblems();
-        return problems.stream()
-                .map(problemConverter::convert)
-                .collect(toList());
+        String url = buildUrl(config.getCollectionUrl(), singletonMap("id", 1));
+
+        try {
+            List<SybonProblem> problems = restTemplate.getForObject(url, SybonProblemCollection.class).getProblems();
+            return problems.stream()
+                    .map(problemConverter::convert)
+                    .collect(toList());
+        } catch (Exception e) {
+            log.warning(format("Unable to get problems from %s: %s", getApiName(), e.getMessage()));
+            return emptyList();
+        }
     }
 
     @Override
@@ -55,12 +62,11 @@ public class SybonApi implements ExternalApi {
 
         try {
             int submissionId = restTemplate.postForObject(url, sybonSubmit, int.class);
+            submission.getResult().setVerdict(PENDING);
             submission.setExternalSubmissionId(submissionId);
-            submission.setResult(withVerdict(submission, PENDING));
         } catch (Exception e) {
             log.warning(format("Unable to submit submission %d: %s", submission.getSubmissionId(), e.getMessage()));
-            submission.setExternalSubmissionId(null);
-            submission.setResult(withVerdict(submission, NOT_SUBMITTED));
+            submission.getResult().setVerdict(NOT_SUBMITTED);
         }
     }
 
@@ -83,9 +89,9 @@ public class SybonApi implements ExternalApi {
         submit.setCompilerId(languageConverter.convert(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
-        submit.setProblemId(getSybonId(submission.getProblem().getProblemId()));
+        submit.setProblemId(parseInt(submission.getProblem().getRawProblemName()));
         submit.setPretestsOnly(submission.isPretestsOnly());
-        submit.setContinueCondition(SybonContinueCondition.Always);
+        submit.setContinueCondition(Always);
 
         return submit;
     }
@@ -131,13 +137,5 @@ public class SybonApi implements ExternalApi {
     @Override
     public String getApiName() {
         return API_NAME;
-    }
-
-    private String withResourceName(Object o) {
-        return addResource(o, getApiName());
-    }
-
-    private int getSybonId(String s) {
-        return Integer.parseInt(removeResource(s));
     }
 }

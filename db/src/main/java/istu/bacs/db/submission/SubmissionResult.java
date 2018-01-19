@@ -33,13 +33,6 @@ public class SubmissionResult {
     private Integer timeUsedMillis;
     private Integer memoryUsedBytes;
 
-    public static SubmissionResult withVerdict(Submission submission, Verdict verdict) {
-        return SubmissionResult.builder()
-                .submission(submission)
-                .verdict(verdict)
-                .build();
-    }
-
     @Override
     public String toString() {
         return "SubmissionResult{" +
