@@ -4,11 +4,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
+/**
+ * Used configuration from <a href="https://stackoverflow.com/a/40864401/4296219">SO 40864401: Angular 2 Spring Boot Login CORS Problems</a>
+ */
 @Component
 @Order(HIGHEST_PRECEDENCE)
 public class MyCorsFilter implements Filter {
@@ -23,11 +27,16 @@ public class MyCorsFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "*");
 
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
-
+        response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Authorization, Origin, Content-Type, Version");
         response.setHeader("Access-Control-Expose-Headers", "X-Requested-With, Authorization, Origin, Content-Type");
 
-        chain.doFilter(req, res);
+        final HttpServletRequest request = (HttpServletRequest) req;
+        if (!request.getMethod().equals("OPTIONS")) {
+            chain.doFilter(req, res);
+        } else {
+            // do not continue with filter chain for options requests
+        }
     }
 
     @Override
