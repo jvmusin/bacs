@@ -22,9 +22,9 @@ public class ContestantRow {
 
     private int place;
 
-    public ContestantRow(User contestant, List<ContestProblem> problems) {
+    public ContestantRow(User contestant, List<ContestProblem> contestProblems) {
         this.contestant = contestant;
-        progressByProblem = problems.stream()
+        progressByProblem = contestProblems.stream()
                 .collect(toMap(
                         identity(),
                         p -> new ProblemProgress()

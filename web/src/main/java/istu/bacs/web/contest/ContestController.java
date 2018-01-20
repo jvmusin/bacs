@@ -86,8 +86,8 @@ public class ContestController {
 
     @GetMapping("{contestId}/standings")
     public StandingsDto getStandings(@PathVariable int contestId) {
-        Contest contest = contestService.findById(contestId);
+        Contest contest = Contest.builder().contestId(contestId).build();
         Standings standings = standingsService.getStandings(contest);
-        return new StandingsDto(contest, standings);
+        return new StandingsDto(standings);
     }
 }

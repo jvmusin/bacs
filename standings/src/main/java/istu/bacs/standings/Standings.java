@@ -24,8 +24,8 @@ public class Standings {
     public void update(Submission submission) {
         synchronized (this) {
             log.info("Updating standings for submission " + submission.getSubmissionId());
-            byUser.computeIfAbsent(submission.getAuthor(), contestant -> {
-                ContestantRow row = new ContestantRow(contestant, submission.getContest().getProblems());
+            byUser.computeIfAbsent(submission.getAuthor(), author -> {
+                ContestantRow row = new ContestantRow(author, submission.getContest().getProblems());
                 rows.add(row);
                 return row;
             }).update(submission);
