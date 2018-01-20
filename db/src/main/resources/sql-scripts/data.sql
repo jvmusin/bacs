@@ -27,5 +27,4 @@ INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (6, 4, 'FAKE@10', 'DW');
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 4, 'FAKE@11', 'EE');
 
-
 INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (8, 5, 'SYBON@1', 'XXX');

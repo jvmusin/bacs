@@ -2,7 +2,6 @@ package istu.bacs.web.contest;
 
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.user.User;
-import istu.bacs.db.util.OffsetBasedPageRequest;
 import istu.bacs.standings.Standings;
 import istu.bacs.standings.service.StandingsService;
 import istu.bacs.web.contest.dto.ContestMetaDto;
@@ -21,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static istu.bacs.db.util.OffsetBasedPageRequest.fromNullableOffsetAndLimit;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @RequestMapping("contests")
@@ -45,9 +44,7 @@ public class ContestController {
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer limit) {
 
-        if (offset == null) offset = 0;
-        if (limit == null) limit = 500;
-        Pageable pageable = new OffsetBasedPageRequest(offset, limit, new Sort(DESC, "contestId"));
+        Pageable pageable = fromNullableOffsetAndLimit(offset, limit, Sort.by("contestId").descending());
 
         return contestService.findAll(pageable).stream()
                 .map(ContestMetaDto::new)
