@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
@@ -29,7 +28,7 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @OneToMany(cascade = ALL, mappedBy = "contest", fetch = LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "contest")
     @OrderBy("problemIndex ASC")
     private List<ContestProblem> problems;
 

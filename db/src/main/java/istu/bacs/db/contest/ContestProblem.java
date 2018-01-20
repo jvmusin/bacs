@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Data
 @Entity
 @Builder
@@ -22,11 +20,11 @@ public class ContestProblem {
     @GeneratedValue
     private Integer contestProblemId;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne
     @JoinColumn(name = "problem_id")
     private Problem problem;
 

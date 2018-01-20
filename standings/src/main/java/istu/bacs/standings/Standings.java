@@ -2,6 +2,7 @@ package istu.bacs.standings;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.user.User;
+import lombok.extern.java.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import static java.util.Comparator.comparingInt;
 
+@Log
 public class Standings {
 
     private final Map<User, ContestantRow> byUser = new HashMap<>();
@@ -21,6 +23,7 @@ public class Standings {
 
     public void update(Submission submission) {
         synchronized (this) {
+            log.info("Updating standings for submission " + submission.getSubmissionId());
             byUser.computeIfAbsent(submission.getAuthor(), contestant -> {
                 ContestantRow row = new ContestantRow(contestant, submission.getContest().getProblems());
                 rows.add(row);

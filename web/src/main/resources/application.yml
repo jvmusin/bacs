@@ -7,7 +7,7 @@ spring:
     include: 'db,sybon-api,fake-api'
   datasource:
     hikari:
-      maximum-pool-size: 50
+      maximum-pool-size: 20
 ---
 
 spring:

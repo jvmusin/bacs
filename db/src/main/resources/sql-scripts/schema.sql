@@ -74,3 +74,4 @@ CREATE TABLE IF NOT EXISTS submission_result (
   #   FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
 )
   CHARACTER SET 'utf8';
+CREATE INDEX idx_submissionResult_submissionId ON submission_result(submission_id);

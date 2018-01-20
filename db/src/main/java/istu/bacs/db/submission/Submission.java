@@ -15,7 +15,6 @@ import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
@@ -28,11 +27,11 @@ public class Submission {
     @GeneratedValue
     private Integer submissionId;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne
     @JoinColumn(name = "contest_problem_id")
     private ContestProblem contestProblem;
 
