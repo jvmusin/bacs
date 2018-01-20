@@ -49,6 +49,7 @@ public class SybonApi implements ExternalApi {
                     .collect(toList());
         } catch (Exception e) {
             log.warning(format("Unable to get problems from %s: %s", getApiName(), e.getMessage()));
+            e.printStackTrace();
             return emptyList();
         }
     }
@@ -75,7 +76,7 @@ public class SybonApi implements ExternalApi {
             }
         } catch (Exception e) {
             log.warning("Unable to submit submissions: " + e.getMessage());
-            log.throwing("SybonApi", "submit(List<Submission>)", e);
+            e.printStackTrace();
         }
     }
 
@@ -118,6 +119,7 @@ public class SybonApi implements ExternalApi {
             }
         } catch (Exception e) {
             log.warning("Unable to check submission results: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

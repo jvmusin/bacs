@@ -30,8 +30,7 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     @Override
     public void submit(List<Submission> submissions) {
-        Map<String, List<Submission>> byResource = submissions.stream()
-                .collect(groupingBy(Submission::getResourceName, toList()));
+        Map<String, List<Submission>> byResource = splitByResource(submissions);
         byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
@@ -41,13 +40,19 @@ public class ExternalApiAggregatorImpl implements ExternalApiAggregator {
 
     @Override
     public void updateSubmissionDetails(List<Submission> submissions) {
-        Map<String, List<Submission>> byResource = submissions.stream()
-                .collect(groupingBy(Submission::getResourceName, toList()));
+        Map<String, List<Submission>> byResource = splitByResource(submissions);
         byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
             findApi(resource).checkSubmissionResult(resourceSubmissions);
         });
+    }
+
+    private Map<String, List<Submission>> splitByResource(List<Submission> submissions) {
+        return submissions.stream().collect(groupingBy(
+                Submission::getResourceName,
+                toList()
+        ));
     }
 
     private ExternalApi findApi(String resourceName) {

@@ -3,6 +3,10 @@ server:
 spring:
   profiles:
     include: 'db,sybon-api,fake-api'
+---
+
+spring:
+  profiles: cloud
   datasource:
     hikari:
       maximum-pool-size: 7
