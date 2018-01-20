@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS user (
   CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS problem (
-  problem_id         VARCHAR(255),
+  problem_id         VARCHAR(255) PRIMARY KEY,
 
   name               VARCHAR(255) NOT NULL,
   statement_url      TEXT         NOT NULL,
