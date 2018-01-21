@@ -2,7 +2,6 @@ package istu.bacs.web.user;
 
 import istu.bacs.db.user.User;
 import istu.bacs.web.user.dto.NewUserDto;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("sign-up")
+    @PostMapping({"sign-up", "users"})
     public ResponseEntity<?> signUp(@RequestBody NewUserDto user) {
         User u = new User();
         u.setUsername(user.getUsername());
