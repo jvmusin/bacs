@@ -71,24 +71,31 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
         List<Integer> ids = new ArrayList<>();
         while (!q.isEmpty()) ids.add(q.poll());
 
-        List<Submission> submissions = submissionService.findAllByIds(ids);
-        submissions.removeIf(s -> s.getVerdict() != PENDING);
-        externalApi.updateSubmissionDetails(submissions);
+        try {
+            List<Submission> submissions = submissionService.findAllByIds(ids);
+            submissions.removeIf(s -> s.getVerdict() != PENDING);
+            externalApi.updateSubmissionDetails(submissions);
 
-        for (Submission submission : submissions) {
-            int submissionId = submission.getSubmissionId();
-            if (submission.getVerdict() != PENDING) {
-                submissionService.save(submission);
-                rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
+            for (Submission submission : submissions) {
+                int submissionId = submission.getSubmissionId();
+                if (submission.getVerdict() != PENDING) {
+                    submissionService.save(submission);
+                    rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
 
-                String shortInfo = submission.getVerdict().name();
-                if (submission.getVerdict() == COMPILE_ERROR) shortInfo += ": " + submission.getResult().getBuildInfo();
+                    String shortInfo = submission.getVerdict().name();
+                    if (submission.getVerdict() == COMPILE_ERROR)
+                        shortInfo += ": " + submission.getResult().getBuildInfo();
 
-                log.info(format("Submission %d checked: %s", submissionId, shortInfo));
-            } else {
-                log.info(format("Submission %d is in PENDING", submissionId));
-                q.add(submissionId);
+                    log.info(format("Submission %d checked: %s", submissionId, shortInfo));
+                } else {
+                    log.info(format("Submission %d is in PENDING", submissionId));
+                    q.add(submissionId);
+                }
             }
+        } catch (Exception e) {
+            log.warning("Unable to check submissions: " + e.getMessage());
+            e.printStackTrace();
+            q.addAll(ids);
         }
     }
 

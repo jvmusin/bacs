@@ -70,20 +70,26 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
         List<Integer> ids = new ArrayList<>();
         while (!q.isEmpty()) ids.add(q.poll());
 
-        List<Submission> submissions = submissionService.findAllByIds(ids);
-        submissions.removeIf(s -> s.getVerdict() != NOT_SUBMITTED);
-        externalApi.submit(submissions);
+        try {
+            List<Submission> submissions = submissionService.findAllByIds(ids);
+            submissions.removeIf(s -> s.getVerdict() != NOT_SUBMITTED);
+            externalApi.submit(submissions);
 
-        for (Submission submission : submissions) {
-            int submissionId = submission.getSubmissionId();
-            if (submission.getVerdict() != NOT_SUBMITTED) {
-                submissionService.save(submission);
-                rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
-                log.info(format("Submission %d submitted", submissionId));
-            } else {
-                log.warning(format("Submission %d is not submitted yet", submissionId));
-                q.add(submissionId);
+            for (Submission submission : submissions) {
+                int submissionId = submission.getSubmissionId();
+                if (submission.getVerdict() != NOT_SUBMITTED) {
+                    submissionService.save(submission);
+                    rabbitTemplate.convertAndSend(OUTCOMING_QUEUE_NAME, submissionId);
+                    log.info(format("Submission %d submitted", submissionId));
+                } else {
+                    log.warning(format("Submission %d is not submitted yet", submissionId));
+                    q.add(submissionId);
+                }
             }
+        } catch (Exception e) {
+            log.warning("Unable to submit submissions: " + e.getMessage());
+            e.printStackTrace();
+            q.addAll(ids);
         }
     }
 
