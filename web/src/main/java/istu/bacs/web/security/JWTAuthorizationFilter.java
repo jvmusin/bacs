@@ -1,11 +1,12 @@
 package istu.bacs.web.security;
 
 import io.jsonwebtoken.*;
+import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
+import istu.bacs.web.user.UserUtils;
 import lombok.extern.java.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -50,7 +51,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (authentication != null) {
             User user = (User) authentication.getPrincipal();
-            log.info(format("User authorized: %d:'%s':%s", user.getUserId(), user.getUsername(), user.getAuthorities()));
+            log.info(format("User authorized: %d:'%s':%s", user.getUserId(), user.getUsername(), user.getRoles()));
         }
 
         chain.doFilter(req, res);
@@ -67,12 +68,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             user.setUsername(body.getSubject());
             user.setUserId(body.get("userId", Integer.class));
             List<?> authorities = body.get("authorities", List.class);
-            user.setAuthorities(authorities.stream()
+            user.setRoles(authorities.stream()
                     .map(Object::toString)
-                    .map(SimpleGrantedAuthority::new)
+                    .map(Role::valueOf)
                     .collect(toList()));
 
-            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(user, null, UserUtils.getAuthorities(user));
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
             log.info(format("User authorization failed. Token: '%s'. Reason: %s", token, e.getMessage()));
             return null;

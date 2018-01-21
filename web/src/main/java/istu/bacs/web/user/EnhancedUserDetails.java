@@ -7,7 +7,7 @@ public class EnhancedUserDetails extends org.springframework.security.core.userd
     private final int userId;
 
     public EnhancedUserDetails(User user) {
-        super(user.getUsername(), user.getPassword(), user.getAuthorities());
+        super(user.getUsername(), user.getPassword(), UserUtils.getAuthorities(user));
         this.userId = user.getUserId();
     }
 

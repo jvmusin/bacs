@@ -10,6 +10,7 @@ import istu.bacs.db.submission.Language;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
+import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
 import istu.bacs.db.user.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -28,6 +28,8 @@ import java.util.Optional;
 
 import static istu.bacs.db.submission.Language.Python3;
 import static istu.bacs.db.submission.Verdict.PENDING;
+import static istu.bacs.db.user.Role.ROLE_USER;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,7 +60,7 @@ class SubmissionRepositoryTests {
     User author = User.builder()
             .username("Me")
             .password("pass")
-            .authorities(AuthorityUtils.createAuthorityList("ROLE_USER"))
+            .roles(singletonList(ROLE_USER))
             .build();
 
     Contest contest = Contest.builder()

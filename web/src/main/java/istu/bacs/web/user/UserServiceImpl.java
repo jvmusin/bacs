@@ -6,8 +6,9 @@ import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static istu.bacs.db.user.Role.ROLE_USER;
 import static java.lang.String.format;
-import static org.springframework.security.core.authority.AuthorityUtils.createAuthorityList;
+import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
         String pass = user.getPassword();
         user.setPassword(passwordEncoder.encode(pass));
-        user.setAuthorities(createAuthorityList("ROLE_USER"));
+        user.setRoles(singletonList(ROLE_USER));
         userRepository.save(user);
         log.info(format("User successfully registered: %d:'%s':'%s'", user.getUserId(), user.getUsername(), pass));
     }

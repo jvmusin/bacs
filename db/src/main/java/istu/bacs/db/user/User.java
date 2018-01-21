@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -27,8 +26,8 @@ public class User {
     private String username;
     private String password;
 
-    @Convert(converter = GrantedAuthoritiesConverter.class)
-    private List<GrantedAuthority> authorities;
+    @Convert(converter = RolesConverter.class)
+    private List<Role> roles;
 
     @Override
     public boolean equals(Object other) {

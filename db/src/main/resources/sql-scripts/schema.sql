@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS user (
-  user_id     INT PRIMARY KEY AUTO_INCREMENT,
+  user_id  INT PRIMARY KEY AUTO_INCREMENT,
 
-  username    VARCHAR(255) NOT NULL UNIQUE,
-  password    VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
 
-  authorities VARCHAR(255) NOT NULL
+  roles    VARCHAR(255) NOT NULL
 )
   CHARACTER SET 'utf8';
 
@@ -74,4 +74,5 @@ CREATE TABLE IF NOT EXISTS submission_result (
   #   FOREIGN KEY (submission_id) REFERENCES submission (submission_id)
 )
   CHARACTER SET 'utf8';
-CREATE INDEX idx_submissionResult_submissionId ON submission_result(submission_id);
+CREATE INDEX idx_submissionResult_submissionId
+  ON submission_result (submission_id);
