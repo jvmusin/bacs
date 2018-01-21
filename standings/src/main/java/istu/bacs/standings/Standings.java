@@ -35,8 +35,8 @@ public class Standings {
     }
 
     private void normalizeRows() {
-        rows.sort(comparingInt(ContestantRow::getSolvedCount)
-                .<ContestantRow>thenComparingInt(ContestantRow::getPenalty));
+        rows.sort(comparingInt((ContestantRow contestantRow) -> -contestantRow.getSolvedCount())
+                .thenComparingInt(ContestantRow::getPenalty));
 
         for (int i = 0; i < rows.size(); i++) {
             ContestantRow row = rows.get(i);
