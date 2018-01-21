@@ -29,7 +29,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public List<Submission> findAllByIds(List<Integer> ids) {
-        return submissionRepository.findAllByIds(ids);
+        return submissionRepository.findAllById(ids);
     }
 
     @Override

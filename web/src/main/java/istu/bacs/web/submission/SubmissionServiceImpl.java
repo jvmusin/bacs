@@ -2,13 +2,14 @@ package istu.bacs.web.submission;
 
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
-import istu.bacs.db.contest.ContestProblemRepository;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.user.User;
+import istu.bacs.web.contest.ContestService;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,12 +22,12 @@ import static istu.bacs.rabbit.QueueNames.SCHEDULED_SUBMISSIONS;
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final ContestProblemRepository contestProblemRepository;
+    private final ContestService contestService;
     private final RabbitTemplate rabbitTemplate;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestProblemRepository contestProblemRepository, RabbitTemplate rabbitTemplate) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestService contestService, RabbitTemplate rabbitTemplate) {
         this.submissionRepository = submissionRepository;
-        this.contestProblemRepository = contestProblemRepository;
+        this.contestService = contestService;
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -36,31 +37,25 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public List<Submission> findAll() {
-        return submissionRepository.findAll();
+    public List<Submission> findAllByContest(int contestId, Pageable pageable) {
+        Contest contest = contestService.findById(contestId);
+        List<ContestProblem> problems = contest.getProblems();
+        return submissionRepository.findAllByContestProblem(problems, pageable);
     }
 
     @Override
-    public List<Submission> findAllByContest(int contestId) {
-        Contest contest = Contest.builder().contestId(contestId).build();
-        List<ContestProblem> problems = contestProblemRepository.findAllByContest(contest);
-        return submissionRepository.findAllByContestProblems(problems);
-    }
-
-    @Override
-    public List<Submission> findAllByContestAndAuthor(int contestId, int authorUserId) {
-        User author = User.builder().userId(authorUserId).build();
-        Contest contest = Contest.builder().contestId(contestId).build();
-        List<ContestProblem> problems = contestProblemRepository.findAllByContest(contest);
-        return submissionRepository.findAllByAuthorAndContestProblem(author, problems);
+    public List<Submission> findAllByContestAndAuthor(int contestId, User author, Pageable pageable) {
+        Contest contest = contestService.findById(contestId);
+        List<ContestProblem> problems = contest.getProblems();
+        return submissionRepository.findAllByAuthorAndContestProblem(author, problems, pageable);
     }
 
     @Override
     public int submit(EnhancedSubmitSolutionDto submission) {
         LocalDateTime now = LocalDateTime.now();
 
-        Contest contest = Contest.builder().contestId(submission.getContestId()).build();
-        ContestProblem contestProblem = contestProblemRepository.findByContestAndProblemIndex(contest, submission.getProblemIndex());
+        Contest contest = contestService.findById(submission.getContestId());
+        ContestProblem contestProblem = contest.getProblem(submission.getProblemIndex());
 
         Submission sub = Submission.builder()
                 .author(submission.getAuthor())

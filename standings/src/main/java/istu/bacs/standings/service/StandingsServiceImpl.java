@@ -1,6 +1,5 @@
 package istu.bacs.standings.service;
 
-import istu.bacs.db.contest.Contest;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.standings.Standings;
@@ -23,7 +22,7 @@ public class StandingsServiceImpl implements StandingsService, ApplicationListen
     private static final Set<Verdict> unacceptableVerdicts = EnumSet.of(NOT_SUBMITTED, PENDING, COMPILE_ERROR);
 
     private final SubmissionService submissionService;
-    private final Map<Contest, Standings> active = new ConcurrentHashMap<>();
+    private final Map<Integer, Standings> standingsByContestId = new ConcurrentHashMap<>();
 
     public StandingsServiceImpl(SubmissionService submissionService) {
         this.submissionService = submissionService;
@@ -32,7 +31,7 @@ public class StandingsServiceImpl implements StandingsService, ApplicationListen
     @Override
     public void update(Submission submission) {
         if (!unacceptableVerdicts.contains(submission.getVerdict()))
-            getStandings(submission.getContest()).update(submission);
+            getStandings(submission.getContest().getContestId()).update(submission);
     }
 
     @RabbitListener(queues = CHECKED_SUBMISSIONS)
@@ -42,8 +41,8 @@ public class StandingsServiceImpl implements StandingsService, ApplicationListen
     }
 
     @Override
-    public Standings getStandings(Contest contest) {
-        return active.computeIfAbsent(contest, c -> new Standings());
+    public Standings getStandings(int contestId) {
+        return standingsByContestId.computeIfAbsent(contestId, cId -> new Standings());
     }
 
     @Override

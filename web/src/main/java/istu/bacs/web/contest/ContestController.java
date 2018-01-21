@@ -1,6 +1,5 @@
 package istu.bacs.web.contest;
 
-import istu.bacs.db.contest.Contest;
 import istu.bacs.db.user.User;
 import istu.bacs.db.util.OffsetBasedPageRequest;
 import istu.bacs.standings.Standings;
@@ -14,6 +13,7 @@ import istu.bacs.web.standings.dto.StandingsDto;
 import istu.bacs.web.submission.SubmissionService;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
 import istu.bacs.web.submission.dto.SubmissionMetaDto;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,14 +63,30 @@ public class ContestController {
 
     @GetMapping("{contestId}/submissions")
     public List<SubmissionMetaDto> getAllSubmissions(@PathVariable int contestId) {
-        return submissionService.findAllByContest(contestId).stream()
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by("submissionId").descending());
+        return submissionService.findAllByContest(contestId, pageable).stream()
                 .map(SubmissionMetaDto::new)
                 .collect(toList());
     }
 
     @GetMapping("{contestId}/submissions/my")
-    public List<SubmissionMetaDto> getMySubmissions(@PathVariable int contestId, @AuthenticationPrincipal User author) {
-        return submissionService.findAllByContestAndAuthor(contestId, author.getUserId()).stream()
+    public List<SubmissionMetaDto> getMySubmissions(
+            @PathVariable int contestId,
+            @AuthenticationPrincipal User author,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer pageIndex) {
+
+        if ((pageSize == null) != (pageIndex == null))
+            throw new IllegalArgumentException("pageSize and pageIndex should be both null or not null");
+
+        if (pageSize == null) {
+            pageSize = Integer.MAX_VALUE;
+            pageIndex = 0;
+        }
+
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("submissionId").descending());
+
+        return submissionService.findAllByContestAndAuthor(contestId, author, pageable).stream()
                 .map(SubmissionMetaDto::new)
                 .collect(toList());
     }
@@ -81,13 +97,14 @@ public class ContestController {
                       @RequestBody SubmitSolutionDto submission,
                       @AuthenticationPrincipal User author) {
 
-        return submissionService.submit(new EnhancedSubmitSolutionDto(contestId, problemIndex, author, submission));
+        return submissionService.submit(
+                new EnhancedSubmitSolutionDto(contestId, problemIndex, author, submission)
+        );
     }
 
     @GetMapping("{contestId}/standings")
     public StandingsDto getStandings(@PathVariable int contestId) {
-        Contest contest = Contest.builder().contestId(contestId).build();
-        Standings standings = standingsService.getStandings(contest);
+        Standings standings = standingsService.getStandings(contestId);
         return new StandingsDto(standings);
     }
 }

@@ -32,6 +32,13 @@ public class Contest {
     @OrderBy("problemIndex ASC")
     private List<ContestProblem> problems;
 
+    public ContestProblem getProblem(String index) {
+        for (ContestProblem problem : problems)
+            if (Objects.equals(problem.getProblemIndex(), index))
+                return problem;
+        return null;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
