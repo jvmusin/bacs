@@ -6,6 +6,9 @@ import istu.bacs.submissionsubmitterandchecker.db.SubmissionService;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,7 +28,7 @@ import static java.lang.String.format;
 
 @Component
 @Log
-public class SubmissionChecker implements ApplicationListener<ContextRefreshedEvent> {
+public class SubmissionChecker implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     private static final String INCOMING_QUEUE_NAME = SUBMITTED_SUBMISSIONS;
     private static final String OUTCOMING_QUEUE_NAME = CHECKED_SUBMISSIONS;
@@ -35,6 +38,8 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
     private final RabbitTemplate rabbitTemplate;
 
     private final Queue<Integer> q = new ConcurrentLinkedDeque<>();
+
+    private ApplicationContext applicationContext;
 
     public SubmissionChecker(SubmissionService submissionService,
                              ExternalApiAggregator externalApi,
@@ -50,7 +55,6 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
     }
 
     @Scheduled(fixedDelay = 10000)
-    @Transactional
     public void tick() {
         if (q.isEmpty()) {
             log.info("NOTHING TO CHECK");
@@ -58,7 +62,12 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
         }
 
         log.info("SUBMISSION CHECKER TICK STARTED");
+        applicationContext.getBean(SubmissionChecker.class).checkAll();
+        log.info("SUBMISSION CHECKER TICK FINISHED");
+    }
 
+    @Transactional
+    public void checkAll() {
         List<Integer> ids = new ArrayList<>();
         while (!q.isEmpty()) ids.add(q.poll());
 
@@ -81,13 +90,16 @@ public class SubmissionChecker implements ApplicationListener<ContextRefreshedEv
                 q.add(submissionId);
             }
         }
-
-        log.info("SUBMISSION CHECKER TICK FINISHED");
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         submissionService.findAllByVerdict(PENDING)
                 .forEach(s -> q.add(s.getSubmissionId()));
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
