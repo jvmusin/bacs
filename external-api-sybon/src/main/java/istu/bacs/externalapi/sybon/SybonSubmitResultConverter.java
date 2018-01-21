@@ -4,6 +4,8 @@ import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.submission.Verdict;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.Base64;
+
 public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, SubmissionResult> {
 
     private static final SybonTestResultStatusConverter testResultStatusConverter = new SybonTestResultStatusConverter();
@@ -18,7 +20,7 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
 
         if (status == SybonBuildResultStatus.FAILED || status == SybonBuildResultStatus.SERVER_ERROR)
             return SubmissionResult.builder()
-                    .buildInfo(submission.getBuildResult().getOutput())
+                    .buildInfo(new String(Base64.getDecoder().decode(submission.getBuildResult().getOutput())))
                     .verdict(Verdict.COMPILE_ERROR)
                     .build();
 
