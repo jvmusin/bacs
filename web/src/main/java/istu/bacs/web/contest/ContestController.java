@@ -2,14 +2,13 @@ package istu.bacs.web.contest;
 
 import istu.bacs.db.user.User;
 import istu.bacs.db.util.OffsetBasedPageRequest;
-import istu.bacs.standings.Standings;
-import istu.bacs.standings.service.StandingsService;
+import istu.bacs.standingsapi.StandingsService;
+import istu.bacs.standingsapi.dto.StandingsDto;
 import istu.bacs.web.contest.dto.ContestMetaDto;
 import istu.bacs.web.contest.dto.FullContestDto;
 import istu.bacs.web.problem.ProblemService;
 import istu.bacs.web.problem.dto.ProblemDto;
 import istu.bacs.web.problem.dto.SubmitSolutionDto;
-import istu.bacs.web.standings.dto.StandingsDto;
 import istu.bacs.web.submission.SubmissionService;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
 import istu.bacs.web.submission.dto.SubmissionMetaDto;
@@ -104,7 +103,6 @@ public class ContestController {
 
     @GetMapping("{contestId}/standings")
     public StandingsDto getStandings(@PathVariable int contestId) {
-        Standings standings = standingsService.getStandings(contestId);
-        return new StandingsDto(standings);
+        return standingsService.getStandings(contestId);
     }
 }

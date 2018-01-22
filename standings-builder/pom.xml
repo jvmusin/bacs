@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>standings</artifactId>
+    <artifactId>standings-builder</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -20,6 +20,20 @@
 
     <dependencies>
 
+        <!-- Standings API -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>standings-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Database -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>db</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- RabbitMQ -->
         <dependency>
             <groupId>istu.bacs</groupId>
@@ -27,13 +41,22 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Database models -->
+        <!-- Redis -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>db</artifactId>
+            <artifactId>redis</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

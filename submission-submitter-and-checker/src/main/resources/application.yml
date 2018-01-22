@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: 'db,sybon-api,fake-api'
+    include: 'db,sybon-api,fake-api,standings-updater'
   datasource:
     hikari:
       maximum-pool-size: 20
@@ -10,4 +10,4 @@ spring:
   profiles: cloud
   datasource:
     hikari:
-      maximum-pool-size: 2
+      maximum-pool-size: 3

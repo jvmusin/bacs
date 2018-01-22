@@ -1,14 +1,16 @@
-package istu.bacs.standings;
+package istu.bacs.standingsbuilder;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.db.user.User;
+import istu.bacs.standingsapi.dto.StandingsDto;
 import lombok.extern.java.Log;
 
 import java.util.*;
 
 import static istu.bacs.db.submission.Verdict.*;
 import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.toList;
 
 @Log
 public class Standings {
@@ -17,10 +19,6 @@ public class Standings {
 
     private final Map<User, ContestantRow> byUser = new HashMap<>();
     private final List<ContestantRow> rows = new ArrayList<>();
-
-    public List<ContestantRow> getRows() {
-        return rows;
-    }
 
     public void update(Submission submission) {
         synchronized (this) {
@@ -52,6 +50,16 @@ public class Standings {
                 if (prev.getSolvedCount() == row.getSolvedCount() && prev.getPenalty() == row.getPenalty())
                     row.setPlace(prev.getPlace());
             }
+        }
+    }
+
+    public StandingsDto toDto() {
+        synchronized (this) {
+            StandingsDto standingsDto = new StandingsDto();
+            standingsDto.setContestants(rows.stream()
+                    .map(ContestantRow::toDto)
+                    .collect(toList()));
+            return standingsDto;
         }
     }
 }

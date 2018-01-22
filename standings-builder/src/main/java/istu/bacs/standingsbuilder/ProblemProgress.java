@@ -1,7 +1,8 @@
-package istu.bacs.standings;
+package istu.bacs.standingsbuilder;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
+import istu.bacs.standingsapi.dto.ProblemSolvingResultDto;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import static istu.bacs.db.submission.Verdict.*;
-import static istu.bacs.standings.SolvingResult.notSolved;
-import static istu.bacs.standings.SolvingResult.solved;
+import static istu.bacs.standingsbuilder.SolvingResult.notSolved;
+import static istu.bacs.standingsbuilder.SolvingResult.solved;
 import static java.util.Comparator.comparing;
 
 @Data

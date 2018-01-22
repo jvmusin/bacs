@@ -1,14 +1,17 @@
-package istu.bacs.standings;
+package istu.bacs.standingsbuilder;
 
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.user.User;
+import istu.bacs.standingsapi.dto.ContestantRowDto;
+import istu.bacs.standingsapi.dto.ProblemSolvingResultDto;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
 
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Data
@@ -47,5 +50,30 @@ public class ContestantRow {
             solvedCount++;
             penalty += result.getPenalty();
         }
+    }
+
+    public ContestantRowDto toDto() {
+        ContestantRowDto row = new ContestantRowDto();
+
+        row.setUsername(contestant.getUsername());
+        row.setPlace(place);
+        row.setSolvedCount(solvedCount);
+        row.setPenalty(penalty);
+        row.setResults(progressByProblem.entrySet().stream()
+                .map(e -> {
+                    ProblemSolvingResultDto result = new ProblemSolvingResultDto();
+
+                    result.setProblemIndex(e.getKey().getProblemIndex());
+
+                    SolvingResult res = e.getValue().getResult();
+                    result.setSolved(res.isSolved());
+                    result.setFailTries(res.getFailTries());
+                    result.setPenalty(res.getPenalty());
+
+                    return result;
+                })
+                .collect(toList()));
+
+        return row;
     }
 }

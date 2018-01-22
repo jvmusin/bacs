@@ -12,7 +12,6 @@
         <module>db</module>
 
         <module>web</module>
-        <module>standings</module>
 
         <module>external-api</module>
         <module>external-api-aggregator</module>
@@ -20,9 +19,12 @@
         <module>external-api-sybon</module>
 
         <module>rabbit</module>
+        <module>redis</module>
+
         <module>submission-submitter-and-checker</module>
 
-        <module>redis</module>
+        <module>standings-api</module>
+        <module>standings-builder</module>
     </modules>
 
     <parent>
@@ -55,6 +57,10 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -81,11 +87,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-json</artifactId>
             <scope>test</scope>
         </dependency>
 

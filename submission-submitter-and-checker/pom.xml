@@ -55,6 +55,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Standings Builder -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>standings-builder</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

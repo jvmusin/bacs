@@ -1,4 +1,4 @@
-package istu.bacs.standings.db;
+package istu.bacs.standingsbuilder.db;
 
 import istu.bacs.db.submission.Submission;
 

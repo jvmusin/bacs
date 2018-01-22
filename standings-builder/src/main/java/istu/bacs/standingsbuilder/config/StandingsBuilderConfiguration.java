@@ -1,24 +1,29 @@
-package istu.bacs.redis;
+package istu.bacs.standingsbuilder.config;
 
+import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.standingsapi.StandingsService;
+import istu.bacs.standingsbuilder.StandingsServiceImpl;
+import istu.bacs.standingsbuilder.StandingsUpdater;
+import istu.bacs.standingsbuilder.db.SubmissionService;
+import istu.bacs.standingsbuilder.db.SubmissionServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Configuration
-public class RedisConfiguration {
+public class StandingsBuilderConfiguration {
 
     private static final Pattern redisUrlPattern = Pattern.compile("redis://(?<userName>.*):(?<password>.*)@(?<hostName>.+):(?<port>\\d+)");
 
     @Bean
-    public RedisStandaloneConfiguration redisStandaloneConfiguration() {
+    RedisStandaloneConfiguration redisStandaloneConfiguration() {
         String redisUrl = System.getenv("REDIS_URL");
 
         if (redisUrl == null)
@@ -40,12 +45,28 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+    RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
-    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory() {
-        return new LettuceConnectionFactory();
+    StandingsRedisTemplate standingsRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        return new StandingsRedisTemplate(redisConnectionFactory);
+    }
+
+    @Bean
+    SubmissionService submissionService(SubmissionRepository submissionRepository) {
+        return new SubmissionServiceImpl(submissionRepository);
+    }
+
+    @Bean
+    StandingsService standingsService(StandingsRedisTemplate standingsRedisTemplate) {
+        return new StandingsServiceImpl(standingsRedisTemplate);
+    }
+
+    @Bean
+    @Profile("standings-updater")
+    StandingsUpdater standingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService) {
+        return new StandingsUpdater(standingsRedisTemplate, submissionService);
     }
 }

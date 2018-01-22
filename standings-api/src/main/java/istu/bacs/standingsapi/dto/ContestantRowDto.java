@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class ContestantRowDto {
 
-    private String contestantUsername;
+    private String username;
     private int place;
 
     private List<ProblemSolvingResultDto> results;

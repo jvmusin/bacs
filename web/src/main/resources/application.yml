@@ -1,7 +1,7 @@
 server:
   port: 80
   tomcat:
-    accept-count: 10000
+    accept-count: 20000
 spring:
   profiles:
     include: 'db,sybon-api,fake-api'
@@ -14,4 +14,4 @@ spring:
   profiles: cloud
   datasource:
     hikari:
-      maximum-pool-size: 7
+      maximum-pool-size: 6

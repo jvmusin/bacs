@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: 'db,standings-updater'
+  datasource:
+    hikari:
+      maximum-pool-size: 1

@@ -1,4 +1,4 @@
-package istu.bacs.standings;
+package istu.bacs.standingsbuilder;
 
 import istu.bacs.db.submission.Submission;
 import lombok.Data;
