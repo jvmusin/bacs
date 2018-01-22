@@ -18,6 +18,6 @@ public class SubmissionSubmitterAndCheckerApplication {
     @SuppressWarnings("ContextJavaBeanUnresolvedMethodsInspection")
     @Bean(destroyMethod = "shutdown")
     public Executor taskScheduler() {
-        return Executors.newScheduledThreadPool(2);
+        return Executors.newScheduledThreadPool(3);
     }
 }
