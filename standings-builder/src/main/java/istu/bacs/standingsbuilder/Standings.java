@@ -17,7 +17,7 @@ public class Standings {
 
     private static final Set<Verdict> unacceptableVerdicts = EnumSet.of(NOT_SUBMITTED, PENDING, COMPILE_ERROR);
 
-    private final Map<User, ContestantRow> byUser = new HashMap<>();
+    private final Map<User, ContestantRow> rowByAuthor = new HashMap<>();
     private final List<ContestantRow> rows = new ArrayList<>();
 
     public void update(Submission submission) {
@@ -27,7 +27,7 @@ public class Standings {
             if (unacceptableVerdicts.contains(submission.getVerdict()))
                 return;
 
-            byUser.computeIfAbsent(submission.getAuthor(), author -> {
+            rowByAuthor.computeIfAbsent(submission.getAuthor(), author -> {
                 ContestantRow row = new ContestantRow(author, submission.getContest().getProblems());
                 rows.add(row);
                 return row;
