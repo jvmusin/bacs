@@ -23,7 +23,7 @@ public class StandingsBuilderConfiguration {
     private static final Pattern redisUrlPattern = Pattern.compile("redis://(?<userName>.*):(?<password>.*)@(?<hostName>.+):(?<port>\\d+)");
 
     @Bean
-    RedisStandaloneConfiguration redisStandaloneConfiguration() {
+    public RedisStandaloneConfiguration redisStandaloneConfiguration() {
         String redisUrl = System.getenv("REDIS_URL");
 
         if (redisUrl == null)
@@ -45,28 +45,28 @@ public class StandingsBuilderConfiguration {
     }
 
     @Bean
-    RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+    public RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
-    StandingsRedisTemplate standingsRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public StandingsRedisTemplate standingsRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         return new StandingsRedisTemplate(redisConnectionFactory);
     }
 
     @Bean
-    SubmissionService submissionService(SubmissionRepository submissionRepository) {
+    public SubmissionService submissionService(SubmissionRepository submissionRepository) {
         return new SubmissionServiceImpl(submissionRepository);
     }
 
     @Bean
-    StandingsService standingsService(StandingsRedisTemplate standingsRedisTemplate) {
+    public StandingsService standingsService(StandingsRedisTemplate standingsRedisTemplate) {
         return new StandingsServiceImpl(standingsRedisTemplate);
     }
 
     @Bean
     @Profile("standings-updater")
-    StandingsUpdater standingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService) {
+    public StandingsUpdater standingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService) {
         return new StandingsUpdater(standingsRedisTemplate, submissionService);
     }
 }
