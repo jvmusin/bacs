@@ -39,14 +39,12 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- External API Aggregator -->
+        <!-- External APIs -->
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>
             <artifactId>aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!-- External APIs -->
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>
             <artifactId>fake-api</artifactId>
