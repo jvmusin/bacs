@@ -1,24 +1,18 @@
 package istu.bacs.standingsbuilder;
 
 import istu.bacs.db.submission.Submission;
-import istu.bacs.db.submission.Verdict;
-import istu.bacs.standingsapi.dto.ProblemSolvingResultDto;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
-import static istu.bacs.db.submission.Verdict.*;
+import static istu.bacs.db.submission.Verdict.ACCEPTED;
 import static istu.bacs.standingsbuilder.SolvingResult.notSolved;
 import static istu.bacs.standingsbuilder.SolvingResult.solved;
 import static java.util.Comparator.comparing;
 
 @Data
 public class ProblemProgress {
-
-    private static final Set<Verdict> ignoredVerdicts = EnumSet.of(COMPILE_ERROR, PENDING, SERVER_ERROR);
 
     private final List<Submission> submissions = new ArrayList<>();
 
@@ -31,7 +25,6 @@ public class ProblemProgress {
 
         int failTries = 0;
         for (Submission submission : submissions) {
-            if (ignoredVerdicts.contains(submission.getVerdict())) continue;
             if (submission.getVerdict() == ACCEPTED) {
                 result = solved(failTries, submission);
                 return;
