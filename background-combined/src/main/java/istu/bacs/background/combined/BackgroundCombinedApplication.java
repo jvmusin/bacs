@@ -17,7 +17,7 @@ public class BackgroundCombinedApplication {
 
     @SuppressWarnings("ContextJavaBeanUnresolvedMethodsInspection")
     @Bean(destroyMethod = "shutdown")
-    public Executor taskScheduler() {
+    Executor taskScheduler() {
         return Executors.newScheduledThreadPool(3);
     }
 }
