@@ -1,8 +1,8 @@
 package istu.bacs.background.combined;
 
 import istu.bacs.db.submission.Submission;
-import istu.bacs.externalapi.aggregator.ExternalApiAggregator;
 import istu.bacs.background.combined.db.SubmissionService;
+import istu.bacs.externalapi.ExternalApi;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -33,7 +33,7 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
     private static final String OUTCOMING_QUEUE_NAME = SUBMITTED_SUBMISSIONS;
 
     private final SubmissionService submissionService;
-    private final ExternalApiAggregator externalApi;
+    private final ExternalApi externalApi;
     private final RabbitTemplate rabbitTemplate;
 
     private final Queue<Integer> q = new ConcurrentLinkedDeque<>();
@@ -41,7 +41,7 @@ public class SubmissionSubmitter implements ApplicationListener<ContextRefreshed
     private ApplicationContext applicationContext;
 
     public SubmissionSubmitter(SubmissionService submissionService,
-                               ExternalApiAggregator externalApi,
+                               ExternalApi externalApi,
                                RabbitTemplate rabbitTemplate) {
         this.submissionService = submissionService;
         this.externalApi = externalApi;

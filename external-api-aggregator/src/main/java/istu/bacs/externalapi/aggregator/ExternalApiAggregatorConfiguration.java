@@ -7,6 +7,7 @@ import istu.bacs.externalapi.sybon.SybonApiEndpointConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
@@ -25,7 +26,8 @@ public class ExternalApiAggregatorConfiguration {
     }
 
     @Bean
-    public ExternalApiAggregator externalApiAggregator(ExternalApi[] externalApis) {
-        return new ExternalApiAggregatorImpl(externalApis);
+    @Primary
+    public ExternalApi externalApiAggregator(ExternalApi[] externalApis) {
+        return new ExternalApiAggregator(externalApis);
     }
 }

@@ -1,6 +1,6 @@
 package istu.bacs.web.problem;
 
-import istu.bacs.externalapi.aggregator.ExternalApiAggregator;
+import istu.bacs.externalapi.ExternalApi;
 import istu.bacs.web.problem.dto.ProblemDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +16,9 @@ import static java.util.stream.Collectors.toList;
 public class ProblemController {
 
     private final ProblemService problemService;
-    private final ExternalApiAggregator externalApi;
+    private final ExternalApi externalApi;
 
-    public ProblemController(ProblemService problemService, ExternalApiAggregator externalApi) {
+    public ProblemController(ProblemService problemService, ExternalApi externalApi) {
         this.problemService = problemService;
         this.externalApi = externalApi;
     }
