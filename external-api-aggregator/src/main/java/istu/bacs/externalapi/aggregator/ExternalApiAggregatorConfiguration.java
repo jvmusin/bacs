@@ -1,28 +1,31 @@
 package istu.bacs.externalapi.aggregator;
 
 import istu.bacs.externalapi.ExternalApi;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import istu.bacs.externalapi.fake.FakeApi;
+import istu.bacs.externalapi.sybon.SybonApi;
+import istu.bacs.externalapi.sybon.SybonApiEndpointConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
-public class ExternalApiAggregatorConfiguration implements ApplicationContextAware {
-
-    private ApplicationContext applicationContext;
+public class ExternalApiAggregatorConfiguration {
 
     @Bean
-    public ExternalApiAggregator externalApiAggregator() {
-        Map<String, ExternalApi> beans = applicationContext.getBeansOfType(ExternalApi.class);
-        ExternalApi[] externalApis = beans.values().toArray(new ExternalApi[0]);
-        return new ExternalApiAggregatorImpl(externalApis);
+    @Profile("sybon-api")
+    ExternalApi sybonApi(RestTemplateBuilder restTemplateBuilder) {
+        return new SybonApi(new SybonApiEndpointConfiguration(), restTemplateBuilder);
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    @Bean
+    @Profile("fake-api")
+    ExternalApi fakeApi() {
+        return new FakeApi();
+    }
+
+    @Bean
+    public ExternalApiAggregator externalApiAggregator(ExternalApi[] externalApis) {
+        return new ExternalApiAggregatorImpl(externalApis);
     }
 }
