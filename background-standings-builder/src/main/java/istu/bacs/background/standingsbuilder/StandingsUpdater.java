@@ -1,9 +1,9 @@
-package istu.bacs.standingsbuilder;
+package istu.bacs.background.standingsbuilder;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.rabbit.QueueNames;
-import istu.bacs.standingsbuilder.config.StandingsRedisTemplate;
-import istu.bacs.standingsbuilder.db.SubmissionService;
+import istu.bacs.background.standingsbuilder.config.StandingsRedisTemplate;
+import istu.bacs.background.standingsbuilder.db.SubmissionService;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.ApplicationListener;
@@ -14,8 +14,6 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-
-import static istu.bacs.standingsbuilder.StandingsServiceImpl.KEY;
 
 @Log
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent> {
@@ -48,7 +46,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         for (int contestId : changed) {
             log.info("UPDATING STANDINGS FOR CONTEST " + contestId + " STARTED");
             Standings standings = standingsByContestId.get(contestId);
-            standingsRedisTemplate.opsForHash().put(KEY, contestId, standings.toDto());
+            standingsRedisTemplate.opsForHash().put(StandingsServiceImpl.KEY, contestId, standings.toDto());
             log.info("UPDATING STANDINGS FOR CONTEST " + contestId + " FINISHED");
         }
 

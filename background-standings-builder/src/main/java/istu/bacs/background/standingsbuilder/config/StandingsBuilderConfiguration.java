@@ -1,11 +1,11 @@
-package istu.bacs.standingsbuilder.config;
+package istu.bacs.background.standingsbuilder.config;
 
+import istu.bacs.background.standingsbuilder.StandingsServiceImpl;
+import istu.bacs.background.standingsbuilder.StandingsUpdater;
+import istu.bacs.background.standingsbuilder.db.SubmissionService;
+import istu.bacs.background.standingsbuilder.db.SubmissionServiceImpl;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.standingsapi.StandingsService;
-import istu.bacs.standingsbuilder.StandingsServiceImpl;
-import istu.bacs.standingsbuilder.StandingsUpdater;
-import istu.bacs.standingsbuilder.db.SubmissionService;
-import istu.bacs.standingsbuilder.db.SubmissionServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

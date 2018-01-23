@@ -54,8 +54,8 @@
 
         <!-- Standings Builder -->
         <dependency>
-            <groupId>istu.bacs</groupId>
-            <artifactId>standings-builder</artifactId>
+            <groupId>istu.bacs.background</groupId>
+            <artifactId>background-standings-builder</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

@@ -1,4 +1,4 @@
-package istu.bacs.standingsbuilder.config;
+package istu.bacs.background.standingsbuilder.config;
 
 import istu.bacs.standingsapi.dto.StandingsDto;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

@@ -1,8 +1,8 @@
-package istu.bacs.standingsbuilder;
+package istu.bacs.background.standingsbuilder;
 
 import istu.bacs.standingsapi.StandingsService;
 import istu.bacs.standingsapi.dto.StandingsDto;
-import istu.bacs.standingsbuilder.config.StandingsRedisTemplate;
+import istu.bacs.background.standingsbuilder.config.StandingsRedisTemplate;
 import org.springframework.data.redis.core.HashOperations;
 
 public class StandingsServiceImpl implements StandingsService {

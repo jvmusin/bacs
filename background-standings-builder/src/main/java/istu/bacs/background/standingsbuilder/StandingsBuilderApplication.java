@@ -1,4 +1,4 @@
-package istu.bacs.standingsbuilder;
+package istu.bacs.background.standingsbuilder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

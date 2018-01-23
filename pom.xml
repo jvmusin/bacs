@@ -24,7 +24,7 @@
         <module>background-combined</module>
 
         <module>standings-api</module>
-        <module>standings-builder</module>
+        <module>background-standings-builder</module>
     </modules>
 
     <parent>
