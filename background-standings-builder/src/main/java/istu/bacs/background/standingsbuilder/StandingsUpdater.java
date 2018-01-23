@@ -63,7 +63,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     @RabbitListener(queues = QueueNames.CHECKED_SUBMISSIONS)
     @Transactional
-    void update(int submissionId) {
+    public void update(int submissionId) {
         update(submissionService.findById(submissionId));
     }
 
