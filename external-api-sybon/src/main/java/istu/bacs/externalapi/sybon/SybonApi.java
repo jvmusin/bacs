@@ -109,18 +109,21 @@ public class SybonApi implements ExternalApi {
         try {
             SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
             for (int i = 0; i < submissions.size(); i++) {
-                Submission submission = submissions.get(i);
-
                 SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
-                result.setSubmissionResultId(submission.getResult().getSubmissionResultId());
-
-                result.setSubmission(submission);
-                submission.setResult(result);
+                updateSubmissionResult(submissions.get(i).getResult(), result);
             }
         } catch (Exception e) {
             log.warning("Unable to check submission results: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void updateSubmissionResult(SubmissionResult myRes, SubmissionResult newRes) {
+        myRes.setBuildInfo(newRes.getBuildInfo());
+        myRes.setVerdict(newRes.getVerdict());
+        myRes.setTestsPassed(newRes.getTestsPassed());
+        myRes.setTimeUsedMillis(newRes.getTimeUsedMillis());
+        myRes.setMemoryUsedBytes(newRes.getMemoryUsedBytes());
     }
 
     private String buildUrl(String url, Map<String, ?> urlParams, Map<String, ?> queryParams) {
