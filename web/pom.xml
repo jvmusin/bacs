@@ -27,7 +27,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!--Standings-->
+        <!-- Standings -->
         <dependency>
             <groupId>istu.bacs</groupId>
             <artifactId>standings-api</artifactId>
@@ -42,7 +42,7 @@
         <!-- External APIs -->
         <dependency>
             <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>aggregator</artifactId>
+            <artifactId>external-api-aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -74,8 +74,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
-        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
