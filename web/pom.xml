@@ -45,16 +45,6 @@
             <artifactId>external-api-aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>external-api-fake</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>external-api-sybon</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <!-- Web (REST) -->
         <dependency>
