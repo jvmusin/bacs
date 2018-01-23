@@ -1,4 +1,4 @@
-package istu.bacs.externalapi.fakeapi;
+package istu.bacs.externalapi.fake;
 
 import istu.bacs.externalapi.ExternalApi;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;

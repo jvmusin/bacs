@@ -1,4 +1,4 @@
-package istu.bacs.externalapi.fakeapi;
+package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;

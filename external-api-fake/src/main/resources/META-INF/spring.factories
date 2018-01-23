@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=istu.bacs.externalapi.fakeapi.FakeApiConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=istu.bacs.externalapi.fake.FakeApiConfiguration

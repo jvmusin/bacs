@@ -1,11 +1,11 @@
-package istu.bacs.externalapi.fakeapi;
+package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.problem.Problem;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static istu.bacs.externalapi.fakeapi.Measure.*;
+import static istu.bacs.externalapi.fake.Measure.*;
 
 public class ProblemService {
 

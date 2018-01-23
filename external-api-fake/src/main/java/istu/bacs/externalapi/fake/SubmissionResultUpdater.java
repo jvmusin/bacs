@@ -1,4 +1,4 @@
-package istu.bacs.externalapi.fakeapi;
+package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionResult;
@@ -7,8 +7,8 @@ import istu.bacs.db.submission.Verdict;
 import java.util.Random;
 
 import static istu.bacs.db.submission.Verdict.*;
-import static istu.bacs.externalapi.fakeapi.Measure.MEGABYTE;
-import static istu.bacs.externalapi.fakeapi.Measure.MILLISECOND;
+import static istu.bacs.externalapi.fake.Measure.MEGABYTE;
+import static istu.bacs.externalapi.fake.Measure.MILLISECOND;
 
 public class SubmissionResultUpdater {
 
