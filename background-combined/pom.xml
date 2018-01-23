@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>submission-submitter-and-checker</artifactId>
+    <groupId>istu.bacs.background</groupId>
+    <artifactId>background-combined</artifactId>
     <packaging>jar</packaging>
-
-    <name>submission-submitter-and-checker</name>
 
     <parent>
         <groupId>istu.bacs</groupId>

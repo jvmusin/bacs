@@ -1,4 +1,4 @@
-package istu.bacs.submissionsubmitterandchecker.db;
+package istu.bacs.background.combined.db;
 
 import istu.bacs.db.submission.*;
 import org.springframework.stereotype.Service;

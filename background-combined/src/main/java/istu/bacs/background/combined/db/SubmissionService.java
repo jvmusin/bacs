@@ -1,4 +1,4 @@
-package istu.bacs.submissionsubmitterandchecker.db;
+package istu.bacs.background.combined.db;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;

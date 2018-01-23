@@ -1,4 +1,4 @@
-package istu.bacs.submissionsubmitterandchecker;
+package istu.bacs.background.combined;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,9 +10,9 @@ import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @EnableScheduling
-public class SubmissionSubmitterAndCheckerApplication {
+public class BackgroundCombinedApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SubmissionSubmitterAndCheckerApplication.class, args);
+        SpringApplication.run(BackgroundCombinedApplication.class, args);
     }
 
     @SuppressWarnings("ContextJavaBeanUnresolvedMethodsInspection")

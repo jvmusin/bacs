@@ -21,7 +21,7 @@
         <module>rabbit</module>
         <module>redis</module>
 
-        <module>submission-submitter-and-checker</module>
+        <module>background-combined</module>
 
         <module>standings-api</module>
         <module>standings-builder</module>
