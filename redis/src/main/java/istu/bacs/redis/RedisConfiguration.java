@@ -45,7 +45,7 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory() {
-        return new LettuceConnectionFactory();
+    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 }
