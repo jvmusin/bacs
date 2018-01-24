@@ -23,12 +23,12 @@ class RabbitServiceShould {
 
     @Test
     @DisplayName("Be injectable")
-    void beNotNull_whenInjected() {
+    void beInjectable() {
         assertNotNull(rabbitService);
     }
 
     @Test
-    @DisplayName("Return same message after pushing to the queue")
+    @DisplayName("Invoke listener when message came")
     void invokeListener_whenMessageCame() throws Exception {
 
         CompletableFuture<String> res = new CompletableFuture<>();

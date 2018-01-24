@@ -26,13 +26,13 @@ class RabbitTemplateShould {
 
     @Test
     @DisplayName("Be injectable")
-    void beNotNull_whenInjected() {
+    void beInjectable() {
         assertNotNull(rabbitTemplate);
     }
 
     @Test
-    @DisplayName("Return same message after pushing to queue")
-    void returnSameMessage_afterPushing(@Autowired AmqpAdmin amqpAdmin) {
+    @DisplayName("Return same message after pushing it to a queue")
+    void returnSameMessage_afterPushingToQueue(@Autowired AmqpAdmin amqpAdmin) {
 
         //Declare a queue that will be auto-deleted after test execution
         Queue testQueue = new Queue("Test Queue", false, true, true);
