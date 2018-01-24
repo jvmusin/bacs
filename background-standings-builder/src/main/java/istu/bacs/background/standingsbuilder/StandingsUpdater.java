@@ -55,7 +55,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     void updateStandings() {
         if (updatedStandings.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
-                log.info("No need to update standings");
+                log.info("NO NEED TO UPDATE STANDINGS");
                 tickCount.set(0);
             }
             return;
