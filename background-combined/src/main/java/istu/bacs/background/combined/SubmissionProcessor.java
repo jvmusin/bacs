@@ -25,7 +25,7 @@ import static java.lang.String.format;
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     //print state once per 5 minutes
-    private static final int printStateEveryNTicks = 60;
+    private static final int printStateEveryNTicks = 2 * 60 * 5;
 
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;

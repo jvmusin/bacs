@@ -27,7 +27,7 @@ import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     //print state once per 5 minutes
-    private static final int printStateEveryNTicks = 60;
+    private static final int printStateEveryNTicks = 2 * 60 * 5;
 
     private final StandingsRedisTemplate standingsRedisTemplate;
     private final SubmissionService submissionService;
