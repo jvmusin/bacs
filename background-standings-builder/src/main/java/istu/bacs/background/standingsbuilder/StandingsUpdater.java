@@ -81,10 +81,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     @PostConstruct
     public void registerSubmissionReceiver() {
-        rabbitService.subscribe(CHECKED_SUBMISSIONS, m -> {
-            int submissionId = parseInt(new String(m.getBody()));
-            self.update(submissionId);
-        });
+        rabbitService.<Integer>subscribe(CHECKED_SUBMISSIONS, m -> self.update(m));
     }
 
     @Override

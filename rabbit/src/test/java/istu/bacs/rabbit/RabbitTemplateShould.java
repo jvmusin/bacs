@@ -25,8 +25,8 @@ class RabbitTemplateShould {
     RabbitTemplate rabbitTemplate;
 
     @Test
-    @DisplayName("Be not null")
-    void createNotNullTemplate() {
+    @DisplayName("Be injectable")
+    void beNotNull_whenInjected() {
         assertNotNull(rabbitTemplate);
     }
 

@@ -69,4 +69,9 @@ public class RabbitConfiguration {
     Queue checkedSubmissionsQueue() {
         return new Queue(CHECKED_SUBMISSIONS.name());
     }
+
+    @Bean
+    Queue otherQueue() {
+        return new Queue(OTHER.name());
+    }
 }

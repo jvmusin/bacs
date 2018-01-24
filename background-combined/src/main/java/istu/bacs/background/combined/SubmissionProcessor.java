@@ -41,10 +41,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     @PostConstruct
     private void registerSubmissionReceiver() {
-        rabbitService.subscribe(incomingQueueName(), m -> {
-            int submissionId = parseInt(new String(m.getBody()));
-            addSubmission(submissionId);
-        });
+        rabbitService.subscribe(incomingQueueName(), this::addSubmission);
     }
 
     @Scheduled(fixedDelay = 10000)
