@@ -19,6 +19,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
 import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
@@ -27,12 +28,16 @@ import static java.lang.Integer.parseInt;
 @Log
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
+    //print state once per 5 minutes
+    private static final int printStateEveryNTicks = 60;
+
     private final StandingsRedisTemplate standingsRedisTemplate;
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;
 
     private final Map<Integer, Standings> standingsByContestId = new ConcurrentHashMap<>();
     private final Queue<Integer> updatedStandings = new ConcurrentLinkedDeque<>();
+    private final AtomicInteger tickCount = new AtomicInteger();
 
     private StandingsUpdater self;
 
@@ -46,11 +51,17 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         return standingsByContestId.computeIfAbsent(contestId, cId -> new Standings());
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 500)
     void updateStandings() {
-        if (updatedStandings.isEmpty())
+        if (updatedStandings.isEmpty()) {
+            if (tickCount.incrementAndGet() == printStateEveryNTicks) {
+                log.info("No need to update standings");
+                tickCount.set(0);
+            }
             return;
+        }
 
+        tickCount.set(0);
         log.info("STANDINGS UPDATING STARTED");
 
         Set<Integer> changed = new HashSet<>();

@@ -17,16 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
+    //print state once per 5 minutes
+    private static final int printStateEveryNTicks = 60;
+
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;
+
     private final Queue<Integer> q = new ConcurrentLinkedDeque<>();
+    private final AtomicInteger tickCount = new AtomicInteger();
 
     private SubmissionProcessor self;
 
@@ -44,12 +49,17 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
         rabbitService.subscribe(incomingQueueName(), this::addSubmission);
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 500)
     public void tick() {
         if (q.isEmpty()) {
-            log().info("NOTHING TO PROCESS");
+            if (tickCount.incrementAndGet() == printStateEveryNTicks) {
+                log().info("NOTHING TO PROCESS");
+                tickCount.set(0);
+            }
             return;
         }
+
+        tickCount.set(0);
 
         log().info(processorName() + " TICK STARTED");
         self.processAll();
