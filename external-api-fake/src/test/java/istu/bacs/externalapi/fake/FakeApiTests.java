@@ -7,7 +7,6 @@ import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.submission.Verdict;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -101,8 +100,8 @@ class FakeApiTests {
             assertTrue(submission.getResult().getMemoryUsedBytes() <= problem.getMemoryLimitBytes(), submission::toString);
         }
 
+        @Test
         @DisplayName("Overflow only time limit when TIME_LIMIT_EXCEEDED passed")
-        @RepeatedTest(10)
         void overflowOnlyTimeLimit_whenTimeLimitVerdict() {
             Submission submission = submission(TIME_LIMIT_EXCEEDED);
 
@@ -110,13 +109,17 @@ class FakeApiTests {
 
             SubmissionResult result = submission.getResult();
             assertNotNull(result.getTestsPassed());
-            assertTrue(result.getTimeUsedMillis() > problem.getTimeLimitMillis(), submission::toString);
-            assertTrue(result.getMemoryUsedBytes() <= problem.getMemoryLimitBytes(), submission::toString);
             assertNull(result.getBuildInfo());
+
+            int timeUsedMillis = result.getTimeUsedMillis();
+            int memoryUsedBytes = result.getMemoryUsedBytes();
+
+            assertTrue(problem.getTimeLimitMillis() < timeUsedMillis, submission::toString);
+            assertTrue(0 <= memoryUsedBytes && memoryUsedBytes <= problem.getMemoryLimitBytes(), submission::toString);
         }
 
+        @Test
         @DisplayName("Overflow only memory limit when MEMORY_LIMIT_EXCEEDED passed")
-        @RepeatedTest(10)
         void overflowOnlyMemoryLimit_whenMemoryLimitVerdict() {
             Submission submission = submission(MEMORY_LIMIT_EXCEEDED);
 
@@ -124,9 +127,13 @@ class FakeApiTests {
 
             SubmissionResult result = submission.getResult();
             assertNotNull(result.getTestsPassed());
-            assertTrue(result.getTimeUsedMillis() <= problem.getTimeLimitMillis(), submission::toString);
-            assertTrue(result.getMemoryUsedBytes() > problem.getMemoryLimitBytes(), submission::toString);
             assertNull(result.getBuildInfo());
+
+            int timeUsedMillis = result.getTimeUsedMillis();
+            int memoryUsedBytes = result.getMemoryUsedBytes();
+
+            assertTrue(0 <= timeUsedMillis && timeUsedMillis <= problem.getTimeLimitMillis(), submission::toString);
+            assertTrue(problem.getMemoryLimitBytes() < memoryUsedBytes, submission::toString);
         }
     }
 
