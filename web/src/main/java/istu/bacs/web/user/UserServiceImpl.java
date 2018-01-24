@@ -2,7 +2,7 @@ package istu.bacs.web.user;
 
 import istu.bacs.db.user.User;
 import istu.bacs.db.user.UserRepository;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
-@Log
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -31,19 +31,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signUp(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            log.info(format("Registration failed: Username is already taken: '%s':'%s'", user.getUsername(), user.getPassword()));
+            log.debug("Registration failed: Username is already taken: '{}':'{}'", user.getUsername(), user.getPassword());
             throw new UsernameAlreadyTakenException(user.getUsername());
         }
 
+        //todo: Add more checks
         if (isEmpty(user.getUsername())) {
             String message = "Registration failed: Username shouldn't be empty";
-            log.info(message);
+            log.debug(message);
             throw new IllegalArgumentException(message);
         }
 
         if (isEmpty(user.getPassword())) {
             String message = "Registration failed: Password shouldn't be empty";
-            log.info(message);
+            log.debug(message);
             throw new IllegalArgumentException(message);
         }
 
@@ -51,6 +52,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(pass));
         user.setRoles(singletonList(ROLE_USER));
         userRepository.save(user);
-        log.info(format("User successfully registered: %d:'%s':'%s'", user.getUserId(), user.getUsername(), pass));
+        log.debug("User successfully registered: {}:'{}':'{}'", user.getUserId(), user.getUsername(), pass);
     }
 }

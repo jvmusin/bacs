@@ -4,7 +4,7 @@ import istu.bacs.db.problem.Problem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.externalapi.ExternalApi;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,15 +16,14 @@ import java.util.Map;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.externalapi.sybon.SybonContinueCondition.Always;
 import static java.lang.Integer.parseInt;
-import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-@Log
+@Slf4j
 public class SybonApi implements ExternalApi {
 
-    public static final String API_NAME = "SYBON";
+    static final String API_NAME = "SYBON";
 
     private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
     private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
@@ -48,8 +47,7 @@ public class SybonApi implements ExternalApi {
                     .map(problemConverter::convert)
                     .collect(toList());
         } catch (Exception e) {
-            log.warning(format("Unable to get problems from %s: %s", getApiName(), e.getMessage()));
-            e.printStackTrace();
+            log.warn("Unable to get problems", e);
             return emptyList();
         }
     }
@@ -75,8 +73,7 @@ public class SybonApi implements ExternalApi {
                 submission.setExternalSubmissionId(submissionIds[i]);
             }
         } catch (Exception e) {
-            log.warning("Unable to submit submissions: " + e.getMessage());
-            e.printStackTrace();
+            log.warn("Unable to submit submissions", e);
         }
     }
 
@@ -113,8 +110,7 @@ public class SybonApi implements ExternalApi {
                 updateSubmissionResult(submissions.get(i).getResult(), result);
             }
         } catch (Exception e) {
-            log.warning("Unable to check submission results: " + e.getMessage());
-            e.printStackTrace();
+            log.warn("Unable to check submission results for submissions {}", ids, e);
         }
     }
 

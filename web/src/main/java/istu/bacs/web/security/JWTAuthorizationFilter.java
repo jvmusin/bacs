@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
 import istu.bacs.web.user.UserUtils;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,13 +18,12 @@ import java.io.IOException;
 import java.util.List;
 
 import static istu.bacs.web.security.SecurityConstants.*;
-import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
-@Log
+@Slf4j
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    JWTAuthorizationFilter(AuthenticationManager authManager) {
         super(authManager);
     }
 
@@ -35,13 +34,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader(HEADER_STRING);
 
         if (header == null) {
-            log.info("User authorization failed. Authorization header is null");
+            log.debug("User authorization failed. Authorization header is null");
             chain.doFilter(req, res);
             return;
         }
 
         if (!header.startsWith(TOKEN_PREFIX)) {
-            log.info(format("User authorization failed. Authorization header has incorrect format: '%s'", header));
+            log.debug("User authorization failed. Authorization header has incorrect format: '{}'", header);
             chain.doFilter(req, res);
             return;
         }
@@ -51,7 +50,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (authentication != null) {
             User user = (User) authentication.getPrincipal();
-            log.info(format("User authorized: %d:'%s':%s", user.getUserId(), user.getUsername(), user.getRoles()));
+            log.debug("User authorized: {}:'{}':{}", user.getUserId(), user.getUsername(), user.getRoles());
         }
 
         chain.doFilter(req, res);
@@ -75,7 +74,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
             return new UsernamePasswordAuthenticationToken(user, null, UserUtils.getAuthorities(user));
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
-            log.info(format("User authorization failed. Token: '%s'. Reason: %s", token, e.getMessage()));
+            log.debug("User authorization failed. Token: '{}'. Reason: {}", token, e.getMessage());
             return null;
         }
     }

@@ -4,7 +4,7 @@ import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.db.user.User;
 import istu.bacs.standingsapi.dto.StandingsDto;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ import static istu.bacs.db.submission.Verdict.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
-@Log
+@Slf4j
 public class Standings {
 
     private static final Set<Verdict> unacceptableVerdicts = EnumSet.of(SCHEDULED, PENDING, COMPILE_ERROR);
@@ -22,7 +22,7 @@ public class Standings {
 
     public void update(Submission submission) {
         synchronized (this) {
-            log.info("Updating standings for submission " + submission.getSubmissionId());
+            log.debug("Updating standings for submission {} started", submission.getSubmissionId());
 
             if (unacceptableVerdicts.contains(submission.getVerdict()))
                 return;
@@ -34,6 +34,8 @@ public class Standings {
             }).update(submission);
 
             normalizeRows();
+
+            log.debug("Updating standings for submission {} finished", submission.getSubmissionId());
         }
     }
 

@@ -4,7 +4,7 @@ import istu.bacs.background.standingsbuilder.config.StandingsRedisTemplate;
 import istu.bacs.background.standingsbuilder.db.SubmissionService;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.rabbit.RabbitService;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
 import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 
-@Log
+@Slf4j
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     private static final int tickDelay = 500;
@@ -57,26 +57,28 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     void updateStandings() {
         if (updatedStandings.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
-                log.info("NO NEED TO UPDATE STANDINGS");
+                log.info("No need to update standings");
                 tickCount.set(0);
             }
             return;
         }
 
         tickCount.set(0);
-        log.info("STANDINGS UPDATING STARTED");
+        log.info("Standings updating started");
 
-        Set<Integer> changed = new HashSet<>();
-        while (!updatedStandings.isEmpty()) changed.add(updatedStandings.poll());
+        Set<Integer> updatedContests = new HashSet<>();
+        while (!updatedStandings.isEmpty()) updatedContests.add(updatedStandings.poll());
 
-        for (int contestId : changed) {
-            log.info("UPDATING STANDINGS FOR CONTEST " + contestId + " STARTED");
+        for (int contestId : updatedContests) {
+            log.debug("Updating standings for contest {} started", contestId);
+
             Standings standings = standingsByContestId.get(contestId);
             standingsRedisTemplate.opsForHash().put(KEY, contestId, standings.toDto());
-            log.info("UPDATING STANDINGS FOR CONTEST " + contestId + " FINISHED");
+
+            log.debug("Updating standings for contest {} finished", contestId);
         }
 
-        log.info("STANDINGS UPDATING FINISHED");
+        log.info("Standings updating finished");
     }
 
     private void update(Submission submission) {

@@ -5,6 +5,7 @@ import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -19,9 +20,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
-
-import static java.lang.String.format;
 
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
@@ -56,7 +54,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     public void tick() {
         if (q.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
-                log().info("NOTHING TO PROCESS");
+                log().info("Nothing to process");
                 tickCount.set(0);
             }
             return;
@@ -64,9 +62,9 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
         tickCount.set(0);
 
-        log().info(processorName() + " TICK STARTED");
+        log().info(processorName() + " tick started");
         self.processAll();
-        log().info(processorName() + " TICK FINISHED");
+        log().info(processorName() + " tick finished");
     }
 
     @Transactional
@@ -85,15 +83,14 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
                 if (submission.getVerdict() != incomingVerdict()) {
                     submissionService.save(submission);
                     rabbitService.send(outcomingQueueName(), submissionId);
-                    log().info(format("Submission %d processed: %s", submissionId, submission.getVerdict()));
+                    log().debug("Submission {} processed: {}", submissionId, submission.getVerdict());
                 } else {
-                    log().info(format("Submission %d NOT processed: %s", submissionId, incomingVerdict()));
+                    log().debug("Submission {} NOT processed: {}", submissionId, incomingVerdict());
                     q.add(submissionId);
                 }
             }
         } catch (Exception e) {
-            log().warning("Unable to process submissions: " + e.getMessage());
-            e.printStackTrace();
+            log().warn("Unable to process submissions", e);
             q.addAll(ids);
         }
     }

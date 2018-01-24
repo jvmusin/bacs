@@ -6,18 +6,18 @@ import istu.bacs.db.submission.Verdict;
 import istu.bacs.externalapi.ExternalApi;
 import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import static istu.bacs.background.combined.SubmissionCheckerProcessor.PROCESSOR_NAME;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 import static istu.bacs.rabbit.QueueName.SUBMITTED_SUBMISSIONS;
 
-@Log
+@Slf4j
 @Component(PROCESSOR_NAME)
 public class SubmissionCheckerProcessor extends SubmissionProcessor {
 

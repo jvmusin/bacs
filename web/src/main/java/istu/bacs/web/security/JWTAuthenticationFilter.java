@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import istu.bacs.db.user.User;
 import istu.bacs.web.user.EnhancedUserDetails;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,16 +21,15 @@ import java.util.List;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static istu.bacs.web.security.SecurityConstants.*;
-import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
 
-@Log
+@Slf4j
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -44,7 +43,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     user.getUsername(),
                     user.getPassword());
 
-            log.info(format("User attempts to login '%s':'%s'", user.getUsername(), user.getPassword()));
+            log.debug("User attempts to login '{}':'{}'", user.getUsername(), user.getPassword());
 
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
@@ -72,6 +71,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
-        log.info(format("User logged in %d:'%s':'%s'", user.getUserId(), user.getUsername(), authorities));
+        log.debug("User logged in {}:'{}':{}", user.getUserId(), user.getUsername(), authorities);
     }
 }
