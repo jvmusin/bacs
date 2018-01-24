@@ -12,11 +12,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +23,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     private static final int tickDelay = 500;
     //print state once per 5 minutes
     private static final int printStateEveryNTicks = (1000 / tickDelay) * 60 * 5;
+    private static final int maxSubmissionsPerBatch = 10;
 
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;
@@ -39,15 +37,6 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     public SubmissionProcessor(SubmissionService submissionService, RabbitService rabbitService) {
         this.submissionService = submissionService;
         this.rabbitService = rabbitService;
-    }
-
-    private void addSubmission(int submissionId) {
-        q.add(submissionId);
-    }
-
-    @PostConstruct
-    private void registerSubmissionReceiver() {
-        rabbitService.subscribe(incomingQueueName(), this::addSubmission);
     }
 
     @Scheduled(fixedDelay = tickDelay)
@@ -69,19 +58,17 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     @Transactional
     public void processAll() {
-        List<Integer> ids = new ArrayList<>();
-        while (!q.isEmpty()) ids.add(q.poll());
+        Set<Integer> ids = new HashSet<>();
+        while (!q.isEmpty() && ids.size() < maxSubmissionsPerBatch) ids.add(q.poll());
 
         try {
-            List<Submission> submissions = submissionService.findAllByIds(ids);
-            submissions.removeIf(s -> s.getVerdict() != incomingVerdict());
+            List<Submission> submissions = submissionService.findAllByIds(new ArrayList<>(ids));
 
             process(submissions);
 
             for (Submission submission : submissions) {
                 int submissionId = submission.getSubmissionId();
                 if (submission.getVerdict() != incomingVerdict()) {
-                    submissionService.save(submission);
                     rabbitService.send(outcomingQueueName(), submissionId);
                     log().debug("Submission {} processed: {}", submissionId, submission.getVerdict());
                 } else {
@@ -107,6 +94,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
         submissionService.findAllByVerdict(incomingVerdict())
                 .forEach(s -> q.add(s.getSubmissionId()));
+        rabbitService.subscribe(incomingQueueName(), q::add);
     }
 
     protected abstract void process(List<Submission> submissions);

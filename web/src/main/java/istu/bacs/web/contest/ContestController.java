@@ -98,7 +98,7 @@ public class ContestController {
                       @RequestBody SubmitSolutionDto submission,
                       @AuthenticationPrincipal User author) {
 
-        log.trace("User {}:'{}' submitted a solution for problem {} in contest {} using {}",
+        log.debug("User {}:'{}' submitted a solution for problem {} in contest {} using {}",
                 author.getUserId(),
                 author.getUsername(),
                 problemIndex,

@@ -9,5 +9,5 @@ public class ProblemSolvingResultDto {
 
     private boolean solved;
     private int failTries;
-    private int penalty;
+    private int solvedAt;
 }

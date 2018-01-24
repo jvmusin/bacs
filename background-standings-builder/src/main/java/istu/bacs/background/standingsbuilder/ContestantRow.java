@@ -10,6 +10,7 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import static istu.bacs.background.standingsbuilder.SolvingResult.TRY_PENALTY_MINUTES;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -25,7 +26,7 @@ public class ContestantRow {
 
     private int place;
 
-    public ContestantRow(User contestant, List<ContestProblem> contestProblems) {
+    ContestantRow(User contestant, List<ContestProblem> contestProblems) {
         this.contestant = contestant;
         progressByProblem = contestProblems.stream()
                 .collect(toMap(
@@ -59,19 +60,21 @@ public class ContestantRow {
         row.setPlace(place);
         row.setSolvedCount(solvedCount);
         row.setPenalty(penalty);
-        row.setResults(progressByProblem.entrySet().stream()
-                .map(e -> {
-                    ProblemSolvingResultDto result = new ProblemSolvingResultDto();
+        row.setResults(progressByProblem.entrySet().stream().map(e -> {
+            ProblemSolvingResultDto result = new ProblemSolvingResultDto();
 
-                    result.setProblemIndex(e.getKey().getProblemIndex());
+            result.setProblemIndex(e.getKey().getProblemIndex());
 
-                    SolvingResult res = e.getValue().getResult();
-                    result.setSolved(res.isSolved());
-                    result.setFailTries(res.getFailTries());
-                    result.setPenalty(res.getPenalty());
+            SolvingResult res = e.getValue().getResult();
+            result.setSolved(res.isSolved());
+            result.setFailTries(res.getFailTries());
 
-                    return result;
-                })
+            int solvedAt = res.getPenalty();
+            if (res.isSolved()) solvedAt -= res.getFailTries() * TRY_PENALTY_MINUTES;
+            result.setSolvedAt(solvedAt);
+
+            return result;
+        })
                 .collect(toList()));
 
         return row;

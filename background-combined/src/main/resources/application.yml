@@ -6,7 +6,7 @@ spring:
       maximum-pool-size: 20
 logging:
   level:
-    istu.bacs: TRACE
+    istu.bacs: DEBUG
 ---
 
 spring:

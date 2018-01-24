@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class SolvingResult {
 
-    private static final int TRY_PENALTY_MINUTES = 20;
+    static final int TRY_PENALTY_MINUTES = 20;
 
     private boolean solved;
     private int failTries;
