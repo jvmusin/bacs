@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
 import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
-import static java.lang.Integer.parseInt;
 
 @Log
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
@@ -40,6 +38,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     private final AtomicInteger tickCount = new AtomicInteger();
 
     private StandingsUpdater self;
+    private boolean initialized;
 
     public StandingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService, RabbitService rabbitService) {
         this.standingsRedisTemplate = standingsRedisTemplate;
@@ -90,16 +89,15 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         update(submissionService.findById(submissionId));
     }
 
-    @PostConstruct
-    public void registerSubmissionReceiver() {
-        rabbitService.<Integer>subscribe(CHECKED_SUBMISSIONS, m -> self.update(m));
-    }
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (initialized) return;
+        initialized = true;
+
         submissionService.findAll().stream()
                 .map(Submission::getSubmissionId)
                 .forEach(self::update);
+        rabbitService.<Integer>subscribe(CHECKED_SUBMISSIONS, m -> self.update(m));
     }
 
     @Override

@@ -34,6 +34,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     private final AtomicInteger tickCount = new AtomicInteger();
 
     private SubmissionProcessor self;
+    private boolean initialized;
 
     public SubmissionProcessor(SubmissionService submissionService, RabbitService rabbitService) {
         this.submissionService = submissionService;
@@ -102,6 +103,9 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (initialized) return;
+        initialized = true;
+
         submissionService.findAllByVerdict(incomingVerdict())
                 .forEach(s -> q.add(s.getSubmissionId()));
     }
