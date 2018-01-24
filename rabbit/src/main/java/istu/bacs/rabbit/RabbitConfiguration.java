@@ -1,9 +1,12 @@
 package istu.bacs.rabbit;
 
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,13 +47,23 @@ public class RabbitConfiguration {
         return connectionFactory;
     }
 
-    @Bean(SCHEDULED_SUBMISSIONS) public Queue scheduledSubmissionsQueue() {
+    @Bean
+    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
+
+    @Bean(SCHEDULED_SUBMISSIONS)
+    public Queue scheduledSubmissionsQueue() {
         return new Queue(SCHEDULED_SUBMISSIONS);
     }
-    @Bean(SUBMITTED_SUBMISSIONS) public Queue submittedSubmissionsQueue() {
+
+    @Bean(SUBMITTED_SUBMISSIONS)
+    public Queue submittedSubmissionsQueue() {
         return new Queue(SUBMITTED_SUBMISSIONS);
     }
-    @Bean(CHECKED_SUBMISSIONS) public Queue checkedSubmissionsQueue() {
+
+    @Bean(CHECKED_SUBMISSIONS)
+    public Queue checkedSubmissionsQueue() {
         return new Queue(CHECKED_SUBMISSIONS);
     }
 }
