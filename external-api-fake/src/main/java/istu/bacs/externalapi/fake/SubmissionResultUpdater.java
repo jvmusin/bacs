@@ -10,18 +10,18 @@ import static istu.bacs.db.submission.Verdict.*;
 import static istu.bacs.externalapi.fake.Measure.MEGABYTE;
 import static istu.bacs.externalapi.fake.Measure.MILLISECOND;
 
-public class SubmissionResultUpdater {
+class SubmissionResultUpdater {
 
     private final Random rnd = new Random();
 
-    public void updateSubmissionResult(Submission submission) {
-        String solution = submission.getSolution().toLowerCase();
+    void updateSubmissionResult(Submission submission) {
+        String solution = submission.getSolution();
 
-        if (solution.contains("accepted")) {
+        if (solution.equalsIgnoreCase(ACCEPTED.name())) {
             accepted(submission);
-        } else if (solution.contains("tl")) {
+        } else if (solution.equalsIgnoreCase(TIME_LIMIT_EXCEEDED.name())) {
             timeLimit(submission);
-        } else if (solution.contains("ml")) {
+        } else if (solution.equalsIgnoreCase(MEMORY_LIMIT_EXCEEDED.name())) {
             memoryLimit(submission);
         } else {
             Verdict verdict = tryFindVerdict(solution);
@@ -34,25 +34,25 @@ public class SubmissionResultUpdater {
         SubmissionResult result = submission.getResult();
 
         result.setVerdict(ACCEPTED);
-        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis()) + 1);
-        result.setMemoryUsedBytes(rnd.nextInt(submission.getProblem().getMemoryLimitBytes()) + 1);
+        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis() + 1));
+        result.setMemoryUsedBytes(rnd.nextInt(submission.getProblem().getMemoryLimitBytes() + 1));
     }
 
     private void timeLimit(Submission submission) {
         SubmissionResult result = submission.getResult();
 
         result.setVerdict(TIME_LIMIT_EXCEEDED);
-        result.setTestsPassed(rnd.nextInt(100) + 1);
+        result.setTestsPassed(rnd.nextInt(100));
         result.setTimeUsedMillis(submission.getProblem().getTimeLimitMillis() + (rnd.nextInt(100) + 1) * MILLISECOND);
-        result.setMemoryUsedBytes(submission.getProblem().getTimeLimitMillis());
+        result.setMemoryUsedBytes(rnd.nextInt(submission.getProblem().getTimeLimitMillis() + 1));
     }
 
     private void memoryLimit(Submission submission) {
         SubmissionResult result = submission.getResult();
 
         result.setVerdict(MEMORY_LIMIT_EXCEEDED);
-        result.setTestsPassed(rnd.nextInt(100) + 1);
-        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis()) + 1);
+        result.setTestsPassed(rnd.nextInt(100));
+        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis() + 1));
         result.setMemoryUsedBytes(submission.getProblem().getMemoryLimitBytes() + (rnd.nextInt(100) + 1) * MEGABYTE);
     }
 
@@ -67,15 +67,14 @@ public class SubmissionResultUpdater {
         SubmissionResult result = submission.getResult();
 
         result.setVerdict(verdict);
-        result.setTestsPassed(rnd.nextInt(100) + 1);
-        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis()) + 1);
-        result.setMemoryUsedBytes(rnd.nextInt(submission.getProblem().getMemoryLimitBytes()) + 1);
+        result.setTestsPassed(rnd.nextInt(100));
+        result.setTimeUsedMillis(rnd.nextInt(submission.getProblem().getTimeLimitMillis() + 1));
+        result.setMemoryUsedBytes(rnd.nextInt(submission.getProblem().getMemoryLimitBytes() + 1));
     }
 
     private Verdict tryFindVerdict(String solution) {
-        solution = solution.toLowerCase();
         for (Verdict verdict : Verdict.values())
-            if (solution.contains(verdict.name().toLowerCase()))
+            if (solution.equalsIgnoreCase(verdict.name()))
                 return verdict;
         return null;
     }

@@ -1,15 +1,17 @@
 package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.problem.Problem;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static istu.bacs.externalapi.fake.Measure.*;
 
-public class ProblemService {
+class ProblemService {
 
     @SuppressWarnings("PointlessArithmeticExpression")
+    @Getter
     private final List<Problem> problems = Arrays.asList(
             createProblem(1,  "Hello!",           1 * SECOND,        1 * GIGABYTE),
             createProblem(2,  "How",              3 * SECOND,        1 * GIGABYTE),
@@ -26,9 +28,5 @@ public class ProblemService {
                 .timeLimitMillis(timeLimitMillis)
                 .memoryLimitBytes(memoryLimitBytes)
                 .build();
-    }
-
-    public List<Problem> getProblems() {
-        return problems;
     }
 }
