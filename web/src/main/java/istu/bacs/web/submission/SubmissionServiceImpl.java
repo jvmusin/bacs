@@ -6,9 +6,9 @@ import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.user.User;
+import istu.bacs.rabbit.RabbitService;
 import istu.bacs.web.contest.ContestService;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +16,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static istu.bacs.db.submission.Verdict.SCHEDULED;
-import static istu.bacs.rabbit.QueueNames.SCHEDULED_SUBMISSIONS;
+import static istu.bacs.rabbit.QueueName.SCHEDULED_SUBMISSIONS;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
     private final ContestService contestService;
-    private final RabbitTemplate rabbitTemplate;
+    private final RabbitService rabbitService;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestService contestService, RabbitTemplate rabbitTemplate) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository, ContestService contestService, RabbitService rabbitService) {
         this.submissionRepository = submissionRepository;
         this.contestService = contestService;
-        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitService = rabbitService;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         sub.setResult(result);
 
         submissionRepository.save(sub);
-        rabbitTemplate.convertAndSend(SCHEDULED_SUBMISSIONS, sub.getSubmissionId());
+        rabbitService.send(SCHEDULED_SUBMISSIONS, sub.getSubmissionId());
         return sub.getSubmissionId();
     }
 }

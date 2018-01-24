@@ -5,6 +5,6 @@ import org.springframework.amqp.core.Message;
 import java.util.function.Consumer;
 
 public interface RabbitService {
-    void send(String queueName, Object message);
-    void subscribe(String queueName, Consumer<Message> consumer);
+    void send(QueueName queueName, Object message);
+    void subscribe(QueueName queueName, Consumer<Message> consumer);
 }

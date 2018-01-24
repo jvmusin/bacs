@@ -3,6 +3,7 @@ package istu.bacs.background.combined;
 import istu.bacs.background.combined.db.SubmissionService;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
+import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -102,9 +103,9 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     protected abstract Verdict incomingVerdict();
 
-    protected abstract String incomingQueueName();
+    protected abstract QueueName incomingQueueName();
 
-    protected abstract String outcomingQueueName();
+    protected abstract QueueName outcomingQueueName();
 
     protected abstract String processorName();
 

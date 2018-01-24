@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static istu.bacs.rabbit.QueueNames.*;
+import static istu.bacs.rabbit.QueueName.*;
 
 @Configuration
 public class RabbitConfiguration {
@@ -55,18 +55,18 @@ public class RabbitConfiguration {
         return new RabbitServiceImpl(amqpAdmin, rabbitTemplate, connectionFactory);
     }
 
-    @Bean(SCHEDULED_SUBMISSIONS)
+    @Bean
     Queue scheduledSubmissionsQueue() {
-        return new Queue(SCHEDULED_SUBMISSIONS);
+        return new Queue(SCHEDULED_SUBMISSIONS.name());
     }
 
-    @Bean(SUBMITTED_SUBMISSIONS)
+    @Bean
     Queue submittedSubmissionsQueue() {
-        return new Queue(SUBMITTED_SUBMISSIONS);
+        return new Queue(SUBMITTED_SUBMISSIONS.name());
     }
 
-    @Bean(CHECKED_SUBMISSIONS)
+    @Bean
     Queue checkedSubmissionsQueue() {
-        return new Queue(CHECKED_SUBMISSIONS);
+        return new Queue(CHECKED_SUBMISSIONS.name());
     }
 }

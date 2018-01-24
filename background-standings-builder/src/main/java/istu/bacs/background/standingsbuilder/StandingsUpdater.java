@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
-import static istu.bacs.rabbit.QueueNames.CHECKED_SUBMISSIONS;
+import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 import static java.lang.Integer.parseInt;
 
 @Log
