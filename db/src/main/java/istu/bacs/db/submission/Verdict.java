@@ -1,7 +1,7 @@
 package istu.bacs.db.submission;
 
 public enum Verdict {
-    NOT_SUBMITTED,
+    SCHEDULED,
 
     ACCEPTED,
     WRONG_ANSWER,

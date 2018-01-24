@@ -2,7 +2,6 @@ package istu.bacs.rabbit;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -16,7 +15,6 @@ import java.net.URISyntaxException;
 import static istu.bacs.rabbit.QueueNames.*;
 
 @Configuration
-@EnableRabbit
 public class RabbitConfiguration {
 
     private static boolean isNotBlank(String s) {
@@ -24,7 +22,7 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public ConnectionFactory connectionFactory() {
+    ConnectionFactory connectionFactory() {
         //получаем адрес AMQP у провайдера
         String uri = System.getenv("CLOUDAMQP_URL");
         if (uri == null) //значит мы запущены локально и нужно подключаться к локальному rabbitmq
@@ -48,22 +46,27 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+    AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
 
+    @Bean
+    RabbitService rabbitService(AmqpAdmin amqpAdmin, RabbitTemplate rabbitTemplate, ConnectionFactory connectionFactory) {
+        return new RabbitServiceImpl(amqpAdmin, rabbitTemplate, connectionFactory);
+    }
+
     @Bean(SCHEDULED_SUBMISSIONS)
-    public Queue scheduledSubmissionsQueue() {
+    Queue scheduledSubmissionsQueue() {
         return new Queue(SCHEDULED_SUBMISSIONS);
     }
 
     @Bean(SUBMITTED_SUBMISSIONS)
-    public Queue submittedSubmissionsQueue() {
+    Queue submittedSubmissionsQueue() {
         return new Queue(SUBMITTED_SUBMISSIONS);
     }
 
     @Bean(CHECKED_SUBMISSIONS)
-    public Queue checkedSubmissionsQueue() {
+    Queue checkedSubmissionsQueue() {
         return new Queue(CHECKED_SUBMISSIONS);
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static istu.bacs.db.submission.Verdict.NOT_SUBMITTED;
+import static istu.bacs.db.submission.Verdict.SCHEDULED;
 import static istu.bacs.rabbit.QueueNames.SCHEDULED_SUBMISSIONS;
 
 @Service
@@ -67,7 +67,7 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .build();
         SubmissionResult result = new SubmissionResult();
 
-        result.setVerdict(NOT_SUBMITTED);
+        result.setVerdict(SCHEDULED);
         result.setSubmission(sub);
         sub.setResult(result);
 

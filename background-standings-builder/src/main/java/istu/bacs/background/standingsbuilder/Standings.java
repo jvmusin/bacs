@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 @Log
 public class Standings {
 
-    private static final Set<Verdict> unacceptableVerdicts = EnumSet.of(NOT_SUBMITTED, PENDING, COMPILE_ERROR);
+    private static final Set<Verdict> unacceptableVerdicts = EnumSet.of(SCHEDULED, PENDING, COMPILE_ERROR);
 
     private final Map<User, ContestantRow> rowByAuthor = new HashMap<>();
     private final List<ContestantRow> rows = new ArrayList<>();

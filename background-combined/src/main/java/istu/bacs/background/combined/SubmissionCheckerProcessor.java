@@ -4,9 +4,8 @@ import istu.bacs.background.combined.db.SubmissionService;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.externalapi.ExternalApi;
+import istu.bacs.rabbit.RabbitService;
 import lombok.extern.java.Log;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,14 +24,9 @@ public class SubmissionCheckerProcessor extends SubmissionProcessor {
 
     private final ExternalApi externalApi;
 
-    public SubmissionCheckerProcessor(SubmissionService submissionService, RabbitTemplate rabbitTemplate, ExternalApi externalApi) {
-        super(submissionService, rabbitTemplate);
+    public SubmissionCheckerProcessor(SubmissionService submissionService, RabbitService rabbitService, ExternalApi externalApi) {
+        super(submissionService, rabbitService);
         this.externalApi = externalApi;
-    }
-
-    @RabbitListener(queues = SUBMITTED_SUBMISSIONS)
-    public void addSubmission(int submissionId) {
-        super.addSubmission(submissionId);
     }
 
     @Override
@@ -43,6 +37,11 @@ public class SubmissionCheckerProcessor extends SubmissionProcessor {
     @Override
     protected Verdict incomingVerdict() {
         return PENDING;
+    }
+
+    @Override
+    protected String incomingQueueName() {
+        return SUBMITTED_SUBMISSIONS;
     }
 
     @Override

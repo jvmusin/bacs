@@ -3,13 +3,14 @@ package istu.bacs.background.combined;
 import istu.bacs.background.combined.db.SubmissionService;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import istu.bacs.rabbit.RabbitService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +18,32 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.logging.Logger;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     private final SubmissionService submissionService;
-    private final RabbitTemplate rabbitTemplate;
+    private final RabbitService rabbitService;
     private final Queue<Integer> q = new ConcurrentLinkedDeque<>();
-    private ApplicationContext applicationContext;
 
-    public SubmissionProcessor(SubmissionService submissionService, RabbitTemplate rabbitTemplate) {
+    private SubmissionProcessor self;
+
+    public SubmissionProcessor(SubmissionService submissionService, RabbitService rabbitService) {
         this.submissionService = submissionService;
-        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitService = rabbitService;
     }
 
-    protected void addSubmission(int submissionId) {
+    private void addSubmission(int submissionId) {
         q.add(submissionId);
+    }
+
+    @PostConstruct
+    private void registerSubmissionReceiver() {
+        rabbitService.subscribe(incomingQueueName(), m -> {
+            int submissionId = parseInt(new String(m.getBody()));
+            addSubmission(submissionId);
+        });
     }
 
     @Scheduled(fixedDelay = 10000)
@@ -43,7 +54,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
         }
 
         log().info(processorName() + " TICK STARTED");
-        applicationContext.getBean(processorName(), SubmissionProcessor.class).processAll();
+        self.processAll();
         log().info(processorName() + " TICK FINISHED");
     }
 
@@ -62,7 +73,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
                 int submissionId = submission.getSubmissionId();
                 if (submission.getVerdict() != incomingVerdict()) {
                     submissionService.save(submission);
-                    rabbitTemplate.convertAndSend(outcomingQueueName(), submissionId);
+                    rabbitService.send(outcomingQueueName(), submissionId);
                     log().info(format("Submission %d processed: %s", submissionId, submission.getVerdict()));
                 } else {
                     log().info(format("Submission %d NOT processed: %s", submissionId, incomingVerdict()));
@@ -78,7 +89,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+        self = applicationContext.getBean(processorName(), SubmissionProcessor.class);
     }
 
     @Override
@@ -90,6 +101,8 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     protected abstract void process(List<Submission> submissions);
 
     protected abstract Verdict incomingVerdict();
+
+    protected abstract String incomingQueueName();
 
     protected abstract String outcomingQueueName();
 

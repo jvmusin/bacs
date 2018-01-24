@@ -43,6 +43,5 @@ class RabbitShould {
 
         assertNotNull(message.getBody());
         assertEquals(now, new String(message.getBody()));
-
     }
 }

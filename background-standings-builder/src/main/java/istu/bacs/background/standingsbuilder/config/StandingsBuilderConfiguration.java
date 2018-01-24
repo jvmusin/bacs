@@ -5,6 +5,7 @@ import istu.bacs.background.standingsbuilder.StandingsUpdater;
 import istu.bacs.background.standingsbuilder.db.SubmissionService;
 import istu.bacs.background.standingsbuilder.db.SubmissionServiceImpl;
 import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.rabbit.RabbitService;
 import istu.bacs.standingsapi.StandingsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,7 +67,7 @@ public class StandingsBuilderConfiguration {
 
     @Bean
     @Profile("standings-updater")
-    public StandingsUpdater standingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService) {
-        return new StandingsUpdater(standingsRedisTemplate, submissionService);
+    public StandingsUpdater standingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService, RabbitService rabbitService) {
+        return new StandingsUpdater(standingsRedisTemplate, submissionService, rabbitService);
     }
 }
