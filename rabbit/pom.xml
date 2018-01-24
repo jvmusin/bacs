@@ -6,8 +6,6 @@
     <artifactId>rabbit</artifactId>
     <packaging>jar</packaging>
 
-    <name>rabbit</name>
-
     <parent>
         <groupId>istu.bacs</groupId>
         <artifactId>parent</artifactId>

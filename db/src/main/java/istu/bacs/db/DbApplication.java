@@ -1,11 +1,11 @@
-package istu.bacs.rabbit;
+package istu.bacs.db;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RabbitApplication {
+public class DbApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RabbitApplication.class, args);
+        SpringApplication.run(DbApplication.class, args);
     }
 }
