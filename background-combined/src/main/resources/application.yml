@@ -4,6 +4,9 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 20
+logging:
+  level:
+    istu.bacs: TRACE
 ---
 
 spring:

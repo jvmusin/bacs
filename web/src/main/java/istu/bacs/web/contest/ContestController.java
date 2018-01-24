@@ -12,6 +12,7 @@ import istu.bacs.web.problem.dto.SubmitSolutionDto;
 import istu.bacs.web.submission.SubmissionService;
 import istu.bacs.web.submission.dto.EnhancedSubmitSolutionDto;
 import istu.bacs.web.submission.dto.SubmissionMetaDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("contests")
+@Slf4j
 public class ContestController {
 
     private final ContestService contestService;
@@ -95,6 +97,13 @@ public class ContestController {
                       @PathVariable String problemIndex,
                       @RequestBody SubmitSolutionDto submission,
                       @AuthenticationPrincipal User author) {
+
+        log.trace("User {}:'{}' submitted a solution for problem {} in contest {} using {}",
+                author.getUserId(),
+                author.getUsername(),
+                problemIndex,
+                contestId,
+                submission.getLanguage());
 
         return submissionService.submit(
                 new EnhancedSubmitSolutionDto(contestId, problemIndex, author, submission)
