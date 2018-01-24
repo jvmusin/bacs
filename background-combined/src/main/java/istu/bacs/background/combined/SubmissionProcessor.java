@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -24,8 +25,9 @@ import static java.lang.String.format;
 
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
+    private static final int tickDelay = 500;
     //print state once per 5 minutes
-    private static final int printStateEveryNTicks = 2 * 60 * 5;
+    private static final int printStateEveryNTicks = (1000 / tickDelay) * 60 * 5;
 
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;
@@ -34,7 +36,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     private final AtomicInteger tickCount = new AtomicInteger();
 
     private SubmissionProcessor self;
-    private boolean initialized;
+    private AtomicBoolean initialized = new AtomicBoolean();
 
     public SubmissionProcessor(SubmissionService submissionService, RabbitService rabbitService) {
         this.submissionService = submissionService;
@@ -50,7 +52,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
         rabbitService.subscribe(incomingQueueName(), this::addSubmission);
     }
 
-    @Scheduled(fixedDelay = 500)
+    @Scheduled(fixedDelay = tickDelay)
     public void tick() {
         if (q.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
@@ -103,8 +105,8 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (initialized) return;
-        initialized = true;
+        if (initialized.getAndSet(true))
+            return;
 
         submissionService.findAllByVerdict(incomingVerdict())
                 .forEach(s -> q.add(s.getSubmissionId()));

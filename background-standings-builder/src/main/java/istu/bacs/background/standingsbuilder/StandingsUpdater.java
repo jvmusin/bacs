@@ -18,6 +18,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
@@ -26,8 +27,9 @@ import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 @Log
 public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
+    private static final int tickDelay = 500;
     //print state once per 5 minutes
-    private static final int printStateEveryNTicks = 2 * 60 * 5;
+    private static final int printStateEveryNTicks = (1000 / tickDelay) * 60 * 5;
 
     private final StandingsRedisTemplate standingsRedisTemplate;
     private final SubmissionService submissionService;
@@ -35,10 +37,11 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     private final Map<Integer, Standings> standingsByContestId = new ConcurrentHashMap<>();
     private final Queue<Integer> updatedStandings = new ConcurrentLinkedDeque<>();
+
+    private final AtomicBoolean initialized = new AtomicBoolean();
     private final AtomicInteger tickCount = new AtomicInteger();
 
     private StandingsUpdater self;
-    private boolean initialized;
 
     public StandingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService, RabbitService rabbitService) {
         this.standingsRedisTemplate = standingsRedisTemplate;
@@ -50,7 +53,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         return standingsByContestId.computeIfAbsent(contestId, cId -> new Standings());
     }
 
-    @Scheduled(fixedDelay = 500)
+    @Scheduled(fixedDelay = tickDelay)
     void updateStandings() {
         if (updatedStandings.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
@@ -78,9 +81,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     private void update(Submission submission) {
         Standings standings = getOrCreateStandings(submission.getContest().getContestId());
-        synchronized (this) {
-            standings.update(submission);
-        }
+        standings.update(submission);
         updatedStandings.add(submission.getContest().getContestId());
     }
 
@@ -91,8 +92,8 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (initialized) return;
-        initialized = true;
+        if (initialized.getAndSet(true))
+            return;
 
         submissionService.findAll().stream()
                 .map(Submission::getSubmissionId)
