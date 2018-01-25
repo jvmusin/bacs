@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 
 public class StandingsServiceImpl implements StandingsService {
 
-    public static final String KEY = "Standings";
+    static final String KEY = "Standings";
 
     private final StandingsRedisTemplate standingsRedisTemplate;
 
