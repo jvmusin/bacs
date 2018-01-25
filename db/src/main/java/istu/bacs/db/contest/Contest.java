@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Data
 @Entity
@@ -26,7 +27,7 @@ public class Contest {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
 
-    @OneToMany(cascade = ALL, mappedBy = "contest")
+    @OneToMany(cascade = ALL, mappedBy = "contest", fetch = EAGER)
     @OrderBy("problemIndex ASC")
     private List<ContestProblem> problems;
 

@@ -8,6 +8,8 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 20
+  jpa:
+    open-in-view: false
 logging:
   level:
     istu.bacs: DEBUG

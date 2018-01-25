@@ -3,7 +3,6 @@ package istu.bacs.background.combined.db;
 import istu.bacs.db.submission.*;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -20,7 +19,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    @Transactional
     public List<Submission> findAllByVerdict(Verdict verdict) {
         return submissionResultRepository.findAllByVerdict(verdict).stream()
                 .map(SubmissionResult::getSubmission)

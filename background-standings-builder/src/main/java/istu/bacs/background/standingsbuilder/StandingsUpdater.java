@@ -5,13 +5,10 @@ import istu.bacs.background.standingsbuilder.db.SubmissionService;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.rabbit.RabbitService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
@@ -25,7 +22,7 @@ import static istu.bacs.background.standingsbuilder.StandingsServiceImpl.KEY;
 import static istu.bacs.rabbit.QueueName.CHECKED_SUBMISSIONS;
 
 @Slf4j
-public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
+public class StandingsUpdater implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final int tickDelay = 500;
     //print state once per 5 minutes
@@ -40,8 +37,6 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
 
     private final AtomicBoolean initialized = new AtomicBoolean();
     private final AtomicInteger tickCount = new AtomicInteger();
-
-    private StandingsUpdater self;
 
     public StandingsUpdater(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService, RabbitService rabbitService) {
         this.standingsRedisTemplate = standingsRedisTemplate;
@@ -87,24 +82,13 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         updatedStandings.add(submission.getContest().getContestId());
     }
 
-    @Transactional
-    public void update(int submissionId) {
-        update(submissionService.findById(submissionId));
-    }
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (initialized.getAndSet(true))
             return;
 
-        submissionService.findAll().stream()
-                .map(Submission::getSubmissionId)
-                .forEach(self::update);
-        rabbitService.<Integer>subscribe(CHECKED_SUBMISSIONS, m -> self.update(m));
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        self = applicationContext.getBean(StandingsUpdater.class);
+        submissionService.findAll().forEach(this::update);
+        rabbitService.<Integer>subscribe(CHECKED_SUBMISSIONS,
+                submissionId -> update(submissionService.findById(submissionId)));
     }
 }
