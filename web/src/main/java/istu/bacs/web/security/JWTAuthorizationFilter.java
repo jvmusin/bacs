@@ -63,14 +63,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .parseClaimsJws(token.replaceFirst(TOKEN_PREFIX, ""))
                     .getBody();
 
-            User user = new User();
-            user.setUsername(body.getSubject());
-            user.setUserId(body.get("userId", Integer.class));
             List<?> authorities = body.get("authorities", List.class);
-            user.setRoles(authorities.stream()
+            List<Role> roles = authorities.stream()
                     .map(Object::toString)
                     .map(Role::valueOf)
-                    .collect(toList()));
+                    .collect(toList());
+
+            User user = User.builder()
+                    .userId(body.get("userId", Integer.class))
+                    .username(body.getSubject())
+                    .roles(roles)
+                    .build();
 
             return new UsernamePasswordAuthenticationToken(user, null, UserUtils.getAuthorities(user));
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {

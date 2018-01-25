@@ -65,10 +65,10 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .language(submission.getSubmission().getLanguage())
                 .solution(submission.getSubmission().getSolution())
                 .build();
-        SubmissionResult result = new SubmissionResult();
-
-        result.setVerdict(SCHEDULED);
-        result.setSubmission(sub);
+        SubmissionResult result = SubmissionResult.builder()
+                .verdict(SCHEDULED)
+                .submission(sub)
+                .build();
         sub.setResult(result);
 
         submissionRepository.save(sub);

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Objects;
 
 @Data
 @Entity

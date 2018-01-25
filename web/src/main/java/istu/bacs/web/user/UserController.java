@@ -23,9 +23,10 @@ public class UserController {
 
     @PostMapping({"sign-up", "users"})
     public ResponseEntity<?> signUp(@RequestBody NewUserDto user) {
-        User u = new User();
-        u.setUsername(user.getUsername());
-        u.setPassword(user.getPassword());
+        User u = User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .build();
 
         try {
             userService.signUp(u);
