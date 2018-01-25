@@ -4,7 +4,7 @@ server:
     accept-count: 20000
 spring:
   profiles:
-    include: 'db,sybon-api,fake-api'
+    include: aggregator-api
   datasource:
     hikari:
       maximum-pool-size: 20

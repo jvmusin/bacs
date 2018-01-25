@@ -1,0 +1,3 @@
+spring:
+  profiles:
+    include: fake-api,sybon-api
