@@ -47,7 +47,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.debug("User authentication failed: {}", e.getMessage());
+            return null;
         }
     }
 
