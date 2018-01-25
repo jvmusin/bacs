@@ -1,19 +1,17 @@
 package istu.bacs.db.contest;
 
 import istu.bacs.db.problem.Problem;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "contest")
+@EqualsAndHashCode(of = "contestProblemId")
 public class ContestProblem {
 
     @Id
@@ -29,25 +27,4 @@ public class ContestProblem {
     private Problem problem;
 
     private String problemIndex;
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null) return false;
-        ContestProblem contestProblem = (ContestProblem) other;
-        return Objects.equals(contestProblemId, contestProblem.contestProblemId);
-    }
-
-    @Override
-    public int hashCode() {
-        return contestProblemId;
-    }
-
-    @Override
-    public String toString() {
-        return "ContestProblem{" +
-                "contestProblemId=" + contestProblemId +
-                ", problem=" + problem +
-                ", problemIndex='" + problemIndex + '\'' +
-                '}';
-    }
 }

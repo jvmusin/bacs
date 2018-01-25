@@ -1,7 +1,5 @@
 package istu.bacs.db.user;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.AttributeConverter;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +7,6 @@ import java.util.List;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-@Component
 public class RolesConverter implements AttributeConverter<List<Role>, String> {
     @Override
     public String convertToDatabaseColumn(List<Role> authorities) {

@@ -1,9 +1,6 @@
 package istu.bacs.db.contest;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import static javax.persistence.CascadeType.ALL;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "contestId")
 public class Contest {
 
     @Id
@@ -37,17 +35,5 @@ public class Contest {
             if (Objects.equals(problem.getProblemIndex(), index))
                 return problem;
         return null;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null) return false;
-        Contest contest = (Contest) other;
-        return Objects.equals(contestId, contest.contestId);
-    }
-
-    @Override
-    public int hashCode() {
-        return contestId;
     }
 }

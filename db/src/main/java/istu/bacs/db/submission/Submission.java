@@ -4,14 +4,10 @@ import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
@@ -21,6 +17,7 @@ import static javax.persistence.EnumType.STRING;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "submissionId")
 public class Submission {
 
     @Id
@@ -60,17 +57,5 @@ public class Submission {
 
     public String getResourceName() {
         return getProblem().getResourceName();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        Submission submission = (Submission) other;
-        return Objects.equals(submissionId, submission.submissionId);
-    }
-
-    @Override
-    public int hashCode() {
-        return submissionId;
     }
 }

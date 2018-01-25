@@ -1,9 +1,6 @@
 package istu.bacs.db.problem;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,6 +11,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "problemId")
 public class Problem {
 
     @Id
@@ -31,17 +29,5 @@ public class Problem {
 
     public String getRawProblemName() {
         return problemId.split("@")[1];
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        Problem problem = (Problem) other;
-        return Objects.equals(problemId, problem.problemId);
-    }
-
-    @Override
-    public int hashCode() {
-        return problemId.hashCode();
     }
 }

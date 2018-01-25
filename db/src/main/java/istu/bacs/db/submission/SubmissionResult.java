@@ -1,9 +1,6 @@
 package istu.bacs.db.submission;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +11,7 @@ import static javax.persistence.EnumType.STRING;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "submission")
 public class SubmissionResult {
 
     @Id
@@ -31,16 +29,4 @@ public class SubmissionResult {
     private Integer testsPassed;
     private Integer timeUsedMillis;
     private Integer memoryUsedBytes;
-
-    @Override
-    public String toString() {
-        return "SubmissionResult{" +
-                "submissionResultId=" + submissionResultId +
-                ", buildInfo='" + buildInfo + '\'' +
-                ", verdict=" + verdict +
-                ", testsPassed=" + testsPassed +
-                ", timeUsedMillis=" + timeUsedMillis +
-                ", memoryUsedBytes=" + memoryUsedBytes +
-                '}';
-    }
 }
