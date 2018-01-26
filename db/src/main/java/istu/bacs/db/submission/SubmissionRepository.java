@@ -14,4 +14,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, Integer>
 
     @Query("SELECT s FROM Submission s WHERE s.author = :author AND s.contestProblem IN (:problems)")
     List<Submission> findAllByAuthorAndContestProblem(@Param("author") User author, @Param("problems") List<ContestProblem> problems, Pageable pageable);
+
+    List<Submission> findAllByResultVerdict(Verdict verdict);
 }

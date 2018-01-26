@@ -107,12 +107,8 @@ class SubmissionRepositoryTests {
                 .language(language)
                 .solution(solution)
                 .externalSubmissionId(externalSubmissionId)
+                .result(SubmissionResult.builder().verdict(PENDING).build())
                 .build();
-        SubmissionResult submissionResult = new SubmissionResult();
-
-        submissionResult.setVerdict(PENDING);
-        submissionResult.setSubmission(submission);
-        submission.setResult(submissionResult);
 
         submissionRepository.save(submission);
         assertThat(submission.getSubmissionId(), is(notNullValue()));

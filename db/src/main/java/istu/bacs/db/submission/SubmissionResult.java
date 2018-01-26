@@ -1,26 +1,21 @@
 package istu.bacs.db.submission;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.Enumerated;
 
 import static javax.persistence.EnumType.STRING;
 
 @Data
-@Entity
 @Builder
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "submission")
 public class SubmissionResult {
-
-    @Id
-    @GeneratedValue
-    private Integer submissionResultId;
-
-    @OneToOne
-    @JoinColumn(name = "submission_id")
-    private Submission submission;
 
     private String buildInfo;
 

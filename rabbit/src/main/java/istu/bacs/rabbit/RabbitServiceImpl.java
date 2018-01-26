@@ -43,6 +43,8 @@ class RabbitServiceImpl implements RabbitService {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName.name());
 
+        container.setConcurrentConsumers(20);
+
         container.setMessageListener(m -> {
             //noinspection unchecked
             consumer.accept((T) messageConverter.fromMessage(m));

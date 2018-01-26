@@ -1,28 +1,24 @@
 package istu.bacs.background.combined.db;
 
-import istu.bacs.db.submission.*;
+import istu.bacs.db.submission.Submission;
+import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.db.submission.Verdict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final SubmissionResultRepository submissionResultRepository;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, SubmissionResultRepository submissionResultRepository) {
+    public SubmissionServiceImpl(SubmissionRepository submissionRepository) {
         this.submissionRepository = submissionRepository;
-        this.submissionResultRepository = submissionResultRepository;
     }
 
     @Override
     public List<Submission> findAllByVerdict(Verdict verdict) {
-        return submissionResultRepository.findAllByVerdict(verdict).stream()
-                .map(SubmissionResult::getSubmission)
-                .collect(toList());
+        return submissionRepository.findAllByResultVerdict(verdict);
     }
 
     @Override

@@ -64,12 +64,8 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .created(now)
                 .language(submission.getSubmission().getLanguage())
                 .solution(submission.getSubmission().getSolution())
+                .result(SubmissionResult.builder().verdict(SCHEDULED).build())
                 .build();
-        SubmissionResult result = SubmissionResult.builder()
-                .verdict(SCHEDULED)
-                .submission(sub)
-                .build();
-        sub.setResult(result);
 
         submissionRepository.save(sub);
         rabbitService.send(SCHEDULED_SUBMISSIONS, sub.getSubmissionId());

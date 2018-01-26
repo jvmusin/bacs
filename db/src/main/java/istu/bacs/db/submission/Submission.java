@@ -9,7 +9,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
 @Data
@@ -40,7 +39,7 @@ public class Submission {
 
     private Integer externalSubmissionId;
 
-    @OneToOne(cascade = ALL, mappedBy = "submission")
+    @Embedded
     private SubmissionResult result;
 
     public Verdict getVerdict() {
