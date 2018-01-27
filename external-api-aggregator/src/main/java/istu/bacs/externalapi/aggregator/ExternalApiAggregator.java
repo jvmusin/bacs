@@ -46,8 +46,8 @@ class ExternalApiAggregator implements ExternalApi {
     }
 
     @Override
-    public void checkSubmissionResult(Submission submission) {
-        checkSubmissionResult(singletonList(submission));
+    public boolean checkSubmissionResult(Submission submission) {
+        return checkSubmissionResult(singletonList(submission));
     }
 
     @Override
