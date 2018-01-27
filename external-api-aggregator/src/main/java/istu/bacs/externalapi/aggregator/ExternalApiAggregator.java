@@ -30,18 +30,19 @@ class ExternalApiAggregator implements ExternalApi {
     }
 
     @Override
-    public void submit(Submission submission) {
-        submit(singletonList(submission));
+    public boolean submit(Submission submission) {
+        return submit(singletonList(submission));
     }
 
     @Override
-    public void submit(List<Submission> submissions) {
+    public boolean submit(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = splitByResource(submissions);
-        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
+        //noinspection ReplaceInefficientStreamCount
+        return byResource.entrySet().parallelStream().filter(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
-            findApi(resource).submit(resourceSubmissions);
-        });
+            return findApi(resource).submit(resourceSubmissions);
+        }).count() > 0;
     }
 
     @Override
@@ -50,13 +51,14 @@ class ExternalApiAggregator implements ExternalApi {
     }
 
     @Override
-    public void checkSubmissionResult(List<Submission> submissions) {
+    public boolean checkSubmissionResult(List<Submission> submissions) {
         Map<String, List<Submission>> byResource = splitByResource(submissions);
-        byResource.entrySet().parallelStream().forEach(resourceAndSubmissions -> {
+        //noinspection ReplaceInefficientStreamCount
+        return byResource.entrySet().parallelStream().filter(resourceAndSubmissions -> {
             String resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
-            findApi(resource).checkSubmissionResult(resourceSubmissions);
-        });
+            return findApi(resource).checkSubmissionResult(resourceSubmissions);
+        }).count() > 0;
     }
 
     private Map<String, List<Submission>> splitByResource(List<Submission> submissions) {

@@ -19,8 +19,9 @@ public interface ExternalApi {
      *
      * @param submission Submission to send.
      */
-    void submit(Submission submission);
-    void submit(List<Submission> submissions);
+    boolean submit(Submission submission);
+
+    boolean submit(List<Submission> submissions);
 
     /**
      * Checks submission result.
@@ -30,8 +31,9 @@ public interface ExternalApi {
      *
      * @param submission Submission to check.
      */
-    void checkSubmissionResult(Submission submission);
-    void checkSubmissionResult(List<Submission> submissions);
+    boolean checkSubmissionResult(Submission submission);
+
+    boolean checkSubmissionResult(List<Submission> submissions);
 
     String getApiName();
 }

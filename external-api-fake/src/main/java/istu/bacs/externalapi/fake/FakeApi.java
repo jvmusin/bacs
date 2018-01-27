@@ -22,24 +22,28 @@ public class FakeApi implements ExternalApi {
     }
 
     @Override
-    public void submit(Submission submission) {
+    public boolean submit(Submission submission) {
         submission.setExternalSubmissionId(rnd.nextInt(Integer.MAX_VALUE));
         submission.getResult().setVerdict(PENDING);
+        return true;
     }
 
     @Override
-    public void submit(List<Submission> submissions) {
+    public boolean submit(List<Submission> submissions) {
         submissions.forEach(this::submit);
+        return true;
     }
 
     @Override
-    public void checkSubmissionResult(Submission submission) {
+    public boolean checkSubmissionResult(Submission submission) {
         submissionResultUpdater.updateSubmissionResult(submission);
+        return true;
     }
 
     @Override
-    public void checkSubmissionResult(List<Submission> submissions) {
+    public boolean checkSubmissionResult(List<Submission> submissions) {
         submissions.forEach(this::checkSubmissionResult);
+        return !submissions.isEmpty();
     }
 
     @Override

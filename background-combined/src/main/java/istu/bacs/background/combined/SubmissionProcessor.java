@@ -20,7 +20,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     private static final int tickDelay = 500;
     //print state once per 5 minutes
     private static final int printStateEveryNTicks = (1000 / tickDelay) * 60 * 5;
-    private static final int maxSubmissionsPerBatch = 10;
+    private static final int maxSubmissionsPerBatch = Integer.MAX_VALUE;
 
     private final SubmissionService submissionService;
     private final RabbitService rabbitService;
@@ -53,29 +53,38 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     }
 
     private void processAll() {
+        log().trace("Processing started");
+
         Set<Integer> ids = new HashSet<>();
         while (!q.isEmpty() && ids.size() < maxSubmissionsPerBatch) ids.add(q.poll());
+        log().trace("Processing {} submissions: {}", ids.size(), ids);
 
         try {
             List<Submission> submissions = submissionService.findAllByIds(new ArrayList<>(ids));
+            log().trace("Found {} submissions", submissions.size());
 
-            process(submissions);
+            boolean anyProcessed = process(submissions);
 
-            for (Submission submission : submissions) {
-                int submissionId = submission.getSubmissionId();
-                if (submission.getVerdict() != incomingVerdict()) {
-                    submissionService.save(submission);
-                    rabbitService.send(outcomingQueueName(), submissionId);
-                    log().debug("Submission {} processed: {}", submissionId, submission.getVerdict());
-                } else {
-                    log().debug("Submission {} NOT processed: {}", submissionId, incomingVerdict());
-                    q.add(submissionId);
+            if (anyProcessed) {
+                for (Submission submission : submissions) {
+                    int submissionId = submission.getSubmissionId();
+                    if (submission.getVerdict() != incomingVerdict()) {
+                        submissionService.save(submission);
+                        rabbitService.send(outcomingQueueName(), submissionId);
+                        log().debug("Submission {} processed: {}", submissionId, submission.getVerdict());
+                    } else {
+                        q.add(submissionId);
+                    }
                 }
+            } else {
+                q.addAll(ids);
             }
         } catch (Exception e) {
             log().warn("Unable to process submissions", e);
             q.addAll(ids);
         }
+
+        log().trace("Processing finished");
     }
 
     @Override
@@ -88,7 +97,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
         rabbitService.subscribe(incomingQueueName(), q::add);
     }
 
-    protected abstract void process(List<Submission> submissions);
+    protected abstract boolean process(List<Submission> submissions);
 
     protected abstract Verdict incomingVerdict();
 

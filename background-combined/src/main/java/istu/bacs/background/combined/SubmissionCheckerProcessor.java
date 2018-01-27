@@ -31,8 +31,8 @@ public class SubmissionCheckerProcessor extends SubmissionProcessor {
     }
 
     @Override
-    protected void process(List<Submission> submissions) {
-        externalApi.checkSubmissionResult(submissions);
+    protected boolean process(List<Submission> submissions) {
+        return externalApi.checkSubmissionResult(submissions);
     }
 
     @Override

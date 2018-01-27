@@ -31,8 +31,8 @@ public class SubmissionSubmitterProcessor extends SubmissionProcessor {
     }
 
     @Override
-    protected void process(List<Submission> submissions) {
-        externalApi.submit(submissions);
+    protected boolean process(List<Submission> submissions) {
+        return externalApi.submit(submissions);
     }
 
     @Override

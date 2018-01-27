@@ -47,18 +47,21 @@ public class SybonApi implements ExternalApi {
                     .map(problemConverter::convert)
                     .collect(toList());
         } catch (Exception e) {
-            log.warn("Unable to get problems", e);
+            log.warn("Unable to get problems using url '{}'", url, e);
             return emptyList();
         }
     }
 
     @Override
-    public void submit(Submission submission) {
-        submit(singletonList(submission));
+    public boolean submit(Submission submission) {
+        return submit(singletonList(submission));
     }
 
     @Override
-    public void submit(List<Submission> submissions) {
+    public boolean submit(List<Submission> submissions) {
+        if (submissions.isEmpty())
+            return false;
+
         List<SybonSubmit> sybonSubmits = submissions.stream()
                 .map(this::createSubmit)
                 .collect(toList());
@@ -72,8 +75,11 @@ public class SybonApi implements ExternalApi {
                 submission.getResult().setVerdict(PENDING);
                 submission.setExternalSubmissionId(submissionIds[i]);
             }
+            return true;
         } catch (Exception e) {
-            log.warn("Unable to submit submissions", e);
+            String ids = submissions.stream().map(Submission::getSubmissionId).map(Object::toString).collect(joining(","));
+            log.warn("Unable to submit submissions {}", ids, e);
+            return false;
         }
     }
 
@@ -91,12 +97,15 @@ public class SybonApi implements ExternalApi {
     }
 
     @Override
-    public void checkSubmissionResult(Submission submission) {
-        checkSubmissionResult(singletonList(submission));
+    public boolean checkSubmissionResult(Submission submission) {
+        return checkSubmissionResult(singletonList(submission));
     }
 
     @Override
-    public void checkSubmissionResult(List<Submission> submissions) {
+    public boolean checkSubmissionResult(List<Submission> submissions) {
+        if (submissions.isEmpty())
+            return false;
+
         String ids = submissions.stream()
                 .map(sub -> sub.getExternalSubmissionId() + "")
                 .collect(joining(","));
@@ -105,12 +114,16 @@ public class SybonApi implements ExternalApi {
 
         try {
             SybonSubmitResult[] sybonResults = restTemplate.getForObject(url, SybonSubmitResult[].class);
+            boolean anySuccess = false;
             for (int i = 0; i < submissions.size(); i++) {
                 SubmissionResult result = submitResultConverter.convert(sybonResults[i]);
                 updateSubmissionResult(submissions.get(i).getResult(), result);
+                anySuccess |= result.getVerdict() != PENDING;
             }
+            return anySuccess;
         } catch (Exception e) {
             log.warn("Unable to check submission results for submissions {}", ids, e);
+            return false;
         }
     }
 
