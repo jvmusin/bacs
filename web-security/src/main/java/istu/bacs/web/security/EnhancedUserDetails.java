@@ -1,4 +1,4 @@
-package istu.bacs.web.user;
+package istu.bacs.web.security;
 
 import istu.bacs.db.user.User;
 
@@ -7,7 +7,7 @@ public class EnhancedUserDetails extends org.springframework.security.core.userd
     private final int userId;
 
     public EnhancedUserDetails(User user) {
-        super(user.getUsername(), user.getPassword(), UserUtils.getAuthorities(user));
+        super(user.getUsername(), user.getPassword(), WebSecurityUserUtils.getAuthorities(user));
         this.userId = user.getUserId();
     }
 

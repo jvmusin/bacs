@@ -1,4 +1,4 @@
-package istu.bacs.web.user;
+package istu.bacs.web.security;
 
 import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class UserUtils {
+public class WebSecurityUserUtils {
 
     public static List<GrantedAuthority> getAuthorities(User user) {
         return user.getRoles().stream()

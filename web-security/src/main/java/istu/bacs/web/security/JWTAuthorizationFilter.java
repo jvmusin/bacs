@@ -3,7 +3,6 @@ package istu.bacs.web.security;
 import io.jsonwebtoken.*;
 import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
-import istu.bacs.web.user.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,10 +17,11 @@ import java.io.IOException;
 import java.util.List;
 
 import static istu.bacs.web.security.SecurityConstants.*;
+import static istu.bacs.web.security.WebSecurityUserUtils.getAuthorities;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     JWTAuthorizationFilter(AuthenticationManager authManager) {
         super(authManager);
@@ -75,7 +75,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .roles(roles)
                     .build();
 
-            return new UsernamePasswordAuthenticationToken(user, null, UserUtils.getAuthorities(user));
+            return new UsernamePasswordAuthenticationToken(user, null, getAuthorities(user));
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
             log.debug("User authorization failed. Token: '{}'. Reason: {}", token, e.getMessage());
             return null;

@@ -1,25 +1,14 @@
 package istu.bacs.web.security;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
-
 /**
  * Used configuration from <a href="https://stackoverflow.com/a/40864401/4296219">SO 40864401: Angular 2 Spring Boot Login CORS Problems</a>
  */
-@Component
-@Order(HIGHEST_PRECEDENCE)
-public class MyCorsFilter implements Filter {
-
-    public MyCorsFilter() {
-        super();
-    }
+class MyCorsFilter implements Filter {
 
     @Override
     public final void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain) throws IOException, ServletException {

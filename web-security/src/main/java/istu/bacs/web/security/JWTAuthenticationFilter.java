@@ -3,7 +3,6 @@ package istu.bacs.web.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import istu.bacs.db.user.User;
-import istu.bacs.web.user.EnhancedUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +24,7 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
@@ -41,7 +40,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),
-                    user.getPassword());
+                    user.getPassword()
+            );
 
             log.debug("User attempts to login '{}':'{}'", user.getUsername(), user.getPassword());
 
@@ -67,7 +67,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setSubject(user.getUsername())
                 .claim("userId", user.getUserId())
                 .claim("authorities", authorities)
-                .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME_MILLIS))
                 .signWith(HS256, SECRET)
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);

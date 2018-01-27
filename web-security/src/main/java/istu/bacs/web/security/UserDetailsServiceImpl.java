@@ -1,4 +1,4 @@
-package istu.bacs.web.user;
+package istu.bacs.web.security;
 
 import istu.bacs.db.user.User;
 import istu.bacs.db.user.UserRepository;
