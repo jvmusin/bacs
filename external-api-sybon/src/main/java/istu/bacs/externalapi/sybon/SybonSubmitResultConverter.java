@@ -18,9 +18,12 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
                     .verdict(Verdict.PENDING)
                     .build();
 
+        String buildInfo = new String(Base64.getDecoder().decode(submission.getBuildResult().getOutput()));
+        if (buildInfo.trim().isEmpty()) buildInfo = null;
+
         if (status == SybonBuildResultStatus.FAILED || status == SybonBuildResultStatus.SERVER_ERROR)
             return SubmissionResult.builder()
-                    .buildInfo(new String(Base64.getDecoder().decode(submission.getBuildResult().getOutput())))
+                    .buildInfo(buildInfo)
                     .verdict(Verdict.COMPILE_ERROR)
                     .build();
 
@@ -44,7 +47,7 @@ public class SybonSubmitResultConverter implements Converter<SybonSubmitResult, 
         if (verdict == Verdict.ACCEPTED) testsPassed = null;
 
         return SubmissionResult.builder()
-                .buildInfo(submission.getBuildResult().getOutput())
+                .buildInfo(buildInfo)
                 .verdict(verdict)
                 .testsPassed(testsPassed)
                 .timeUsedMillis(maxTimeUsedMillis)
