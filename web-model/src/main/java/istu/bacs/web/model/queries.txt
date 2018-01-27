@@ -1,0 +1,36 @@
+Запросы
+
+	Контесты
+		Все контесты 					| GET		| contests													| Contest[]
+		Конкретный контест				| GET		| contests/{contestId}										| Contest
+		Задачи контеста					| GET		| contests/{contestId}/problems								| Problem[]
+		Конкретная задача контеста		| GET		| contests/{contestId}/problems/{problemIndex}				| Problem
+		Все посылки по задаче контеста	| GET		| contests/{contestId}/problems/{problemIndex}/submissions	| Submission[]
+		Все посылки						| GET		| contests/{contestId}/submissions							| Submission[]
+		Положение участников			| GET		| contests/{contestId}/standings							| Standings
+
+		Отправить решение				| POST		| contests/{contestId}/submissions							| Int (submissionId)
+
+		Создать контест					| POST		| contests/{contestId}			| EditedContest
+		Отредактировать контест			| PUT		| contests/{contestId}			| EditedContest
+		Удалить контест					| DELETE	| contests/{contestId}			| Int (contestId)
+
+	Посылки
+		Все посылки						| GET		| submissions												| Submission[]
+		Конкретная посылка				| GET		| submissions/{submissionId}								| Submission
+
+	Реджаджер
+		Реджадж задачи/контеста			| PUT		| rejudger						| Rejudge
+
+	Пользователи
+		Все пользователи				| GET		| users														| User[]
+		Конкретный пользователь			| GET		| users/{username}											| User
+
+		Логин							| POST		| users							| {username, password} json
+		Зарегистрировать пользователя	| POST		| users/{username}				| User
+		//Отредактировать пользователя	| PUT		| users/{username}				| User
+
+	Задачи (в этом контексте индексом задачи становится её id во внешней системе)
+		Все задачи						| GET		| problems													| Problem[]
+		Конкретная задача				| GET		| problems/{problemId}										| Problem[]
+		Все задачи с внешних источников	| GET		| problems?external
