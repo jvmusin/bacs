@@ -1,5 +1,6 @@
 package istu.bacs.web.model;
 
+import istu.bacs.db.contest.Contest;
 import lombok.Value;
 
 @Value
@@ -9,14 +10,19 @@ public class Problem {
     int contestId;
     int timeLimitMillis;
     int memoryLimitBytes;
+    String statementUrl;
 
-    public static Problem fromDb(istu.bacs.db.contest.ContestProblem problem) {
+    public static Problem fromDb(istu.bacs.db.contest.ContestProblem contestProblem) {
+        Contest contest = contestProblem.getContest();
+        istu.bacs.db.problem.Problem problem = contestProblem.getProblem();
+
         return new Problem(
-                problem.getProblemIndex(),
-                problem.getProblem().getName(),
-                problem.getContest().getContestId(),
-                problem.getProblem().getTimeLimitMillis(),
-                problem.getProblem().getMemoryLimitBytes()
+                contestProblem.getProblemIndex(),
+                problem.getName(),
+                contest.getContestId(),
+                problem.getTimeLimitMillis(),
+                problem.getMemoryLimitBytes(),
+                problem.getStatementUrl()
         );
     }
 }
