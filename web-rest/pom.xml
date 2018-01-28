@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>istu.bacs.web</groupId>
-    <artifactId>web-security</artifactId>
+    <artifactId>web-rest</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -15,25 +15,10 @@
 
     <dependencies>
 
-        <!-- WebFlux Starter -->
+        <!-- WebFlux -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-
-        <!-- Security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.security</groupId>-->
-            <!--<artifactId>spring-security-webflux</artifactId>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.0</version>
         </dependency>
 
         <!-- Database -->
@@ -43,7 +28,14 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Models -->
+        <!-- Security -->
+        <dependency>
+            <groupId>istu.bacs.web</groupId>
+            <artifactId>web-security</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Model -->
         <dependency>
             <groupId>istu.bacs.web</groupId>
             <artifactId>web-model</artifactId>
@@ -51,5 +43,14 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

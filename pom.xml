@@ -11,9 +11,9 @@
     <modules>
         <module>db</module>
 
-        <module>web</module>
         <module>web-model</module>
         <module>web-security</module>
+        <module>web-rest</module>
 
         <module>external-api</module>
         <module>external-api-aggregator</module>
@@ -85,6 +85,11 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
 
