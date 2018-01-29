@@ -1,4 +1,4 @@
-package istu.bacs.web.webrest.submission;
+package istu.bacs.web.rest.submission;
 
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
@@ -16,8 +16,10 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public Mono<Submission> findById(int submissionId) {
-        return Mono.justOrEmpty(submissionRepository.findById(submissionId));
+    public Mono<Submission> findById(Mono<Integer> submissionId) {
+        return submissionId
+                .map(submissionRepository::findById)
+                .flatMap(Mono::justOrEmpty);
     }
 
     @Override

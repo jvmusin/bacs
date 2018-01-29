@@ -1,4 +1,4 @@
-package istu.bacs.web.webrest.submission;
+package istu.bacs.web.rest.submission;
 
 import istu.bacs.web.model.Submission;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +14,11 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ba
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
-public class SubmissionsHandler {
+public class SubmissionHandler {
 
     private final SubmissionService submissionService;
 
-    public SubmissionsHandler(SubmissionService submissionService) {
+    public SubmissionHandler(SubmissionService submissionService) {
         this.submissionService = submissionService;
     }
 
@@ -28,18 +28,20 @@ public class SubmissionsHandler {
                 .andRoute(GET("/submissions/{submissionId}"), this::getSubmission);
     }
 
-    private Mono<ServerResponse> getAllSubmissions(ServerRequest request) {
+    private Mono<ServerResponse> getAllSubmissions(@SuppressWarnings("unused") ServerRequest request) {
         return ok().body(
-                submissionService.findAll().map(Submission::fromDb),
+                submissionService.findAll().transform(Submission::fromDb),
                 Submission.class
         );
     }
 
     private Mono<ServerResponse> getSubmission(ServerRequest request) {
         int submissionId = Integer.parseInt(request.pathVariable("submissionId"));
-        return submissionService.findById(submissionId)
-                .map(Submission::fromDb)
-                .flatMap(s -> ok().syncBody(s))
+
+        return Mono.just(submissionId)
+                .transform(submissionService::findById)
+                .transform(Submission::fromDb)
+                .transform(submission -> ok().body(submission, Submission.class))
                 .switchIfEmpty(badRequest().syncBody("Unable to find submission " + submissionId));
     }
 }

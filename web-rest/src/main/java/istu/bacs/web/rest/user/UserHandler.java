@@ -1,4 +1,4 @@
-package istu.bacs.web.webrest.user;
+package istu.bacs.web.rest.user;
 
 import istu.bacs.web.model.User;
 import istu.bacs.web.security.LoginHandler;
@@ -15,12 +15,12 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ba
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
-public class UsersHandler {
+public class UserHandler {
 
     private final LoginHandler loginHandler;
     private final UserService userService;
 
-    public UsersHandler(LoginHandler loginHandler, UserService userService) {
+    public UserHandler(LoginHandler loginHandler, UserService userService) {
         this.loginHandler = loginHandler;
         this.userService = userService;
     }
@@ -33,26 +33,28 @@ public class UsersHandler {
                 .andRoute(PUT("/users/{username}"), this::updateUser);
     }
 
-    private Mono<ServerResponse> getAllUsers(ServerRequest request) {
+    private Mono<ServerResponse> getAllUsers(@SuppressWarnings("unused") ServerRequest request) {
         return ok().body(
-                userService.findAll().map(User::fromDb),
+                userService.findAll().transform(User::fromDb),
                 User.class
         );
     }
 
     private Mono<ServerResponse> getUser(ServerRequest request) {
         String username = request.pathVariable("username");
-        return userService.findByUsername(username)
-                .map(User::fromDb)
-                .flatMap(u -> ok().syncBody(u))
+
+        return Mono.just(username)
+                .transform(userService::findByUsername)
+                .transform(User::fromDb)
+                .transform(user -> ok().body(user, User.class))
                 .switchIfEmpty(badRequest().syncBody("Unable to find user with username '" + username + "'"));
     }
 
     private Mono<ServerResponse> updateUser(ServerRequest request) {
         String username = request.pathVariable("username");
-        return request.bodyToMono(User.class)
-                .flatMap(u -> userService.update(username, u))
-                .flatMap(u -> ok().build())
+
+        return userService.update(Mono.just(username), request.bodyToMono(User.class))
+                .transform(user -> ok().build())
                 .switchIfEmpty(badRequest().syncBody("Unable to find user with username '" + username + "'"));
     }
 }

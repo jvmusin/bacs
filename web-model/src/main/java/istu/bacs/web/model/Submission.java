@@ -2,6 +2,8 @@ package istu.bacs.web.model;
 
 import istu.bacs.db.submission.Language;
 import lombok.Value;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static istu.bacs.web.model.WebModelUtils.formatDateTime;
 
@@ -15,15 +17,23 @@ public class Submission {
     String solution;
     SubmissionResult result;
 
-    public static Submission fromDb(istu.bacs.db.submission.Submission submission) {
+    public static Mono<Submission> fromDb(Mono<istu.bacs.db.submission.Submission> submission) {
+        return submission.map(Submission::convert);
+    }
+
+    public static Flux<Submission> fromDb(Flux<istu.bacs.db.submission.Submission> submission) {
+        return submission.map(Submission::convert);
+    }
+
+    private static Submission convert(istu.bacs.db.submission.Submission s) {
         return new Submission(
-                submission.getSubmissionId(),
-                User.fromDb(submission.getAuthor()),
-                Problem.fromDb(submission.getContestProblem()),
-                formatDateTime(submission.getCreated()),
-                submission.getLanguage(),
-                submission.getSolution(),
-                SubmissionResult.fromDb(submission.getResult())
+                s.getSubmissionId(),
+                User.fromDb(s.getAuthor()),
+                Problem.fromDbContestProblem(Mono.just(s.getContestProblem())).block(),
+                formatDateTime(s.getCreated()),
+                s.getLanguage(),
+                s.getSolution(),
+                SubmissionResult.fromDb(s.getResult())
         );
     }
 }

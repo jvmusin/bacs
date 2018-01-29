@@ -1,7 +1,9 @@
 package istu.bacs.web.model;
 
-import istu.bacs.db.contest.Contest;
+import istu.bacs.db.contest.ContestProblem;
 import lombok.Value;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Value
 public class Problem {
@@ -12,17 +14,41 @@ public class Problem {
     int memoryLimitBytes;
     String statementUrl;
 
-    public static Problem fromDb(istu.bacs.db.contest.ContestProblem contestProblem) {
-        Contest contest = contestProblem.getContest();
-        istu.bacs.db.problem.Problem problem = contestProblem.getProblem();
+    public static Flux<Problem> fromDbContestProblems(Flux<ContestProblem> contestProblems) {
+        return contestProblems.map(Problem::convert);
+    }
 
+    public static Mono<Problem> fromDbContestProblem(Mono<ContestProblem> contestProblem) {
+        return contestProblem.map(Problem::convert);
+    }
+
+    public static Flux<Problem> fromDbProblems(Flux<istu.bacs.db.problem.Problem> problems) {
+        return problems.map(Problem::convert);
+    }
+
+    public static Mono<Problem> fromDbProblem(Mono<istu.bacs.db.problem.Problem> problem) {
+        return problem.map(Problem::convert);
+    }
+
+    private static Problem convert(ContestProblem cp) {
         return new Problem(
-                contestProblem.getProblemIndex(),
-                problem.getName(),
-                contest.getContestId(),
-                problem.getTimeLimitMillis(),
-                problem.getMemoryLimitBytes(),
-                problem.getStatementUrl()
+                cp.getProblemIndex(),
+                cp.getProblem().getName(),
+                cp.getContest().getContestId(),
+                cp.getProblem().getTimeLimitMillis(),
+                cp.getProblem().getMemoryLimitBytes(),
+                cp.getProblem().getStatementUrl()
+        );
+    }
+
+    private static Problem convert(istu.bacs.db.problem.Problem p) {
+        return new Problem(
+                p.getProblemId(),
+                p.getName(),
+                -1,
+                p.getTimeLimitMillis(),
+                p.getMemoryLimitBytes(),
+                p.getStatementUrl()
         );
     }
 }
