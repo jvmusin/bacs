@@ -18,13 +18,21 @@ public class Contest {
     Problem[] problems;
 
     public static Mono<Contest> fromDb(Mono<istu.bacs.db.contest.Contest> contest) {
-        return contest.map(c -> new Contest(
-                c.getContestId(),
-                c.getName(),
-                formatDateTime(c.getStartTime()),
-                formatDateTime(c.getFinishTime()),
-                convertProblems(c.getProblems())
-        ));
+        return contest.map(Contest::convert);
+    }
+
+    public static Flux<Contest> fromDb(Flux<istu.bacs.db.contest.Contest> contests) {
+        return contests.map(Contest::convert);
+    }
+
+    private static Contest convert(istu.bacs.db.contest.Contest contest) {
+        return new Contest(
+                contest.getContestId(),
+                contest.getName(),
+                formatDateTime(contest.getStartTime()),
+                formatDateTime(contest.getFinishTime()),
+                convertProblems(contest.getProblems())
+        );
     }
 
     private static Problem[] convertProblems(List<ContestProblem> problems) {

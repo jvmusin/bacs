@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS contest (
   CHARACTER SET 'utf8';
 
 CREATE TABLE IF NOT EXISTS contest_problem (
-  contest_problem_id INT PRIMARY KEY AUTO_INCREMENT,
+  contest_problem_id VARCHAR(255) PRIMARY KEY,
 
   contest_id         INT          NOT NULL,
   problem_id         VARCHAR(255) NOT NULL,

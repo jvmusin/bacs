@@ -42,6 +42,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- RabbitMQ -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>rabbit</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

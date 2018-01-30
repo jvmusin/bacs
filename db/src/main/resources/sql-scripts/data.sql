@@ -17,14 +17,14 @@ INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (4, 'Runni
 INSERT INTO contest(contest_id, name, start_time, finish_time) VALUES (5, 'Running sybon contest', '2017-12-31 12:00', '2047-04-23 17:30');
 
 
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (1, 2, 'FAKE@1' , 'A');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('2#A', 2, 'FAKE@1' , 'A');
 
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (2, 3, 'FAKE@1' , '123');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('3#123', 3, 'FAKE@1' , '123');
 
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (3, 4, 'FAKE@1',  'A');
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (4, 4, 'FAKE@2',  'B');
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (5, 4, 'FAKE@5',  'CQ');
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (6, 4, 'FAKE@10', 'DW');
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (7, 4, 'FAKE@11', 'EE');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('4#A',  4, 'FAKE@1',  'A');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('4#B',  4, 'FAKE@2',  'B');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('4#CQ', 4, 'FAKE@5',  'CQ');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('4#DW', 4, 'FAKE@10', 'DW');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('4#EE', 4, 'FAKE@11', 'EE');
 
-INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES (8, 5, 'SYBON@1', 'XXX');
+INSERT INTO contest_problem(contest_problem_id, contest_id, problem_id, problem_index) VALUES ('5#XXX', 5, 'SYBON@1', 'XXX');

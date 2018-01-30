@@ -21,14 +21,14 @@ public class Submission {
         return submission.map(Submission::convert);
     }
 
-    public static Flux<Submission> fromDb(Flux<istu.bacs.db.submission.Submission> submission) {
-        return submission.map(Submission::convert);
+    public static Flux<Submission> fromDb(Flux<istu.bacs.db.submission.Submission> submissions) {
+        return submissions.map(Submission::convert);
     }
 
     private static Submission convert(istu.bacs.db.submission.Submission s) {
         return new Submission(
                 s.getSubmissionId(),
-                User.fromDb(s.getAuthor()),
+                User.fromDb(Mono.just(s.getAuthor())).block(),
                 Problem.fromDbContestProblem(Mono.just(s.getContestProblem())).block(),
                 formatDateTime(s.getCreated()),
                 s.getLanguage(),

@@ -4,9 +4,9 @@ import lombok.Value;
 
 @Value
 public class EditContest {
-    String id;
+    Integer id;
     String name;
     String startTime;
     String finishTime;
-    int[] problemIds;
+    EditContestProblem[] problems;
 }

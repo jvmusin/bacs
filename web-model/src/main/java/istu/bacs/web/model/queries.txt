@@ -11,8 +11,8 @@
 
 		Отправить решение				| POST		| contests/{contestId}/submissions							| Int (submissionId)
 
-		Создать контест					| POST		| contests/{contestId}			| EditedContest
-		Отредактировать контест			| PUT		| contests/{contestId}			| EditedContest
+		Создать контест					| POST		| contests/{contestId}			| EditContest
+		Отредактировать контест			| PUT		| contests/{contestId}			| EditContest
 		Удалить контест					| DELETE	| contests/{contestId}			| Int (contestId)
 
 	Посылки
