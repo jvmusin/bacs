@@ -36,7 +36,7 @@ public class JWTAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Object getPrincipal() {
+    public User getPrincipal() {
         return new User(userId, username, null, roles);
     }
 }

@@ -1,11 +1,14 @@
 package istu.bacs.web.rest.submission;
 
+import istu.bacs.db.user.User;
 import istu.bacs.web.model.Submission;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
@@ -29,10 +32,14 @@ public class SubmissionHandler {
     }
 
     private Mono<ServerResponse> getAllSubmissions(@SuppressWarnings("unused") ServerRequest request) {
-        return ok().body(
-                submissionService.findAll().transform(Submission::fromDb),
-                Submission.class
-        );
+        return Mono.justOrEmpty(request.queryParam("my"))
+                .zipWith(request.principal())
+                .map(t -> (User) ((UsernamePasswordAuthenticationToken) t.getT2()).getPrincipal())
+                .flatMapMany(u -> submissionService.findAllByAuthor(Mono.just(u)))
+                .transform(Submission::fromDb)
+                .collectList()
+                .map(Flux::fromIterable)
+                .flatMap(submissions -> ok().body(submissions, Submission.class));
     }
 
     private Mono<ServerResponse> getSubmission(ServerRequest request) {

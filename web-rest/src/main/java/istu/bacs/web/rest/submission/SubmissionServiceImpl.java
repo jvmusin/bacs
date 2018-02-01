@@ -4,6 +4,7 @@ import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
+import istu.bacs.db.user.User;
 import istu.bacs.web.rest.contest.ContestService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -60,8 +61,8 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public Flux<Submission> findAllByContestProblem(Flux<ContestProblem> problems) {
-        return problems.flatMapIterable(submissionRepository::findAllByContestProblem);
+    public Flux<Submission> findAllByAuthor(Mono<User> author) {
+        return author.flatMapIterable(submissionRepository::findAllByAuthor);
     }
 
     @Override

@@ -9,6 +9,7 @@ import istu.bacs.standingsapi.StandingsService;
 import istu.bacs.web.model.*;
 import istu.bacs.web.rest.problem.ProblemService;
 import istu.bacs.web.rest.submission.SubmissionService;
+import istu.bacs.web.security.JWTAuthenticationToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -129,7 +130,7 @@ public class ContestHandler {
         return request.bodyToMono(SubmitSolution.class)
                 .map(SubmitSolution::toDb)
                 .zipWith(request.principal())
-                .doOnNext(t -> t.getT1().setAuthor((User) ((UsernamePasswordAuthenticationToken) t.getT2()).getPrincipal()))
+                .doOnNext(t -> t.getT1().setAuthor(((JWTAuthenticationToken) t.getT2()).getPrincipal()))
                 .map(Tuple2::getT1)
                 .transform(submissionService::save)
                 .map(istu.bacs.db.submission.Submission::getSubmissionId)

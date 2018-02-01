@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class ServerSecurityContextRepositoryImpl implements ServerSecurityContextRepository {
 
-    private static UsernamePasswordAuthenticationToken getAuthentication(String token) {
+    private static JWTAuthenticationToken getAuthentication(String token) {
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(SECRET)
@@ -35,13 +35,7 @@ public class ServerSecurityContextRepositoryImpl implements ServerSecurityContex
                     .map(Role::valueOf)
                     .collect(toList());
 
-            User user = User.builder()
-                    .userId(body.get("userId", Integer.class))
-                    .username(body.getSubject())
-                    .roles(roles)
-                    .build();
-
-            return new UsernamePasswordAuthenticationToken(user, null, getAuthorities(user));
+            return new JWTAuthenticationToken(body.get("userId", Integer.class), body.getSubject(), roles);
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
             log.debug("User authorization failed. Token: '{}'. Reason: {}", token, e.getMessage());
             return null;
@@ -55,6 +49,7 @@ public class ServerSecurityContextRepositoryImpl implements ServerSecurityContex
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
+
         String header = exchange.getRequest().getHeaders().getFirst(HEADER_STRING);
 
         //noinspection ConstantConditions
@@ -68,7 +63,7 @@ public class ServerSecurityContextRepositoryImpl implements ServerSecurityContex
             return Mono.just(new SecurityContextImpl(ANONYMOUS));
 
         User user = (User) auth.getPrincipal();
-        log.debug("User authenticated: {}:'{}':{}", user.getUserId(), user.getUsername(), user.getPassword());
+        log.debug("User authenticated: {}:'{}'", user.getUserId(), user.getUsername());
         return Mono.just(new SecurityContextImpl(auth));
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import static istu.bacs.web.security.SecurityConstants.LOGIN_URL;
 import static istu.bacs.web.security.SecurityConstants.REGISTER_URL;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.security.config.web.server.SecurityWebFiltersOrder.AUTHENTICATION;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
@@ -30,11 +29,6 @@ public class SecurityConfiguration {
     @Bean
     ReactiveAuthenticationManager reactiveAuthenticationManager() {
         return new ReactiveAuthenticationManagerImpl();
-    }
-
-    @Bean
-    JWTAuthenticationWebFilter jwtAuthenticationWebFilter(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JWTAuthenticationWebFilter(reactiveAuthenticationManager);
     }
 
     @Bean
@@ -60,7 +54,6 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
-                                                JWTAuthenticationWebFilter jwtAuthenticationWebFilter,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ServerSecurityContextRepository securityContextRepository) {
         http.httpBasic().disable();
@@ -70,8 +63,6 @@ public class SecurityConfiguration {
 
         http.authenticationManager(reactiveAuthenticationManager);
         http.securityContextRepository(securityContextRepository);
-
-        http.addFilterAt(jwtAuthenticationWebFilter, AUTHENTICATION);
 
         http.authorizeExchange()
                 .pathMatchers(POST, REGISTER_URL).permitAll()
