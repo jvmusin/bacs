@@ -57,6 +57,7 @@ public class LoginHandler {
                         u.getRoles()))
                 .map(u -> TOKEN_PREFIX + Jwts.builder()
                         .setSubject(u.getUsername())
+                        .claim("userId", u.getUserId())
                         .claim("roles", u.getRoles())
                         .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME_MILLIS))
                         .signWith(HS256, SECRET)

@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import istu.bacs.db.user.Role;
 import istu.bacs.db.user.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import static istu.bacs.web.security.JWTAuthenticationToken.ANONYMOUS;
 import static istu.bacs.web.security.SecurityConstants.*;
-import static istu.bacs.web.security.WebSecurityUserUtils.getAuthorities;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
