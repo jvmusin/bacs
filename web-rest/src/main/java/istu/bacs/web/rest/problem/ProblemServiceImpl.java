@@ -26,4 +26,16 @@ public class ProblemServiceImpl implements ProblemService {
     public Flux<Problem> findAll() {
         return Flux.fromIterable(problemRepository.findAll());
     }
+
+    @Override
+    public Flux<Problem> saveAll(Flux<Problem> problems) {
+        return problems.collectList()
+                .map(problemRepository::saveAll)
+                .flatMapMany(Flux::fromIterable);
+    }
+
+    @Override
+    public Flux<Problem> saveAll(Iterable<Problem> problems) {
+        return saveAll(Flux.fromIterable(problems));
+    }
 }

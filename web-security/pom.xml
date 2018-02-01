@@ -50,6 +50,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Standings -->
+        <dependency>
+            <groupId>istu.bacs</groupId>
+            <artifactId>standings-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

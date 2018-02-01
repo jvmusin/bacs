@@ -1,2 +1,2 @@
-web: java -Dserver.port=$PORT -Dspring.profiles.active=cloud -jar web/target/web-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -Dspring.profiles.active=cloud -jar web-rest/target/web-rest-0.0.1-SNAPSHOT.jar
 combined: java -Dspring.profiles.active=cloud -jar background-combined/target/background-combined-0.0.1-SNAPSHOT.jar

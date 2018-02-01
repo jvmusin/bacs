@@ -3,16 +3,15 @@ package istu.bacs.background.standingsbuilder;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.user.User;
-import istu.bacs.standingsapi.dto.ContestantRowDto;
-import istu.bacs.standingsapi.dto.ProblemSolvingResultDto;
+import istu.bacs.web.model.ProblemSolvingResult;
 import lombok.Data;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
 
 import static istu.bacs.background.standingsbuilder.SolvingResult.TRY_PENALTY_MINUTES;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Data
@@ -53,30 +52,26 @@ public class ContestantRow {
         }
     }
 
-    public ContestantRowDto toDto() {
-        ContestantRowDto row = new ContestantRowDto();
+    public istu.bacs.web.model.ContestantRow toDto() {
 
-        row.setUsername(contestant.getUsername());
-        row.setPlace(place);
-        row.setSolvedCount(solvedCount);
-        row.setPenalty(penalty);
-        row.setResults(progressByProblem.entrySet().stream().map(e -> {
-            ProblemSolvingResultDto result = new ProblemSolvingResultDto();
+        return new istu.bacs.web.model.ContestantRow(
+                istu.bacs.web.model.User.fromDb(contestant),
+                place,
+                solvedCount,
+                penalty,
+                Flux.fromIterable(progressByProblem.entrySet()).map(e -> {
 
-            result.setProblemIndex(e.getKey().getProblemIndex());
+                    SolvingResult res = e.getValue().getResult();
+                    int solvedAt = res.getPenalty();
+                    if (res.isSolved()) solvedAt -= res.getFailTries() * TRY_PENALTY_MINUTES;
 
-            SolvingResult res = e.getValue().getResult();
-            result.setSolved(res.isSolved());
-            result.setFailTries(res.getFailTries());
-
-            int solvedAt = res.getPenalty();
-            if (res.isSolved()) solvedAt -= res.getFailTries() * TRY_PENALTY_MINUTES;
-            result.setSolvedAt(solvedAt);
-
-            return result;
-        })
-                .collect(toList()));
-
-        return row;
+                    return new ProblemSolvingResult(
+                            e.getKey().getProblemIndex(),
+                            res.isSolved(),
+                            res.getFailTries(),
+                            solvedAt
+                    );
+                }).collectList().block()
+        );
     }
 }

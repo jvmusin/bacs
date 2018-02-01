@@ -2,8 +2,11 @@ package istu.bacs.background.standingsbuilder.config;
 
 import istu.bacs.background.standingsbuilder.StandingsServiceImpl;
 import istu.bacs.background.standingsbuilder.StandingsUpdater;
+import istu.bacs.background.standingsbuilder.db.ContestService;
+import istu.bacs.background.standingsbuilder.db.ContestServiceImpl;
 import istu.bacs.background.standingsbuilder.db.SubmissionService;
 import istu.bacs.background.standingsbuilder.db.SubmissionServiceImpl;
+import istu.bacs.db.contest.ContestRepository;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.rabbit.RabbitService;
 import istu.bacs.standingsapi.StandingsService;
@@ -26,8 +29,13 @@ public class StandingsBuilderConfiguration {
     }
 
     @Bean
-    public StandingsService standingsService(StandingsRedisTemplate standingsRedisTemplate) {
-        return new StandingsServiceImpl(standingsRedisTemplate);
+    ContestService contestService(ContestRepository contestRepository) {
+        return new ContestServiceImpl(contestRepository);
+    }
+
+    @Bean
+    public StandingsService standingsService(ContestService contestService, StandingsRedisTemplate standingsRedisTemplate) {
+        return new StandingsServiceImpl(contestService, standingsRedisTemplate);
     }
 
     @Bean

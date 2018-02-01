@@ -49,12 +49,12 @@ public class LoginHandler {
     }
 
     private Mono<String> generateToken(Mono<User> user) {
-        return user.doOnEach(u ->
+        return user.doOnNext(u ->
                 log.debug("User logged in {}:'{}':'{}':{}",
-                        u.get().getUserId(),
-                        u.get().getUsername(),
-                        u.get().getPassword(),
-                        u.get().getRoles()))
+                        u.getUserId(),
+                        u.getUsername(),
+                        u.getPassword(),
+                        u.getRoles()))
                 .map(u -> TOKEN_PREFIX + Jwts.builder()
                         .setSubject(u.getUsername())
                         .claim("roles", u.getRoles())

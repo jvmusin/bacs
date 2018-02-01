@@ -18,14 +18,14 @@ public class Contest {
     Problem[] problems;
 
     public static Mono<Contest> fromDb(Mono<istu.bacs.db.contest.Contest> contest) {
-        return contest.map(Contest::convert);
+        return contest.map(Contest::fromDb);
     }
 
     public static Flux<Contest> fromDb(Flux<istu.bacs.db.contest.Contest> contests) {
-        return contests.map(Contest::convert);
+        return contests.map(Contest::fromDb);
     }
 
-    private static Contest convert(istu.bacs.db.contest.Contest contest) {
+    public static Contest fromDb(istu.bacs.db.contest.Contest contest) {
         return new Contest(
                 contest.getContestId(),
                 contest.getName(),

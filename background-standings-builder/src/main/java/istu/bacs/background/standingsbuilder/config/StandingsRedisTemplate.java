@@ -1,6 +1,6 @@
 package istu.bacs.background.standingsbuilder.config;
 
-import istu.bacs.standingsapi.dto.StandingsDto;
+import istu.bacs.web.model.Standings;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -13,7 +13,7 @@ public class StandingsRedisTemplate extends RedisTemplate<String, Object> {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
         setKeySerializer(stringSerializer);
         setHashKeySerializer(new Jackson2JsonRedisSerializer<>(Integer.class));
-        setHashValueSerializer(new Jackson2JsonRedisSerializer<>(StandingsDto.class));
+        setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Standings.class));
     }
 
     public StandingsRedisTemplate(RedisConnectionFactory connectionFactory) {

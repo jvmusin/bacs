@@ -52,6 +52,19 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
+    public Flux<Submission> findAllByContestProblemAndChecked(String contestProblemId) {
+        return Mono.just(contestProblemId)
+                .map(id -> ContestProblem.builder().contestProblemId(id).build())
+                .map(submissionRepository::findAllByContestProblemAndChecked)
+                .flatMapMany(Flux::fromIterable);
+    }
+
+    @Override
+    public Flux<Submission> findAllByContestProblem(Flux<ContestProblem> problems) {
+        return problems.flatMapIterable(submissionRepository::findAllByContestProblem);
+    }
+
+    @Override
     public Mono<Submission> save(Mono<Submission> submission) {
         return submission.map(submissionRepository::save);
     }

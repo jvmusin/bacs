@@ -1,5 +1,6 @@
 package istu.bacs.web.rest.user;
 
+import istu.bacs.web.model.Login;
 import istu.bacs.web.model.User;
 import istu.bacs.web.security.LoginHandler;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.regex.Pattern;
+
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
@@ -16,6 +19,9 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 
 @Component
 public class UserHandler {
+
+    private static final Pattern usernamePattern = Pattern.compile("[\\w\\d_-]{3,20}");
+    private static final Pattern passwordPattern = Pattern.compile(".{3,20}");
 
     private final LoginHandler loginHandler;
     private final UserService userService;
@@ -27,10 +33,27 @@ public class UserHandler {
 
     @Bean
     public RouterFunction<ServerResponse> usersRouter() {
-        return route(POST("/users"), loginHandler::login)
+        return route(POST("/login"), loginHandler::login)
                 .andRoute(GET("/users"), this::getAllUsers)
+                .andRoute(POST("/users"), this::registerUser)
                 .andRoute(GET("/users/{username}"), this::getUser)
                 .andRoute(PUT("/users/{username}"), this::updateUser);
+    }
+
+    private Mono<ServerResponse> registerUser(ServerRequest request) {
+        return request.bodyToMono(Login.class)
+                .filter(u -> checkUsername(u.getUsername()))
+                .filter(u -> checkPassword(u.getPassword()))
+                .transform(userService::create)
+                .transform(user -> ok().build());
+    }
+
+    private boolean checkUsername(String username) {
+        return usernamePattern.matcher(username).matches();
+    }
+
+    private boolean checkPassword(String password) {
+        return passwordPattern.matcher(password).matches();
     }
 
     private Mono<ServerResponse> getAllUsers(@SuppressWarnings("unused") ServerRequest request) {
@@ -53,8 +76,10 @@ public class UserHandler {
     private Mono<ServerResponse> updateUser(ServerRequest request) {
         String username = request.pathVariable("username");
 
-        return userService.update(Mono.just(username), request.bodyToMono(User.class))
-                .transform(user -> ok().build())
-                .switchIfEmpty(badRequest().syncBody("Unable to find user with username '" + username + "'"));
+        return request.bodyToMono(User.class)
+                .filter(u -> checkUsername(u.getUsername()))
+                .zipWith(Mono.just(username))
+                .flatMap(t -> userService.update(t.getT2(), t.getT1()))
+                .flatMap(user -> ok().build());
     }
 }

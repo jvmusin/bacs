@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS submission (
   submission_id          INT PRIMARY KEY AUTO_INCREMENT,
 
   author_id              INT          NOT NULL,
-  contest_problem_id     INT          NOT NULL,
+  contest_problem_id     VARCHAR(255) NOT NULL,
 
   pretests_only          BOOLEAN      NOT NULL,
   created                DATETIME     NOT NULL,

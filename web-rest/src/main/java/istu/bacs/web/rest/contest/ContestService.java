@@ -7,6 +7,8 @@ import reactor.core.publisher.Mono;
 public interface ContestService {
     Flux<Contest> findAll();
     Mono<Contest> findById(Mono<Integer> contestId);
+    Mono<Contest> findById(int contestId);
     Mono<Contest> save(Mono<Contest> contest);
+    Mono<Contest> save(Contest contest);
     Mono<Contest> delete(Mono<Contest> contest);
 }

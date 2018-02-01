@@ -27,8 +27,18 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public Mono<Contest> findById(int contestId) {
+        return findById(Mono.just(contestId));
+    }
+
+    @Override
     public Mono<Contest> save(Mono<Contest> contest) {
         return contest.map(contestRepository::save);
+    }
+
+    @Override
+    public Mono<Contest> save(Contest contest) {
+        return save(Mono.just(contest));
     }
 
     @Override

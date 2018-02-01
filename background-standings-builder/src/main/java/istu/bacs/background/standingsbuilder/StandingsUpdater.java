@@ -2,6 +2,7 @@ package istu.bacs.background.standingsbuilder;
 
 import istu.bacs.background.standingsbuilder.config.StandingsRedisTemplate;
 import istu.bacs.background.standingsbuilder.db.SubmissionService;
+import istu.bacs.db.contest.Contest;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.rabbit.RabbitService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,8 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
         this.rabbitService = rabbitService;
     }
 
-    private Standings getOrCreateStandings(int contestId) {
-        return standingsByContestId.computeIfAbsent(contestId, cId -> new Standings());
+    private Standings getOrCreateStandings(Contest contest) {
+        return standingsByContestId.computeIfAbsent(contest.getContestId(), cId -> new Standings(contest));
     }
 
     @Scheduled(fixedDelay = tickDelay)
@@ -77,7 +78,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     }
 
     private void update(Submission submission) {
-        Standings standings = getOrCreateStandings(submission.getContest().getContestId());
+        Standings standings = getOrCreateStandings(submission.getContest());
         standings.update(submission);
         updatedStandings.add(submission.getContest().getContestId());
     }

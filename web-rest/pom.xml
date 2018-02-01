@@ -49,6 +49,20 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- External API -->
+        <dependency>
+            <groupId>istu.bacs.externalapi</groupId>
+            <artifactId>external-api-aggregator</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Standings -->
+        <dependency>
+            <groupId>istu.bacs.background</groupId>
+            <artifactId>background-standings-builder</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

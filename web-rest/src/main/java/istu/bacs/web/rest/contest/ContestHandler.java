@@ -2,12 +2,15 @@ package istu.bacs.web.rest.contest;
 
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.user.User;
+import istu.bacs.externalapi.ExternalApi;
 import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
+import istu.bacs.standingsapi.StandingsService;
 import istu.bacs.web.model.*;
 import istu.bacs.web.rest.problem.ProblemService;
 import istu.bacs.web.rest.submission.SubmissionService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -18,6 +21,7 @@ import reactor.util.function.Tuple2;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -28,12 +32,16 @@ public class ContestHandler {
     private final ContestService contestService;
     private final SubmissionService submissionService;
     private final ProblemService problemService;
+    private final StandingsService standingsService;
+    private final ExternalApi externalApi;
     private final RabbitService rabbitService;
 
-    public ContestHandler(ContestService contestService, SubmissionService submissionService, ProblemService problemService, RabbitService rabbitService) {
+    public ContestHandler(ContestService contestService, SubmissionService submissionService, ProblemService problemService, StandingsService standingsService, ExternalApi externalApi, RabbitService rabbitService) {
         this.contestService = contestService;
         this.submissionService = submissionService;
         this.problemService = problemService;
+        this.standingsService = standingsService;
+        this.externalApi = externalApi;
         this.rabbitService = rabbitService;
     }
 
@@ -47,8 +55,10 @@ public class ContestHandler {
                 .andRoute(GET("/contests/{contestId}/submissions"), this::getContestSubmissions)
                 .andRoute(GET("/contests/{contestId}/standings"), this::getContestStandings)
                 .andRoute(POST("/contests/{contestId}/submissions"), this::submitSolution)
-                .andRoute(POST("/contests/{contestId}"), this::createContest)
-                .andRoute(PUT("/contests/{contestId}"), this::createContest)
+                .andRoute(POST("/contests"), this::createContest)
+                .andRoute(PUT("/contests/{contestId}"), request -> {
+                    throw new RuntimeException("Not implemented yet");
+                })
                 .andRoute(DELETE("/contests/{contestId}"), this::deleteContest);
     }
 
@@ -108,61 +118,63 @@ public class ContestHandler {
     }
 
     private Mono<ServerResponse> getContestStandings(@SuppressWarnings("unused") ServerRequest request) {
-        //TODO Implement it
-        return null;
+        int contestId = Integer.parseInt(request.pathVariable("contestId"));
+
+        return Mono.just(contestId)
+                .transform(standingsService::getStandings)
+                .transform(standings -> ok().body(standings, Standings.class));
     }
 
     private Mono<ServerResponse> submitSolution(ServerRequest request) {
         return request.bodyToMono(SubmitSolution.class)
                 .map(SubmitSolution::toDb)
                 .zipWith(request.principal())
-                .doOnNext(t -> t.getT1().setAuthor((User) t.getT2()))
+                .doOnNext(t -> t.getT1().setAuthor((User) ((UsernamePasswordAuthenticationToken) t.getT2()).getPrincipal()))
                 .map(Tuple2::getT1)
                 .transform(submissionService::save)
-                .doOnNext(submission -> rabbitService.send(QueueName.SCHEDULED_SUBMISSIONS, submission))
                 .map(istu.bacs.db.submission.Submission::getSubmissionId)
+                .transform(submissionService::findById)
+                .doOnNext(externalApi::submit)
+                .map(istu.bacs.db.submission.Submission::getSubmissionId)
+                .doOnNext(submissionId -> rabbitService.send(QueueName.SCHEDULED_SUBMISSIONS, submissionId))
                 .transform(submissionId -> ok().body(submissionId, Integer.class));
     }
 
     private Mono<ServerResponse> createContest(ServerRequest request) {
         return request.bodyToMono(EditContest.class)
-//                .transform(ec -> contestService.findById(ec.map(EditContest::getId))
-//                        .transform(c -> Mono.<EditContest>error(new RuntimeException("Such contest is already created. If you want to edit it, use PUT method.")))
-//                        .switchIfEmpty(ec))
-                .map(this::createContest)
-                .transform(contestService::save)
-                .transform(contest -> ok().build());
-    }
-
-    private istu.bacs.db.contest.Contest createContest(EditContest ec) {
-        istu.bacs.db.contest.Contest contest = istu.bacs.db.contest.Contest.builder()
-                .contestId(ec.getId())
-                .name(ec.getName())
-                .startTime(WebModelUtils.parseDateTime(ec.getStartTime()))
-                .finishTime(WebModelUtils.parseDateTime(ec.getFinishTime()))
-                .build();
-
-        List<ContestProblem> problems = Flux.fromArray(ec.getProblems())
-                .map(problem -> {
-                    Mono<istu.bacs.db.problem.Problem> dbProblem = problemService.findById(Mono.just(problem.getProblemId()));
-                    ContestProblem cp = ContestProblem.withContestIdAndProblemIndex(ec.getId(), problem.getProblemIndex());
-                    cp.setProblem(dbProblem.block());
-                    cp.setContest(contest);
-                    return cp;
-                }).collectList().block();
-        contest.setProblems(problems);
-
-        problems.forEach(problem -> problem.setContest(contest));
-
-        return contest;
+                .flatMap(ec -> Mono.just(
+                        istu.bacs.db.contest.Contest.builder()
+                                .name(ec.getName())
+                                .startTime(WebModelUtils.parseDateTime(ec.getStartTime()))
+                                .finishTime(WebModelUtils.parseDateTime(ec.getFinishTime()))
+                                .problems(emptyList())
+                                .build())
+                        .transform(contestService::save)
+                        .doOnNext(c -> {
+                            List<ContestProblem> problems = Flux.fromArray(ec.getProblems())
+                                    .map(problem -> {
+                                        Mono<istu.bacs.db.problem.Problem> dbProblem = problemService.findById(Mono.just(problem.getProblemId()));
+                                        ContestProblem cp = ContestProblem.withContestIdAndProblemIndex(c.getContestId(), problem.getProblemIndex());
+                                        cp.setProblem(dbProblem.block());
+                                        cp.setContest(c);
+                                        return cp;
+                                    })
+                                    .collectList().block();
+                            c.setProblems(problems);
+                            problems.forEach(problem -> problem.setContest(c));
+                        })
+                        .transform(contestService::save)
+                )
+                .map(istu.bacs.db.contest.Contest::getContestId)
+                .transform(contestId -> ok().body(contestId, Integer.class));
     }
 
     private Mono<ServerResponse> deleteContest(ServerRequest request) {
         int contestId = Integer.parseInt(request.pathVariable("contestId"));
 
         return Mono.just(contestId)
-                .map(id -> istu.bacs.db.contest.Contest.builder().contestId(contestId).build())
+                .map(id -> istu.bacs.db.contest.Contest.builder().contestId(id).build())
                 .transform(contestService::delete)
-                .transform(contest -> ok().build());
+                .flatMap(contest -> ok().build());
     }
 }

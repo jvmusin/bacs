@@ -4,3 +4,12 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 50
+  profiles:
+    active: aggregator-api
+---
+
+spring:
+  profiles: cloud
+  datasource:
+    hikari:
+      maximum-pool-size: 6

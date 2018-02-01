@@ -1,8 +1,9 @@
 package istu.bacs.standingsapi;
 
-import istu.bacs.standingsapi.dto.StandingsDto;
+import istu.bacs.web.model.Standings;
+import reactor.core.publisher.Mono;
 
 public interface StandingsService {
 
-    StandingsDto getStandings(int contestId);
+    Mono<Standings> getStandings(Mono<Integer> contestId);
 }

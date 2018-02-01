@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class Problem {
     String index;
     String name;
-    int contestId;
+    Integer contestId;
     int timeLimitMillis;
     int memoryLimitBytes;
     String statementUrl;
@@ -45,7 +45,7 @@ public class Problem {
         return new Problem(
                 p.getProblemId(),
                 p.getName(),
-                -1,
+                null,
                 p.getTimeLimitMillis(),
                 p.getMemoryLimitBytes(),
                 p.getStatementUrl()

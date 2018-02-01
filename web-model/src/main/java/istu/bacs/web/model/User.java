@@ -9,14 +9,14 @@ public class User {
     String username;
 
     public static Mono<User> fromDb(Mono<istu.bacs.db.user.User> user) {
-        return user.map(User::convert);
+        return user.map(User::fromDb);
     }
 
     public static Flux<User> fromDb(Flux<istu.bacs.db.user.User> user) {
-        return user.map(User::convert);
+        return user.map(User::fromDb);
     }
 
-    private static User convert(istu.bacs.db.user.User user) {
+    public static User fromDb(istu.bacs.db.user.User user) {
         return new User(user.getUsername());
     }
 }
