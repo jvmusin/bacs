@@ -5,7 +5,7 @@ spring:
     hikari:
       maximum-pool-size: 50
   profiles:
-    active: aggregator-api
+    include: aggregator-api
 logging:
   level:
     istu.bacs: trace
