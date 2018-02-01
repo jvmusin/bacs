@@ -33,9 +33,9 @@ public class UserHandler {
 
     @Bean
     public RouterFunction<ServerResponse> usersRouter() {
-        return route(POST("/login"), loginHandler::login)
+        return route(POST("/auth/login"), loginHandler::login)
                 .andRoute(GET("/users"), this::getAllUsers)
-                .andRoute(POST("/users"), this::registerUser)
+                .andRoute(POST("/auth/users"), this::registerUser)
                 .andRoute(GET("/users/{username}"), this::getUser)
                 .andRoute(PUT("/users/{username}"), this::updateUser);
     }
