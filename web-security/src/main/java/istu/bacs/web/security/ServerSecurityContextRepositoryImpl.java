@@ -52,7 +52,7 @@ public class ServerSecurityContextRepositoryImpl implements ServerSecurityContex
 
         //noinspection ConstantConditions
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-            log.debug("User authentication failed: Header is null or is incorrect: '{}'", header);
+            log.debug("User authentication failed: Authorization header is null or incorrect: '{}'", header);
             return Mono.just(new SecurityContextImpl(ANONYMOUS));
         }
 
