@@ -6,6 +6,9 @@ spring:
       maximum-pool-size: 50
   profiles:
     active: aggregator-api
+logging:
+  level:
+    istu.bacs: trace
 ---
 
 spring:

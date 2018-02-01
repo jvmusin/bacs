@@ -1,3 +1,0 @@
-logging:
-  level:
-    istu.bacs.web: TRACE

@@ -6,7 +6,7 @@ spring:
       maximum-pool-size: 20
 logging:
   level:
-    istu.bacs.background.combined: TRACE
+    istu.bacs.background: TRACE
 ---
 
 spring:
