@@ -29,7 +29,7 @@ public class ServerSecurityContextRepositoryImpl implements ServerSecurityContex
                     .parseClaimsJws(token.replaceFirst(TOKEN_PREFIX, ""))
                     .getBody();
 
-            List<?> authorities = body.get("authorities", List.class);
+            List<?> authorities = body.get("roles", List.class);
             List<Role> roles = authorities.stream()
                     .map(Object::toString)
                     .map(Role::valueOf)
