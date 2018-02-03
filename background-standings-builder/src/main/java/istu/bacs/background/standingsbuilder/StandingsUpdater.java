@@ -53,28 +53,28 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     void uploadStandings() {
         if (updatedStandings.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
-                log.info("No need to update standings");
+                log.info("No need to upload standings");
                 tickCount.set(0);
             }
             return;
         }
 
         tickCount.set(0);
-        log.info("Standings updating started");
+        log.info("Standings uploading started");
 
         Set<Integer> updatedContests = new HashSet<>();
         while (!updatedStandings.isEmpty()) updatedContests.add(updatedStandings.poll());
 
         for (int contestId : updatedContests) {
-            log.debug("Updating standings for contest {} started", contestId);
+            log.debug("Uploading standings for contest {} started", contestId);
 
             Standings standings = standingsByContestId.get(contestId);
             standingsRedisTemplate.opsForHash().put(KEY, contestId, standings.toDto());
 
-            log.debug("Updating standings for contest {} finished", contestId);
+            log.debug("Uploading standings for contest {} finished", contestId);
         }
 
-        log.info("Standings updating finished");
+        log.info("Standings uploading finished");
     }
 
     private void update(Submission submission) {
