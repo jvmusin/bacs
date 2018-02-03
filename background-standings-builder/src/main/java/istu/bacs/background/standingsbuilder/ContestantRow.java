@@ -54,7 +54,6 @@ public class ContestantRow {
     }
 
     public istu.bacs.web.model.ContestantRow toDto() {
-
         return new istu.bacs.web.model.ContestantRow(
                 istu.bacs.web.model.User.fromDb(contestant),
                 place,
@@ -72,7 +71,7 @@ public class ContestantRow {
                             res.getFailTries(),
                             solvedAt
                     );
-                }).collectList().block()
+                }).filter(res -> res.isSolved() || res.getFailTries() > 0).collectList().block()
         );
     }
 }

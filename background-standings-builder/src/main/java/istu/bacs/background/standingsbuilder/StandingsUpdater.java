@@ -50,7 +50,7 @@ public class StandingsUpdater implements ApplicationListener<ContextRefreshedEve
     }
 
     @Scheduled(fixedDelay = tickDelay)
-    void updateStandings() {
+    void uploadStandings() {
         if (updatedStandings.isEmpty()) {
             if (tickCount.incrementAndGet() == printStateEveryNTicks) {
                 log.info("No need to update standings");
