@@ -7,6 +7,7 @@ import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
 import istu.bacs.standingsapi.StandingsService;
 import istu.bacs.web.model.*;
+import istu.bacs.web.rest.AuthUtils;
 import istu.bacs.web.rest.problem.ProblemService;
 import istu.bacs.web.rest.submission.SubmissionService;
 import istu.bacs.web.security.JWTAuthenticationToken;
@@ -130,7 +131,7 @@ public class ContestHandler {
         return request.bodyToMono(SubmitSolution.class)
                 .map(SubmitSolution::toDb)
                 .zipWith(request.principal())
-                .doOnNext(t -> t.getT1().setAuthor(((JWTAuthenticationToken) t.getT2()).getPrincipal()))
+                .doOnNext(t -> t.getT1().setAuthor(AuthUtils.getCurrentUser(t.getT2())))
                 .map(Tuple2::getT1)
                 .transform(submissionService::save)
                 .map(istu.bacs.db.submission.Submission::getSubmissionId)

@@ -7,12 +7,13 @@ import istu.bacs.web.model.ProblemSolvingResult;
 import lombok.Data;
 import reactor.core.publisher.Flux;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static istu.bacs.background.standingsbuilder.SolvingResult.TRY_PENALTY_MINUTES;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
 
 @Data
 public class ContestantRow {
@@ -27,11 +28,11 @@ public class ContestantRow {
 
     ContestantRow(User contestant, List<ContestProblem> contestProblems) {
         this.contestant = contestant;
-        progressByProblem = contestProblems.stream()
-                .collect(toMap(
-                        identity(),
-                        p -> new ProblemProgress()
-                ));
+        progressByProblem = Flux.fromIterable(contestProblems).collectMap(
+                identity(),
+                p -> new ProblemProgress(),
+                () -> new TreeMap<>(Comparator.comparing(ContestProblem::getProblemIndex))
+        ).block();
     }
 
     public void update(Submission submission) {

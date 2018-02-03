@@ -2,6 +2,7 @@ package istu.bacs.web.rest.submission;
 
 import istu.bacs.db.user.User;
 import istu.bacs.web.model.Submission;
+import istu.bacs.web.rest.AuthUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class SubmissionHandler {
     private Mono<ServerResponse> getAllSubmissions(@SuppressWarnings("unused") ServerRequest request) {
         return Mono.justOrEmpty(request.queryParam("my"))
                 .zipWith(request.principal())
-                .map(t -> (User) ((UsernamePasswordAuthenticationToken) t.getT2()).getPrincipal())
+                .map(t -> AuthUtils.getCurrentUser(t.getT2()))
                 .flatMapMany(u -> submissionService.findAllByAuthor(Mono.just(u)))
                 .transform(Submission::fromDb)
                 .collectList()

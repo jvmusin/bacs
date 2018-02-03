@@ -20,7 +20,7 @@ public class StandingsServiceImpl implements StandingsService {
     @Override
     public Mono<istu.bacs.web.model.Standings> getStandings(Mono<Integer> contestId) {
         return contestId
-                .transform(id -> {
+                .flatMap(id -> {
                             istu.bacs.web.model.Standings standings = (istu.bacs.web.model.Standings) standingsRedisTemplate.opsForHash().get(KEY, id);
                             //noinspection ConstantConditions
                             if (standings == null) {

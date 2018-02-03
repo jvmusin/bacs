@@ -4,5 +4,5 @@ import istu.bacs.db.contest.Contest;
 import reactor.core.publisher.Mono;
 
 public interface ContestService {
-    Mono<Contest> findById(Mono<Integer> contestId);
+    Mono<Contest> findById(int contestId);
 }

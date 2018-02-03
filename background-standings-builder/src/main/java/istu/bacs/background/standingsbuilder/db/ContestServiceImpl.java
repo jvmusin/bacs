@@ -13,8 +13,9 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Mono<Contest> findById(Mono<Integer> contestId) {
-        return contestId.map(contestRepository::findById)
+    public Mono<Contest> findById(int contestId) {
+        return Mono.just(contestId)
+                .map(contestRepository::findById)
                 .flatMap(Mono::justOrEmpty);
     }
 }
