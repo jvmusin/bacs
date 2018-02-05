@@ -29,13 +29,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(authenticationManager());
+        jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(REGISTER_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new MyCorsFilter(), ChannelProcessingFilter.class)
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(jwtAuthenticationFilter)
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(STATELESS);

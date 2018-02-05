@@ -1,10 +1,13 @@
 package istu.bacs.web.model;
 
+import lombok.experimental.UtilityClass;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
+@UtilityClass
 public class WebModelUtils {
 
     private static DateTimeFormatter formatter = ISO_DATE_TIME;

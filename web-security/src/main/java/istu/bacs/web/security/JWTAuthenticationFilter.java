@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -34,7 +33,7 @@ class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
-                                                HttpServletResponse res) throws AuthenticationException {
+                                                HttpServletResponse res) {
         try {
             User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
 
@@ -66,7 +65,7 @@ class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("userId", user.getUserId())
-                .claim("authorities", authorities)
+                .claim("roles", authorities)
                 .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME_MILLIS))
                 .signWith(HS256, SECRET)
                 .compact();

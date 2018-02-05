@@ -15,10 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static istu.bacs.web.security.SecurityConstants.*;
 import static istu.bacs.web.security.WebSecurityUserUtils.getAuthorities;
-import static java.util.stream.Collectors.toList;
+import static java.util.Arrays.asList;
 
 @Slf4j
 class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -46,9 +47,9 @@ class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(header.replaceFirst(TOKEN_PREFIX, ""));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = (User) authentication.getPrincipal();
             log.debug("User authorized: {}:'{}':{}", user.getUserId(), user.getUsername(), user.getRoles());
         }
@@ -60,14 +61,14 @@ class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token.replaceFirst(TOKEN_PREFIX, ""))
+                    .parseClaimsJws(token)
                     .getBody();
 
-            List<?> authorities = body.get("authorities", List.class);
-            List<Role> roles = authorities.stream()
+            List<?> rolesObj = body.get("roles", List.class);
+            List<Role> roles = rolesObj.stream()
                     .map(Object::toString)
                     .map(Role::valueOf)
-                    .collect(toList());
+                    .collect(Collectors.toList());
 
             User user = User.builder()
                     .userId(body.get("userId", Integer.class))
@@ -76,7 +77,7 @@ class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .build();
 
             return new UsernamePasswordAuthenticationToken(user, null, getAuthorities(user));
-        } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             log.debug("User authorization failed. Token: '{}'. Reason: {}", token, e.getMessage());
             return null;
         }
