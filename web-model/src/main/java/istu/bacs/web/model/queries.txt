@@ -11,9 +11,9 @@
 
 		Отправить решение				| POST		| contests/{contestId}/submissions							| Int (submissionId)
 
-		Создать контест					| POST		| contests/{contestId}			| EditedContest
-		Отредактировать контест			| PUT		| contests/{contestId}			| EditedContest
-		Удалить контест					| DELETE	| contests/{contestId}			| Int (contestId)
+		Создать контест					| POST		| contests/						| EditContest
+		Отредактировать контест			| PUT		| contests/{contestId}			| EditContest
+		Удалить контест					| DELETE	| contests/{contestId}
 
 	Посылки
 		Все посылки						| GET		| submissions												| Submission[]
@@ -26,11 +26,11 @@
 		Все пользователи				| GET		| users														| User[]
 		Конкретный пользователь			| GET		| users/{username}											| User
 
-		Логин							| POST		| users							| {username, password} json
-		Зарегистрировать пользователя	| POST		| users/{username}				| User
+		Логин							| POST		| auth/login					| Login
+		Зарегистрировать пользователя	| POST		| auth/register					| Login
 		//Отредактировать пользователя	| PUT		| users/{username}				| User
 
 	Задачи (в этом контексте индексом задачи становится её id во внешней системе)
 		Все задачи						| GET		| problems													| Problem[]
-		Конкретная задача				| GET		| problems/{problemId}										| Problem[]
+		Конкретная задача				| GET		| problems/{problemId}										| Problem
 		Все задачи с внешних источников	| GET		| problems?external
