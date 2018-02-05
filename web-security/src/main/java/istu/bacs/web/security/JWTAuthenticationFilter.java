@@ -3,6 +3,7 @@ package istu.bacs.web.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import istu.bacs.db.user.User;
+import istu.bacs.web.model.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +36,7 @@ class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) {
         try {
-            User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
+            Login user = new ObjectMapper().readValue(req.getInputStream(), Login.class);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),
