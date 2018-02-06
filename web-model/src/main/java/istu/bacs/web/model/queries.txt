@@ -12,9 +12,9 @@
 		Удалить контест					| DELETE	| contests/{contestId}
 
 	Посылки
-		Все посылки						| GET		| submissions?contestId=7&problemIndex=A&anyAuthor=true		| Submission[]
+		Все посылки						| GET		| submissions?contestId=7&problemIndex=A					| Submission[]
 		Посылки автора					| GET		| submissions?contestId=7&problemIndex=A&author=molodec		| Submission[]
-		Конкретная посылка				| GET		| submissions?submissionId=12345							| Submission
+		Конкретная посылка				| GET		| submissions/{submissionId}								| Submission
 		Отправить решение				| POST		| submissions					| SubmitSolution			| Int (submissionId)
 
 	Реджаджер

@@ -9,8 +9,4 @@ import java.util.List;
 
 public interface SubmissionService {
     Submission findById(int submissionId);
-    List<Submission> findAllByContest(int contestId, Pageable pageable);
-    List<Submission> findAllByContestAndAuthor(int contestId, User author, Pageable pageable);
-
-    int submit(EnhancedSubmitSolutionDto submission);
 }

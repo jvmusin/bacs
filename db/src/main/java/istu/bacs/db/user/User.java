@@ -1,6 +1,7 @@
 package istu.bacs.db.user;
 
 import lombok.*;
+import lombok.experimental.Wither;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ public class User {
     @GeneratedValue
     private Integer userId;
 
+    @Wither
     private String username;
     private String password;
 
