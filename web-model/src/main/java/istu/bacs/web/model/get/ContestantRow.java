@@ -1,5 +1,6 @@
-package istu.bacs.web.model;
+package istu.bacs.web.model.get;
 
+import istu.bacs.web.model.User;
 import lombok.Value;
 
 @Value

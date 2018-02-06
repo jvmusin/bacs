@@ -1,4 +1,4 @@
-package istu.bacs.web.model;
+package istu.bacs.web.model.get;
 
 import istu.bacs.db.submission.Verdict;
 import lombok.Value;

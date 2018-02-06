@@ -2,8 +2,7 @@ package istu.bacs.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
-import istu.bacs.db.user.User;
-import istu.bacs.web.model.Login;
+import istu.bacs.web.model.post.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

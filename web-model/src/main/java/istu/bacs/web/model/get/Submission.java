@@ -1,6 +1,7 @@
-package istu.bacs.web.model;
+package istu.bacs.web.model.get;
 
 import istu.bacs.db.submission.Language;
+import istu.bacs.web.model.User;
 import lombok.Value;
 
 import static istu.bacs.web.model.WebModelUtils.formatDateTime;
