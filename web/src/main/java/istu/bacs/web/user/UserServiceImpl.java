@@ -6,8 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static istu.bacs.db.user.Role.ROLE_USER;
-import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -24,18 +25,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(int userId) {
-        return userRepository.findById(userId).orElse(null);
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public void signUp(User user) {
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void register(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             log.debug("Registration failed: Username is already taken: '{}':'{}'", user.getUsername(), user.getPassword());
             throw new UsernameAlreadyTakenException(user.getUsername());
         }
 
-        //todo: Add more checks
         if (isEmpty(user.getUsername())) {
             String message = "Registration failed: Username shouldn't be empty";
             log.debug(message);

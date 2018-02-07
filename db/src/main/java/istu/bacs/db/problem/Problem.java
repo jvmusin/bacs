@@ -1,6 +1,7 @@
 package istu.bacs.db.problem;
 
 import lombok.*;
+import lombok.experimental.Wither;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 public class Problem {
 
     @Id
+    @Wither
     private String problemId;
 
     private String name;

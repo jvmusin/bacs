@@ -22,7 +22,7 @@ class ProblemService {
 
     private static Problem createProblem(int problemId, String name, int timeLimitMillis, int memoryLimitBytes) {
         return Problem.builder()
-                .problemId("FAKE@" + problemId)
+                .problemId("FAKE#" + problemId)
                 .name(name)
                 .statementUrl("URL_FOR_FAKED_PROBLEM_WITH_ID_" + problemId)
                 .timeLimitMillis(timeLimitMillis)

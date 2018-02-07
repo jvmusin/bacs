@@ -2,11 +2,12 @@ package istu.bacs.web.model.post;
 
 import lombok.Value;
 
+import java.util.List;
+
 @Value
 public class EditContest {
-    String id;
     String name;
     String startTime;
     String finishTime;
-    int[] problemIds;
+    List<EditContestProblem> problems;
 }

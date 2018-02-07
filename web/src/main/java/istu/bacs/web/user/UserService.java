@@ -2,7 +2,10 @@ package istu.bacs.web.user;
 
 import istu.bacs.db.user.User;
 
+import java.util.List;
+
 public interface UserService {
-    User findById(int userId);
-    void signUp(User user);
+    List<User> findAllUsers();
+    User findByUsername(String username);
+    void register(User user);
 }

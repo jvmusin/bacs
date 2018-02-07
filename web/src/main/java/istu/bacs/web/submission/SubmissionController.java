@@ -4,8 +4,10 @@ import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.user.User;
 import istu.bacs.web.contest.ContestService;
 import istu.bacs.web.model.get.Submission;
+import istu.bacs.web.model.post.SubmitSolution;
 import lombok.AllArgsConstructor;
 import org.hibernate.query.criteria.internal.OrderImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -63,5 +65,10 @@ public class SubmissionController {
                 .stream()
                 .map(Submission::fromDb)
                 .collect(toList());
+    }
+
+    @PostMapping
+    public int submitSolution(@RequestBody SubmitSolution sol, @AuthenticationPrincipal User author) {
+        return submissionService.submit(sol, author);
     }
 }

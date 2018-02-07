@@ -1,27 +1,20 @@
 package istu.bacs.web.problem;
 
-import istu.bacs.db.contest.Contest;
-import istu.bacs.db.contest.ContestProblem;
-import istu.bacs.db.contest.ContestProblemRepository;
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.problem.ProblemRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
 
     private final ProblemRepository problemRepository;
-    private final ContestProblemRepository contestProblemRepository;
-
-    public ProblemServiceImpl(ProblemRepository problemRepository, ContestProblemRepository contestProblemRepository) {
-        this.problemRepository = problemRepository;
-        this.contestProblemRepository = contestProblemRepository;
-    }
 
     @Override
-    public List<Problem> findAll() {
+    public List<Problem> findAllProblems() {
         return problemRepository.findAll();
     }
 
@@ -31,13 +24,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public ContestProblem findByContestAndProblemIndex(int contestId, String problemIndex) {
-        Contest contest = Contest.builder().contestId(contestId).build();
-        return contestProblemRepository.findByContestAndProblemIndex(contest, problemIndex);
-    }
-
-    @Override
-    public void saveAll(List<Problem> problems) {
+    public void saveAll(Iterable<Problem> problems) {
         problemRepository.saveAll(problems);
     }
 }

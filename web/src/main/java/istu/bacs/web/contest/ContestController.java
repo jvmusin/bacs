@@ -4,6 +4,7 @@ import istu.bacs.standingsapi.StandingsService;
 import istu.bacs.standingsapi.dto.StandingsDto;
 import istu.bacs.web.model.get.Contest;
 import istu.bacs.web.model.get.Problem;
+import istu.bacs.web.model.post.EditContest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -56,5 +57,15 @@ public class ContestController {
     @GetMapping("/{contestId}/standings")
     public StandingsDto getStandings(@PathVariable int contestId) {
         return standingsService.getStandings(contestId);
+    }
+
+    @PostMapping
+    public int createContest(@RequestBody EditContest contest) {
+        return contestService.createContest(contest);
+    }
+
+    @PutMapping("/{contestId}")
+    public void editContest(@RequestBody EditContest contest, @PathVariable int contestId) {
+        contestService.editContest(contest, contestId);
     }
 }

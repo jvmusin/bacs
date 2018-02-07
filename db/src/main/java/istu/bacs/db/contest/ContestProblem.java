@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class ContestProblem {
 
     @Id
-    @GeneratedValue
-    private Integer contestProblemId;
+    private String contestProblemId;
 
     @ManyToOne
     @JoinColumn(name = "contest_id")
@@ -27,4 +26,10 @@ public class ContestProblem {
     private Problem problem;
 
     private String problemIndex;
+
+    public static ContestProblem withId(int contestId, String problemIndex) {
+        ContestProblem cp = new ContestProblem();
+        cp.setContestProblemId(contestId + "#" + problemIndex);
+        return cp;
+    }
 }

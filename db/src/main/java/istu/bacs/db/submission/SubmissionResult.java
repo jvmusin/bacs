@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Wither;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Enumerated;
@@ -20,6 +21,7 @@ public class SubmissionResult {
     private String buildInfo;
 
     @Enumerated(STRING)
+    @Wither
     private Verdict verdict;
     private Integer testsPassed;
     private Integer timeUsedMillis;

@@ -1,6 +1,7 @@
 package istu.bacs.db.contest;
 
 import lombok.*;
+import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class Contest {
 
     @Id
     @GeneratedValue
+    @Wither
     private Integer contestId;
 
     private String name;
