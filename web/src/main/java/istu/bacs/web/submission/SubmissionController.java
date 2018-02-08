@@ -5,6 +5,7 @@ import istu.bacs.db.user.User;
 import istu.bacs.web.contest.ContestService;
 import istu.bacs.web.model.get.Submission;
 import istu.bacs.web.model.post.SubmitSolution;
+import istu.bacs.web.user.UserService;
 import lombok.AllArgsConstructor;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +28,7 @@ public class SubmissionController {
 
     private final SubmissionService submissionService;
     private final ContestService contestService;
+    private final UserService userService;
     private final EntityManager em;
 
     @GetMapping("/{submissionId}")
@@ -38,7 +40,8 @@ public class SubmissionController {
     public List<Submission> getSubmissions(
             @RequestParam(name = "contestId", required = false) Integer contestId,
             @RequestParam(name = "problemIndex", required = false) String problemIndex,
-            @RequestParam(name = "author", required = false) String author) {
+            @RequestParam(name = "author", required = false) String author,
+            @AuthenticationPrincipal User user) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -47,7 +50,10 @@ public class SubmissionController {
 
         List<Predicate> predicates = new ArrayList<>();
         if (author != null) {
-            predicates.add(cb.equal(s.get("author"), new User().withUsername(author)));
+            User author0 = author.equals(user.getUsername())
+                    ? user
+                    : userService.findByUsername(author);
+            predicates.add(cb.equal(s.get("author"), author0));
         }
         if (contestId != null) {
             List<ContestProblem> problems = contestService.findById(contestId).getProblems()

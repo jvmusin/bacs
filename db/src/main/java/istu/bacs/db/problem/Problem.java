@@ -25,10 +25,10 @@ public class Problem {
     private int memoryLimitBytes;
 
     public String getResourceName() {
-        return problemId.split("@")[0];
+        return problemId.split("#")[0];
     }
 
-    public String getRawProblemName() {
-        return problemId.split("@")[1];
+    public String getRawProblemId() {
+        return problemId.split("#")[1];
     }
 }

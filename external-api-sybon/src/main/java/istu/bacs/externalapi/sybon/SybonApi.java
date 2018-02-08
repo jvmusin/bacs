@@ -89,7 +89,7 @@ public class SybonApi implements ExternalApi {
         submit.setCompilerId(languageConverter.convert(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
-        submit.setProblemId(parseInt(submission.getProblem().getRawProblemName()));
+        submit.setProblemId(parseInt(submission.getProblem().getRawProblemId()));
         submit.setPretestsOnly(submission.isPretestsOnly());
         submit.setContinueCondition(Always);
 
