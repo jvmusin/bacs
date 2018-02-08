@@ -10,17 +10,17 @@ import javax.validation.constraints.NotNull;
 @Value
 public class SubmitSolution {
 
-    private static final int MAX_SOLUTION_SIZE_KILOBYTES = 64 * 1024;
+    private static final int MAX_SOLUTION_SIZE_BYTES = 64 * 1024 - 1;   //64 kilobytes
 
     int contestId;
 
-    @NotNull
+    @NotEmpty
     String problemIndex;
 
     @NotNull
     Language language;
 
     @NotEmpty
-    @Max(MAX_SOLUTION_SIZE_KILOBYTES)
+    @Max(MAX_SOLUTION_SIZE_BYTES)
     String solution;
 }

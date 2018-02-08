@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class SubmissionController {
     }
 
     @PostMapping
-    public int submitSolution(@RequestBody SubmitSolution sol, @AuthenticationPrincipal User author) {
+    public int submitSolution(@Valid @RequestBody SubmitSolution sol, @AuthenticationPrincipal User author) {
         return submissionService.submit(sol, author);
     }
 }
