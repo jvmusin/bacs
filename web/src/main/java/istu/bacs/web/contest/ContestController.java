@@ -1,9 +1,9 @@
 package istu.bacs.web.contest;
 
-import istu.bacs.standingsapi.StandingsService;
-import istu.bacs.standingsapi.dto.StandingsDto;
+import istu.bacs.standings.StandingsService;
 import istu.bacs.web.model.get.Contest;
 import istu.bacs.web.model.get.Problem;
+import istu.bacs.web.model.get.Standings;
 import istu.bacs.web.model.post.EditContest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class ContestController {
     }
 
     @GetMapping("/{contestId}/standings")
-    public StandingsDto getStandings(@PathVariable int contestId) {
+    public Standings getStandings(@PathVariable int contestId) {
         return standingsService.getStandings(contestId);
     }
 

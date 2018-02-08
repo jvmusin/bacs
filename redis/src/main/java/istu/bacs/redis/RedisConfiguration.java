@@ -3,10 +3,8 @@ package istu.bacs.redis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
 import java.util.regex.Matcher;
@@ -26,7 +24,7 @@ public class RedisConfiguration {
 
         Matcher matcher = redisUrlPattern.matcher(redisUrl);
         if (!matcher.find())
-            throw new RuntimeException("REDIS URL IS INCORRECT: " + redisUrl);
+            throw new IllegalStateException("REDIS URL IS INCORRECT: " + redisUrl);
 
         String password = matcher.group("password");
         String hostName = matcher.group("hostName");
@@ -37,11 +35,6 @@ public class RedisConfiguration {
         redisStandaloneConfiguration.setPort(port);
         redisStandaloneConfiguration.setHostName(hostName);
         return redisStandaloneConfiguration;
-    }
-
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
-        return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean

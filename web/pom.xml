@@ -30,12 +30,7 @@
         <!-- Standings -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>standings-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>istu.bacs.background</groupId>
-            <artifactId>background-standings-builder</artifactId>
+            <artifactId>standings</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

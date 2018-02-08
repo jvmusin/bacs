@@ -3,8 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>istu.bacs.background</groupId>
-    <artifactId>background-combined</artifactId>
+    <artifactId>standings</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -28,13 +27,6 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- External APIs -->
-        <dependency>
-            <groupId>istu.bacs.externalapi</groupId>
-            <artifactId>external-api-aggregator</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
         <!-- RabbitMQ -->
         <dependency>
             <groupId>istu.bacs</groupId>
@@ -42,20 +34,38 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Standings Builder -->
+        <!-- Redis -->
         <dependency>
             <groupId>istu.bacs</groupId>
-            <artifactId>standings</artifactId>
+            <artifactId>redis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Web Models (Standings) -->
+        <dependency>
+            <groupId>istu.bacs.web</groupId>
+            <artifactId>web-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
 
+    <!-- So, we need this to have a possibility to start this project from other one and from itself too -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
