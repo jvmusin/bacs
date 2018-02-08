@@ -14,9 +14,9 @@ public class StandingsServiceImpl implements StandingsService {
     private final ContestService contestService;
 
     @Override
-    public istu.bacs.web.model.get.Standings getStandings(int contestId) {
-        HashOperations<String, Integer, istu.bacs.web.model.get.Standings> hash = standingsRedisTemplate.opsForHash();
-        istu.bacs.web.model.get.Standings standings = hash.get(KEY, contestId);
+    public istu.bacs.web.model.contest.standings.Standings getStandings(int contestId) {
+        HashOperations<String, Integer, istu.bacs.web.model.contest.standings.Standings> hash = standingsRedisTemplate.opsForHash();
+        istu.bacs.web.model.contest.standings.Standings standings = hash.get(KEY, contestId);
 
         //noinspection ConstantConditions
         if (standings == null) {

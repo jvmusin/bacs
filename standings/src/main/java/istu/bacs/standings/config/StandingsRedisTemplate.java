@@ -1,6 +1,6 @@
 package istu.bacs.standings.config;
 
-import istu.bacs.web.model.get.Standings;
+import istu.bacs.web.model.contest.standings.Standings;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;

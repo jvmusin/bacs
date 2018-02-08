@@ -1,5 +1,6 @@
-package istu.bacs.web.model.get;
+package istu.bacs.web.model.contest.standings;
 
+import istu.bacs.web.model.contest.Contest;
 import lombok.Value;
 
 import java.util.List;

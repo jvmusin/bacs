@@ -1,4 +1,4 @@
-package istu.bacs.web.model.get;
+package istu.bacs.web.model.contest.standings;
 
 import lombok.Value;
 

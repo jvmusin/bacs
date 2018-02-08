@@ -1,7 +1,7 @@
 package istu.bacs.web.problem;
 
 import istu.bacs.externalapi.ExternalApi;
-import istu.bacs.web.model.get.Problem;
+import istu.bacs.web.model.problem.ArchiveProblem;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +18,17 @@ public class ProblemController {
     private final ExternalApi externalApi;
 
     @GetMapping
-    public List<Problem> getAllProblems(@RequestParam(name = "external", required = false) String external) {
+    public List<ArchiveProblem> getAllProblems(@RequestParam(name = "external", required = false) String external) {
         if (external != null) {
             problemService.saveAll(externalApi.getAllProblems());
         }
         return problemService.findAllProblems().stream()
-                .map(Problem::fromDb)
+                .map(ArchiveProblem::fromDb)
                 .collect(toList());
     }
 
     @GetMapping("/{problemId}")
-    public Problem getProblem(@PathVariable String problemId) {
-        return Problem.fromDb(problemService.findById(problemId));
+    public ArchiveProblem getProblem(@PathVariable String problemId) {
+        return ArchiveProblem.fromDb(problemService.findById(problemId));
     }
 }

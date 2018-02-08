@@ -1,4 +1,4 @@
-package istu.bacs.web.model;
+package istu.bacs.web.model.user;
 
 import lombok.Value;
 

@@ -1,7 +1,7 @@
 package istu.bacs.web.contest;
 
 import istu.bacs.db.contest.Contest;
-import istu.bacs.web.model.post.EditContest;
+import istu.bacs.web.model.contest.builder.EditContest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.user.User;
 import istu.bacs.rabbit.RabbitService;
-import istu.bacs.web.model.post.SubmitSolution;
+import istu.bacs.web.model.submission.SubmitSolution;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

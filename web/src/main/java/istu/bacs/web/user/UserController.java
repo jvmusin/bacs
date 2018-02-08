@@ -1,6 +1,6 @@
 package istu.bacs.web.user;
 
-import istu.bacs.web.model.User;
+import istu.bacs.web.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

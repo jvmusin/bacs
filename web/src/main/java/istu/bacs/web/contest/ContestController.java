@@ -1,10 +1,10 @@
 package istu.bacs.web.contest;
 
 import istu.bacs.standings.StandingsService;
-import istu.bacs.web.model.get.Contest;
-import istu.bacs.web.model.get.Problem;
-import istu.bacs.web.model.get.Standings;
-import istu.bacs.web.model.post.EditContest;
+import istu.bacs.web.model.contest.Contest;
+import istu.bacs.web.model.problem.ContestProblem;
+import istu.bacs.web.model.contest.standings.Standings;
+import istu.bacs.web.model.contest.builder.EditContest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -43,15 +43,15 @@ public class ContestController {
     }
 
     @GetMapping("/{contestId}/problems")
-    public List<Problem> getProblems(@PathVariable int contestId) {
+    public List<ContestProblem> getProblems(@PathVariable int contestId) {
         return contestService.findById(contestId).getProblems().stream()
-                .map(Problem::fromDb)
+                .map(ContestProblem::fromDb)
                 .collect(toList());
     }
 
     @GetMapping("{contestId}/problems/{problemIndex}")
-    public Problem getProblem(@PathVariable int contestId, @PathVariable String problemIndex) {
-        return Problem.fromDb(contestService.findById(contestId).getProblem(problemIndex));
+    public ContestProblem getProblem(@PathVariable int contestId, @PathVariable String problemIndex) {
+        return ContestProblem.fromDb(contestService.findById(contestId).getProblem(problemIndex));
     }
 
     @GetMapping("/{contestId}/standings")

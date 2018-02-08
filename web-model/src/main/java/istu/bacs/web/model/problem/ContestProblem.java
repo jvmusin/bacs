@@ -1,36 +1,25 @@
-package istu.bacs.web.model.get;
+package istu.bacs.web.model.problem;
 
 import istu.bacs.db.contest.Contest;
 import lombok.Value;
 
 @Value
-public class Problem {
+public class ContestProblem {
     String index;
     String name;
-    Integer contestId;
+    int contestId;
     int timeLimitMillis;
     int memoryLimitBytes;
     String statementUrl;
 
-    public static Problem fromDb(istu.bacs.db.contest.ContestProblem contestProblem) {
+    public static ContestProblem fromDb(istu.bacs.db.contest.ContestProblem contestProblem) {
         Contest contest = contestProblem.getContest();
         istu.bacs.db.problem.Problem problem = contestProblem.getProblem();
 
-        return new Problem(
+        return new ContestProblem(
                 contestProblem.getProblemIndex(),
                 problem.getName(),
                 contest.getContestId(),
-                problem.getTimeLimitMillis(),
-                problem.getMemoryLimitBytes(),
-                problem.getStatementUrl()
-        );
-    }
-
-    public static Problem fromDb(istu.bacs.db.problem.Problem problem) {
-        return new Problem(
-                problem.getProblemId(),
-                problem.getName(),
-                null,
                 problem.getTimeLimitMillis(),
                 problem.getMemoryLimitBytes(),
                 problem.getStatementUrl()

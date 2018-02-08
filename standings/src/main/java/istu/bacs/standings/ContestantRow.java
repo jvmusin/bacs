@@ -3,7 +3,7 @@ package istu.bacs.standings;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.user.User;
-import istu.bacs.web.model.get.ProblemSolvingResult;
+import istu.bacs.web.model.contest.standings.ProblemSolvingResult;
 import lombok.Data;
 
 import java.util.List;
@@ -65,15 +65,15 @@ public class ContestantRow {
         }
     }
 
-    public istu.bacs.web.model.get.ContestantRow toDto() {
+    public istu.bacs.web.model.contest.standings.ContestantRow toDto() {
         List<ProblemSolvingResult> results = progressByProblem.entrySet()
                 .stream()
                 .map(ContestantRow::createProblemSolvingResult)
                 .filter(r -> r.isSolved() || r.getFailTries() > 0)
                 .collect(toList());
 
-        return new istu.bacs.web.model.get.ContestantRow(
-                istu.bacs.web.model.User.fromDb(contestant),
+        return new istu.bacs.web.model.contest.standings.ContestantRow(
+                istu.bacs.web.model.user.User.fromDb(contestant),
                 place,
                 solvedCount,
                 penalty,

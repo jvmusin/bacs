@@ -5,8 +5,8 @@ import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.contest.ContestRepository;
 import istu.bacs.db.problem.Problem;
 import istu.bacs.web.model.WebModelUtils;
-import istu.bacs.web.model.post.EditContest;
-import istu.bacs.web.model.post.EditContestProblem;
+import istu.bacs.web.model.contest.builder.EditContest;
+import istu.bacs.web.model.contest.builder.EditContestProblem;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

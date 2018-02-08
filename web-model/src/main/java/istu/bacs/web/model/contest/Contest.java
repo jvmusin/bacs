@@ -1,5 +1,6 @@
-package istu.bacs.web.model.get;
+package istu.bacs.web.model.contest;
 
+import istu.bacs.web.model.problem.ContestProblem;
 import lombok.Value;
 
 import static istu.bacs.web.model.WebModelUtils.formatDateTime;
@@ -10,7 +11,7 @@ public class Contest {
     String name;
     String startTime;
     String finishTime;
-    Problem[] problems;
+    ContestProblem[] problems;
 
     public static Contest fromDb(istu.bacs.db.contest.Contest contest) {
         return new Contest(
@@ -18,7 +19,7 @@ public class Contest {
                 contest.getName(),
                 formatDateTime(contest.getStartTime()),
                 formatDateTime(contest.getFinishTime()),
-                contest.getProblems().stream().map(Problem::fromDb).toArray(Problem[]::new)
+                contest.getProblems().stream().map(ContestProblem::fromDb).toArray(ContestProblem[]::new)
         );
     }
 }

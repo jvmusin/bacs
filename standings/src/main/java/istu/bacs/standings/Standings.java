@@ -3,7 +3,7 @@ package istu.bacs.standings;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.db.user.User;
-import istu.bacs.web.model.get.Contest;
+import istu.bacs.web.model.contest.Contest;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,8 +61,8 @@ public class Standings {
     }
 
     @Synchronized
-    public istu.bacs.web.model.get.Standings toDto() {
-        return new istu.bacs.web.model.get.Standings(
+    public istu.bacs.web.model.contest.standings.Standings toDto() {
+        return new istu.bacs.web.model.contest.standings.Standings(
                 contest,
                 rows.stream()
                         .map(ContestantRow::toDto)

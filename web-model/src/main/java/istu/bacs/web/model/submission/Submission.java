@@ -1,7 +1,8 @@
-package istu.bacs.web.model.get;
+package istu.bacs.web.model.submission;
 
 import istu.bacs.db.submission.Language;
-import istu.bacs.web.model.User;
+import istu.bacs.web.model.problem.ContestProblem;
+import istu.bacs.web.model.user.User;
 import lombok.Value;
 
 import static istu.bacs.web.model.WebModelUtils.formatDateTime;
@@ -10,7 +11,7 @@ import static istu.bacs.web.model.WebModelUtils.formatDateTime;
 public class Submission {
     int id;
     User author;
-    Problem problem;
+    ContestProblem problem;
     String created;
     Language language;
     String solution;
@@ -20,7 +21,7 @@ public class Submission {
         return new Submission(
                 submission.getSubmissionId(),
                 User.fromDb(submission.getAuthor()),
-                Problem.fromDb(submission.getContestProblem()),
+                ContestProblem.fromDb(submission.getContestProblem()),
                 formatDateTime(submission.getCreated()),
                 submission.getLanguage(),
                 submission.getSolution(),
