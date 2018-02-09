@@ -2,21 +2,15 @@ server:
   port: 80
   tomcat:
     accept-count: 20000
+    max-connections: 50
 spring:
   profiles:
     include: aggregator-api
   datasource:
     hikari:
-      maximum-pool-size: 20
+      maximum-pool-size: 15
   jpa:
     open-in-view: false
 logging:
   level:
-    istu.bacs: DEBUG
----
-
-spring:
-  profiles: cloud
-  datasource:
-    hikari:
-      maximum-pool-size: 6
+    istu.bacs.web: DEBUG
