@@ -70,7 +70,7 @@ public class ContestServiceImpl implements ContestService {
                 .map(p -> {
                     ContestProblem cp = ContestProblem.withId(contest.getContestId(), p.getProblemIndex());
                     cp.setContest(contest);
-                    cp.setProblem(new Problem().withProblemId(p.getProblemId()));
+                    cp.setProblem(new Problem().withId(p.getProblemId().getResourceName(), p.getProblemId().getResourceProblemId()));
                     cp.setProblemIndex(p.getProblemIndex());
                     return cp;
                 })

@@ -5,7 +5,8 @@ import lombok.Value;
 
 @Value
 public class ArchiveProblem {
-    String id;
+
+    ArchiveProblemId problemId;
     String name;
     int timeLimitMillis;
     int memoryLimitBytes;
@@ -13,7 +14,7 @@ public class ArchiveProblem {
 
     public static ArchiveProblem fromDb(Problem problem) {
         return new ArchiveProblem(
-                problem.getProblemId(),
+                new ArchiveProblemId(problem.getResourceName(), problem.getRawProblemId()),
                 problem.getName(),
                 problem.getTimeLimitMillis(),
                 problem.getMemoryLimitBytes(),

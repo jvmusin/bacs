@@ -14,6 +14,8 @@ import javax.persistence.Id;
 @EqualsAndHashCode(of = "problemId")
 public class Problem {
 
+    private static final String ID_DELIMITER = "#";
+
     @Id
     @Wither
     private String problemId;
@@ -25,10 +27,14 @@ public class Problem {
     private int memoryLimitBytes;
 
     public String getResourceName() {
-        return problemId.split("#")[0];
+        return problemId.split(ID_DELIMITER)[0];
     }
 
     public String getRawProblemId() {
-        return problemId.split("#")[1];
+        return problemId.split(ID_DELIMITER)[1];
+    }
+
+    public Problem withId(String resourceName, String resourceProblemId) {
+        return new Problem().withProblemId(resourceName + ID_DELIMITER + resourceProblemId);
     }
 }
