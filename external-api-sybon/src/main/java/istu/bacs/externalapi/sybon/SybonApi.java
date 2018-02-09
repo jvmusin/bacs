@@ -47,7 +47,7 @@ public class SybonApi implements ExternalApi {
                     .map(problemConverter::convert)
                     .collect(toList());
         } catch (Exception e) {
-            log.warn("Unable to get problems using url '{}'", url, e);
+            log.warn("Unable to get problems using url '{}': {}", url, e.getMessage(), e);
             return emptyList();
         }
     }
