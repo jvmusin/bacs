@@ -35,6 +35,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
         this.rabbitService = rabbitService;
     }
 
+    @SuppressWarnings("squid:S2629")
     @Scheduled(fixedDelay = tickDelay)
     public void tick() {
         if (q.isEmpty()) {
@@ -47,9 +48,9 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
         tickCount.set(0);
 
-        log().info(processorName() + " tick started");
+        log().info("{} tick started", processorName());
         processAll();
-        log().info(processorName() + " tick finished");
+        log().info("{} tick finished", processorName());
     }
 
     private void processAll() {

@@ -51,6 +51,10 @@ public class StandingsUploader implements ApplicationListener<ContextRefreshedEv
 
     @Scheduled(fixedDelay = TICK_DELAY)
     void uploadStandings() {
+
+        if (!initialized.get())
+            return;
+
         if (updatedContests.isEmpty()) {
             if (tickCount.incrementAndGet() == PRINT_STATE_EVERY_N_TICKS) {
                 log.info("No need to upload standings");
@@ -85,11 +89,13 @@ public class StandingsUploader implements ApplicationListener<ContextRefreshedEv
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (initialized.getAndSet(true))
+        if (initialized.get())
             return;
 
         submissionService.findAll().forEach(this::update);
         rabbitService.<Integer>subscribe(QueueName.CHECKED_SUBMISSIONS,
                 submissionId -> update(submissionService.findById(submissionId)));
+
+        initialized.set(true);
     }
 }
