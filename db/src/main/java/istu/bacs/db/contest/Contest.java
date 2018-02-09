@@ -13,6 +13,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Data
 @Entity
+@Table(name = "contest", schema = "public")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +21,7 @@ import static javax.persistence.FetchType.EAGER;
 public class Contest {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Wither
     private Integer contestId;
 

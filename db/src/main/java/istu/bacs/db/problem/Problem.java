@@ -5,9 +5,11 @@ import lombok.experimental.Wither;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
+@Table(name = "problem", schema = "public")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

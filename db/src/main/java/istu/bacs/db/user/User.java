@@ -3,14 +3,12 @@ package istu.bacs.db.user;
 import lombok.*;
 import lombok.experimental.Wither;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
+@Table(name = "user", schema = "public")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +16,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
     @Wither

@@ -13,6 +13,7 @@ import static javax.persistence.EnumType.STRING;
 
 @Data
 @Entity
+@Table(name = "submission", schema = "public")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +21,7 @@ import static javax.persistence.EnumType.STRING;
 public class Submission {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer submissionId;
 
     @ManyToOne

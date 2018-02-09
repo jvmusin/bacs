@@ -20,7 +20,7 @@ public class SubmitSolution {
     @NotNull
     Language language;
 
-    @NotEmpty
+    @NotNull
     @Length(min = 1, max = MAX_SOLUTION_LENGTH)
     String solution;
 }
