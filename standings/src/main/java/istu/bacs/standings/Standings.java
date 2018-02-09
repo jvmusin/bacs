@@ -1,9 +1,9 @@
 package istu.bacs.standings;
 
+import istu.bacs.db.contest.Contest;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.db.user.User;
-import istu.bacs.web.model.contest.Contest;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +22,8 @@ public class Standings {
     private final Map<User, ContestantRow> rowByAuthor = new HashMap<>();
     private final List<ContestantRow> rows = new ArrayList<>();
 
-    public Standings(istu.bacs.db.contest.Contest contest) {
-        this.contest = Contest.fromDb(contest);
+    public Standings(Contest contest) {
+        this.contest = contest;
     }
 
     @Synchronized
@@ -34,7 +34,7 @@ public class Standings {
             return;
 
         rowByAuthor.computeIfAbsent(submission.getAuthor(), author -> {
-            ContestantRow row = new ContestantRow(author, submission.getContest().getProblems());
+            ContestantRow row = new ContestantRow(author, contest.getProblems());
             rows.add(row);
             return row;
         }).update(submission);
@@ -63,7 +63,7 @@ public class Standings {
     @Synchronized
     public istu.bacs.web.model.contest.standings.Standings toDto() {
         return new istu.bacs.web.model.contest.standings.Standings(
-                contest,
+                istu.bacs.web.model.contest.Contest.fromDb(contest),
                 rows.stream()
                         .map(ContestantRow::toDto)
                         .collect(toList())
