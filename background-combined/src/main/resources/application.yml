@@ -3,15 +3,8 @@ spring:
     include: aggregator-api,standings-updater
   datasource:
     hikari:
-      maximum-pool-size: 20
+      maximum-pool-size: 3
 logging:
   level:
     istu.bacs.background.combined: TRACE
     istu.bacs.standings: TRACE
----
-
-spring:
-  profiles: cloud
-  datasource:
-    hikari:
-      maximum-pool-size: 3
