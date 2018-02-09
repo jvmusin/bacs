@@ -62,12 +62,10 @@ public class StandingsUploader implements ApplicationListener<ContextRefreshedEv
         tickCount.set(0);
         log.info("Standings uploading started");
 
-        Set<Contest> uploaded = new HashSet<>();
-        while (!this.updatedContests.isEmpty()) {
-            Contest contest = updatedContests.poll();
-            if (!uploaded.add(contest))
-                continue;
+        Set<Contest> needUpload = new HashSet<>();
+        while (!updatedContests.isEmpty()) needUpload.add(updatedContests.poll());
 
+        for (Contest contest : needUpload) {
             log.debug("Uploading standings for contest {} started", contest.getContestId());
 
             Standings standings = standingsByContest.get(contest);
