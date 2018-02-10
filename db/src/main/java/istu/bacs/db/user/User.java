@@ -2,9 +2,9 @@ package istu.bacs.db.user;
 
 import lombok.*;
 import lombok.experimental.Wither;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -17,12 +17,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Wither
     private Integer userId;
 
     @Wither
     private String username;
     private String password;
 
-    @Convert(converter = RolesConverter.class)
-    private List<Role> roles;
+    @Type(type = "string-array")
+    @Column(columnDefinition = "text[]")
+    private String[] roles;
 }

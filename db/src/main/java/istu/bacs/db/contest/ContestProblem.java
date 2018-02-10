@@ -11,25 +11,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "contest")
-@EqualsAndHashCode(of = "contestProblemId")
+@EqualsAndHashCode(of = {"contest", "problemIndex"})
 public class ContestProblem {
-
-    @Id
-    private String contestProblemId;
 
     @ManyToOne
     @JoinColumn(name = "contest_id")
+    @Id
     private Contest contest;
 
-    @ManyToOne
-    @JoinColumn(name = "problem_id")
-    private Problem problem;
-
+    @Id
     private String problemIndex;
 
-    public static ContestProblem withId(int contestId, String problemIndex) {
-        ContestProblem cp = new ContestProblem();
-        cp.setContestProblemId(contestId + "#" + problemIndex);
-        return cp;
-    }
+    @ManyToOne
+    @JoinColumns(value = {
+            @JoinColumn(name = "resource_name"),
+            @JoinColumn(name = "resource_problem_id")
+    })
+    private Problem problem;
 }
