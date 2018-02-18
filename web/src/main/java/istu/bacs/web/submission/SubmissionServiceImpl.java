@@ -26,7 +26,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     @Transactional
     public Submission findById(int submissionId) {
-        return submissionRepository.findById(submissionId).orElse(null);
+        Submission submission = submissionRepository.findById(submissionId).orElse(null);
+        initializeSubmission(submission);
+        return submission;
     }
 
     @Override
@@ -46,5 +48,11 @@ public class SubmissionServiceImpl implements SubmissionService {
         submissionRepository.save(submission);
         rabbitService.send(SCHEDULED_SUBMISSIONS, submission.getSubmissionId());
         return submission.getSubmissionId();
+    }
+
+    private void initializeSubmission(Submission submission) {
+        if (submission != null)
+            //noinspection ResultOfMethodCallIgnored
+            submission.getContest();
     }
 }

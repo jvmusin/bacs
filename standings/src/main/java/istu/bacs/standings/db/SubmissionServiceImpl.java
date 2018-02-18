@@ -3,6 +3,7 @@ package istu.bacs.standings.db;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class SubmissionServiceImpl implements SubmissionService {
@@ -14,12 +15,27 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
+    @Transactional
     public Submission findById(int submissionId) {
-        return submissionRepository.findById(submissionId).orElse(null);
+        Submission submission = submissionRepository.findById(submissionId).orElse(null);
+        initializeSubmission(submission);
+        return submission;
     }
 
     @Override
+    @Transactional
     public List<Submission> findAll() {
-        return submissionRepository.findAll();
+        List<Submission> submissions = submissionRepository.findAll();
+        initializeSubmissions(submissions);
+        return submissions;
+    }
+
+    private void initializeSubmission(Submission submission) {
+        if (submission != null)
+            System.out.println(submission.getContest().getProblems().size());
+    }
+
+    private void initializeSubmissions(Iterable<Submission> submissions) {
+        submissions.forEach(this::initializeSubmission);
     }
 }

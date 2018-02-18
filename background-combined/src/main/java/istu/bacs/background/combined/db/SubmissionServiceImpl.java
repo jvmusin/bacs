@@ -20,17 +20,30 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     @Transactional
     public List<Submission> findAllByVerdict(Verdict verdict) {
-        return submissionRepository.findAllByResultVerdict(verdict);
+        List<Submission> submissions = submissionRepository.findAllByResultVerdict(verdict);
+        initializeSubmissions(submissions);
+        return submissions;
     }
 
     @Override
     @Transactional
     public List<Submission> findAllByIds(List<Integer> ids) {
-        return submissionRepository.findAllById(ids);
+        List<Submission> submissions = submissionRepository.findAllById(ids);
+        initializeSubmissions(submissions);
+        return submissions;
     }
 
     @Override
     public void save(Submission submission) {
         submissionRepository.save(submission);
+    }
+
+    private void initializeSubmission(Submission submission) {
+        if (submission != null)
+            System.out.println(submission.getContest().getProblems().size());
+    }
+
+    private void initializeSubmissions(Iterable<Submission> submissions) {
+        submissions.forEach(this::initializeSubmission);
     }
 }

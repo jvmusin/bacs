@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
@@ -28,7 +29,7 @@ public class Submission {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
@@ -49,6 +50,7 @@ public class Submission {
         return getResult().getVerdict();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public ContestProblem getContestProblem() {
         return getContest().getProblem(getProblemIndex());
     }
