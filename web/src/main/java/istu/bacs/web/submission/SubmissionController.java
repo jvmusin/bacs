@@ -64,6 +64,7 @@ public class SubmissionController {
             predicates.add(s.get("contestProblem").in(problems));
         }
 
+        s.fetch("contest");
         query.select(s)
                 .where(predicates.toArray(new Predicate[0]))
                 .orderBy(new OrderImpl(s.get("submissionId"), false));
