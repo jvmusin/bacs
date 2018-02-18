@@ -1,10 +1,12 @@
 package istu.bacs.background.combined;
 
 import istu.bacs.background.combined.db.SubmissionService;
+import istu.bacs.db.contest.Contest;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.Verdict;
 import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -15,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@AllArgsConstructor
 public abstract class SubmissionProcessor implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final int tickDelay = 500;
@@ -28,12 +31,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
     private final Queue<Integer> q = new ConcurrentLinkedDeque<>();
     private final AtomicInteger tickCount = new AtomicInteger();
 
-    private AtomicBoolean initialized = new AtomicBoolean();
-
-    public SubmissionProcessor(SubmissionService submissionService, RabbitService rabbitService) {
-        this.submissionService = submissionService;
-        this.rabbitService = rabbitService;
-    }
+    private final AtomicBoolean initialized = new AtomicBoolean();
 
     @SuppressWarnings("squid:S2629")
     @Scheduled(fixedDelay = tickDelay)
@@ -70,6 +68,7 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
                 for (Submission submission : submissions) {
                     int submissionId = submission.getSubmissionId();
                     if (submission.getVerdict() != incomingVerdict()) {
+                        submission.setContest(new Contest().withContestId(submission.getContest().getContestId()));
                         submissionService.save(submission);
                         rabbitService.send(outcomingQueueName(), submissionId);
                         log().debug("Submission {} processed: {}", submissionId, submission.getVerdict());

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static istu.bacs.db.user.Role.ROLE_USER;
-import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
@@ -55,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         String pass = user.getPassword();
         user.setPassword(passwordEncoder.encode(pass));
-        user.setRoles(singletonList(ROLE_USER));
+        user.setRoles(new String[]{"ROLE_USER"});
         userRepository.save(user);
         log.debug("User successfully registered: {}:'{}':'{}'", user.getUserId(), user.getUsername(), pass);
     }

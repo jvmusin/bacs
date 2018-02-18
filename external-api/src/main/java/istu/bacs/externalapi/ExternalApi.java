@@ -1,6 +1,7 @@
 package istu.bacs.externalapi;
 
 import istu.bacs.db.problem.Problem;
+import istu.bacs.db.problem.ResourceName;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.submission.Verdict;
@@ -35,5 +36,5 @@ public interface ExternalApi {
 
     boolean checkSubmissionResult(List<Submission> submissions);
 
-    String getApiName();
+    ResourceName getResourceName();
 }

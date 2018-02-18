@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static istu.bacs.standings.SolvingResult.TRY_PENALTY_MINUTES;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -18,7 +17,7 @@ import static java.util.stream.Collectors.toMap;
 public class ContestantRow {
 
     private final User contestant;
-    private final Map<ContestProblem, ProblemProgress> progressByProblem;
+    private final Map<String, ProblemProgress> progressByProblemIndex;
 
     private int solvedCount;
     private int penalty;
@@ -27,15 +26,15 @@ public class ContestantRow {
 
     ContestantRow(User contestant, List<ContestProblem> contestProblems) {
         this.contestant = contestant;
-        progressByProblem = contestProblems.stream()
+        progressByProblemIndex = contestProblems.stream()
                 .collect(toMap(
-                        identity(),
+                        ContestProblem::getProblemIndex,
                         p -> new ProblemProgress()
                 ));
     }
 
-    private static ProblemSolvingResult createProblemSolvingResult(Map.Entry<ContestProblem, ProblemProgress> e) {
-        String problemIndex = e.getKey().getProblemIndex();
+    private static ProblemSolvingResult createProblemSolvingResult(Map.Entry<String, ProblemProgress> e) {
+        String problemIndex = e.getKey();
 
         SolvingResult res = e.getValue().getResult();
         boolean solved = res.isSolved();
@@ -48,7 +47,7 @@ public class ContestantRow {
     }
 
     public void update(Submission submission) {
-        ProblemProgress progress = progressByProblem.get(submission.getContestProblem());
+        ProblemProgress progress = progressByProblemIndex.get(submission.getProblemIndex());
 
         SolvingResult wasResult = progress.getResult();
         if (wasResult.isSolved()) {
@@ -66,7 +65,7 @@ public class ContestantRow {
     }
 
     public istu.bacs.web.model.contest.standings.ContestantRow toDto() {
-        List<ProblemSolvingResult> results = progressByProblem.entrySet()
+        List<ProblemSolvingResult> results = progressByProblemIndex.entrySet()
                 .stream()
                 .map(ContestantRow::createProblemSolvingResult)
                 .filter(r -> r.isSolved() || r.getFailTries() > 0)

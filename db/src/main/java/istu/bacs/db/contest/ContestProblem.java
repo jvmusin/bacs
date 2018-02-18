@@ -4,6 +4,7 @@ import istu.bacs.db.problem.Problem;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString(exclude = "contest")
 @EqualsAndHashCode(of = {"contest", "problemIndex"})
-public class ContestProblem {
+public class ContestProblem implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "contest_id")
@@ -28,4 +29,10 @@ public class ContestProblem {
             @JoinColumn(name = "resource_problem_id")
     })
     private Problem problem;
+
+    public ContestProblem withId(int contestId, String problemIndex) {
+        setContest(new Contest().withContestId(contestId));
+        setProblemIndex(problemIndex);
+        return this;
+    }
 }

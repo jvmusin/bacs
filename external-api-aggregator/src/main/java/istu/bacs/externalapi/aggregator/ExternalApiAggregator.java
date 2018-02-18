@@ -1,6 +1,7 @@
 package istu.bacs.externalapi.aggregator;
 
 import istu.bacs.db.problem.Problem;
+import istu.bacs.db.problem.ResourceName;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.externalapi.ExternalApi;
 
@@ -36,10 +37,10 @@ class ExternalApiAggregator implements ExternalApi {
 
     @Override
     public boolean submit(List<Submission> submissions) {
-        Map<String, List<Submission>> byResource = splitByResource(submissions);
+        Map<ResourceName, List<Submission>> byResource = splitByResource(submissions);
         //noinspection ReplaceInefficientStreamCount
         return byResource.entrySet().parallelStream().filter(resourceAndSubmissions -> {
-            String resource = resourceAndSubmissions.getKey();
+            ResourceName resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
             return findApi(resource).submit(resourceSubmissions);
         }).count() > 0;
@@ -52,31 +53,31 @@ class ExternalApiAggregator implements ExternalApi {
 
     @Override
     public boolean checkSubmissionResult(List<Submission> submissions) {
-        Map<String, List<Submission>> byResource = splitByResource(submissions);
+        Map<ResourceName, List<Submission>> byResource = splitByResource(submissions);
         //noinspection ReplaceInefficientStreamCount
         return byResource.entrySet().parallelStream().filter(resourceAndSubmissions -> {
-            String resource = resourceAndSubmissions.getKey();
+            ResourceName resource = resourceAndSubmissions.getKey();
             List<Submission> resourceSubmissions = resourceAndSubmissions.getValue();
             return findApi(resource).checkSubmissionResult(resourceSubmissions);
         }).count() > 0;
     }
 
-    private Map<String, List<Submission>> splitByResource(List<Submission> submissions) {
+    private Map<ResourceName, List<Submission>> splitByResource(List<Submission> submissions) {
         return submissions.stream().collect(groupingBy(
-                Submission::getResourceName,
+                s -> s.getProblem().getResourceName(),
                 toList()
         ));
     }
 
-    private ExternalApi findApi(String resourceName) {
+    private ExternalApi findApi(ResourceName resourceName) {
         for (ExternalApi api : externalApis)
-            if (api.getApiName().equals(resourceName))
+            if (api.getResourceName().equals(resourceName))
                 return api;
-        throw new RuntimeException("No such api: " + resourceName);
+        throw new ApiNotFoundException("No such api: " + resourceName);
     }
 
     @Override
-    public String getApiName() {
+    public ResourceName getResourceName() {
         throw new UnsupportedOperationException();
     }
 }

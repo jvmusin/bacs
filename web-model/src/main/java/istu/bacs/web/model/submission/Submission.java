@@ -21,7 +21,7 @@ public class Submission {
         return new Submission(
                 submission.getSubmissionId(),
                 User.fromDb(submission.getAuthor()),
-                ContestProblem.fromDb(submission.getContestProblem()),
+                ContestProblem.fromDb(submission.getContest().getProblem(submission.getProblemIndex())),
                 formatDateTime(submission.getCreated()),
                 submission.getLanguage(),
                 submission.getSolution(),

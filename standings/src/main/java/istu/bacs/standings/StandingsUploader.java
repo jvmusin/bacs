@@ -6,6 +6,7 @@ import istu.bacs.rabbit.QueueName;
 import istu.bacs.rabbit.RabbitService;
 import istu.bacs.standings.config.StandingsRedisTemplate;
 import istu.bacs.standings.db.SubmissionService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static istu.bacs.standings.StandingsServiceImpl.KEY;
 
 @Slf4j
+@AllArgsConstructor
 public class StandingsUploader implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final int TICK_DELAY = 500;
@@ -39,19 +41,12 @@ public class StandingsUploader implements ApplicationListener<ContextRefreshedEv
     private final AtomicBoolean initialized = new AtomicBoolean();
     private final AtomicInteger tickCount = new AtomicInteger();
 
-    public StandingsUploader(StandingsRedisTemplate standingsRedisTemplate, SubmissionService submissionService, RabbitService rabbitService) {
-        this.standingsRedisTemplate = standingsRedisTemplate;
-        this.submissionService = submissionService;
-        this.rabbitService = rabbitService;
-    }
-
     private Standings getOrCreateStandings(Contest contest) {
         return standingsByContest.computeIfAbsent(contest, Standings::new);
     }
 
     @Scheduled(fixedDelay = TICK_DELAY)
-    void uploadStandings() {
-
+    public void uploadStandings() {
         if (!initialized.get())
             return;
 

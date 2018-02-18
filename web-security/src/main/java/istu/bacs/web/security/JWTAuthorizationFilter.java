@@ -1,7 +1,7 @@
 package istu.bacs.web.security;
 
-import io.jsonwebtoken.*;
-import istu.bacs.db.user.Role;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import istu.bacs.db.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static istu.bacs.web.security.SecurityConstants.*;
 import static istu.bacs.web.security.WebSecurityUserUtils.getAuthorities;
-import static java.util.Arrays.asList;
 
 @Slf4j
 class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -64,16 +63,12 @@ class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .parseClaimsJws(token)
                     .getBody();
 
-            List<?> rolesObj = body.get("roles", List.class);
-            List<Role> roles = rolesObj.stream()
-                    .map(Object::toString)
-                    .map(Role::valueOf)
-                    .collect(Collectors.toList());
+            List<String> roles = body.get("roles", ArrayList.class);
 
             User user = User.builder()
                     .userId(body.get("userId", Integer.class))
                     .username(body.getSubject())
-                    .roles(roles)
+                    .roles(roles.toArray(new String[0]))
                     .build();
 
             return new UsernamePasswordAuthenticationToken(user, null, getAuthorities(user));

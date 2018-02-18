@@ -1,11 +1,13 @@
 package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.problem.Problem;
+import istu.bacs.db.problem.ProblemId;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static istu.bacs.db.problem.ResourceName.FAKE;
 import static istu.bacs.externalapi.fake.Measure.*;
 
 class ProblemService {
@@ -22,7 +24,7 @@ class ProblemService {
 
     private static Problem createProblem(int problemId, String name, int timeLimitMillis, int memoryLimitBytes) {
         return Problem.builder()
-                .problemId("FAKE#" + problemId)
+                .problemId(new ProblemId(FAKE, problemId + ""))
                 .name(name)
                 .statementUrl("URL_FOR_FAKED_PROBLEM_WITH_ID_" + problemId)
                 .timeLimitMillis(timeLimitMillis)

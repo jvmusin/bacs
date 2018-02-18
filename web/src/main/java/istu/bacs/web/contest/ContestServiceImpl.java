@@ -3,13 +3,13 @@ package istu.bacs.web.contest;
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.contest.ContestRepository;
-import istu.bacs.db.problem.Problem;
 import istu.bacs.web.model.WebModelUtils;
 import istu.bacs.web.model.contest.builder.EditContest;
 import istu.bacs.web.model.contest.builder.EditContestProblem;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -24,8 +24,11 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    @Transactional
     public Contest findById(int contestId) {
-        return contestRepository.findById(contestId).orElse(null);
+        Contest contest = contestRepository.findById(contestId).orElse(null);
+        contest.getProblems().size();
+        return contest;
     }
 
     @Override
@@ -40,7 +43,6 @@ public class ContestServiceImpl implements ContestService {
                 .startTime(WebModelUtils.parseDateTime(contest.getStartTime()))
                 .finishTime(WebModelUtils.parseDateTime(contest.getFinishTime()))
                 .build();
-        contestRepository.save(c);
 
         joinProblems(c, contest.getProblems());
         contestRepository.save(c);
@@ -59,7 +61,6 @@ public class ContestServiceImpl implements ContestService {
                 .startTime(WebModelUtils.parseDateTime(contest.getStartTime()))
                 .finishTime(WebModelUtils.parseDateTime(contest.getFinishTime()))
                 .build();
-        contestRepository.save(c);
 
         joinProblems(c, contest.getProblems());
         contestRepository.save(c);
@@ -67,13 +68,7 @@ public class ContestServiceImpl implements ContestService {
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
         List<ContestProblem> contestProblems = problems.stream()
-                .map(p -> {
-                    ContestProblem cp = ContestProblem.withId(contest.getContestId(), p.getProblemIndex());
-                    cp.setContest(contest);
-                    cp.setProblem(new Problem().withId(p.getProblemId().getResourceName(), p.getProblemId().getResourceProblemId()));
-                    cp.setProblemIndex(p.getProblemIndex());
-                    return cp;
-                })
+                .map(p -> new ContestProblem().withId(contest.getContestId(), p.getProblemIndex()))
                 .collect(toList());
         contest.setProblems(contestProblems);
     }

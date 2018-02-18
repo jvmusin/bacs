@@ -1,12 +1,14 @@
 package istu.bacs.externalapi.fake;
 
 import istu.bacs.db.problem.Problem;
+import istu.bacs.db.problem.ResourceName;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.externalapi.ExternalApi;
 
 import java.util.List;
 import java.util.Random;
 
+import static istu.bacs.db.problem.ResourceName.FAKE;
 import static istu.bacs.db.submission.Verdict.PENDING;
 
 public class FakeApi implements ExternalApi {
@@ -47,7 +49,7 @@ public class FakeApi implements ExternalApi {
     }
 
     @Override
-    public String getApiName() {
-        return "FAKE";
+    public ResourceName getResourceName() {
+        return FAKE;
     }
 }

@@ -2,9 +2,9 @@ package istu.bacs.web.contest;
 
 import istu.bacs.standings.StandingsService;
 import istu.bacs.web.model.contest.Contest;
-import istu.bacs.web.model.problem.ContestProblem;
-import istu.bacs.web.model.contest.standings.Standings;
 import istu.bacs.web.model.contest.builder.EditContest;
+import istu.bacs.web.model.contest.standings.Standings;
+import istu.bacs.web.model.problem.ContestProblem;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +39,8 @@ public class ContestController {
 
     @GetMapping("/{contestId}")
     public Contest getContest(@PathVariable int contestId) {
-        return Contest.fromDb(contestService.findById(contestId));
+        istu.bacs.db.contest.Contest contest = contestService.findById(contestId);
+        return Contest.fromDb(contest);
     }
 
     @GetMapping("/{contestId}/problems")

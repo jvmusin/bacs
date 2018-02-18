@@ -1,6 +1,8 @@
 package istu.bacs.db.submission;
 
 import istu.bacs.db.contest.Contest;
+import istu.bacs.db.contest.ContestProblem;
+import istu.bacs.db.problem.Problem;
 import istu.bacs.db.user.User;
 import lombok.*;
 
@@ -42,4 +44,16 @@ public class Submission {
 
     @Embedded
     private SubmissionResult result;
+
+    public Verdict getVerdict() {
+        return getResult().getVerdict();
+    }
+
+    public ContestProblem getContestProblem() {
+        return getContest().getProblem(getProblemIndex());
+    }
+
+    public Problem getProblem() {
+        return getContestProblem().getProblem();
+    }
 }

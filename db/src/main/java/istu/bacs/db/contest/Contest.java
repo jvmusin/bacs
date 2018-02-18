@@ -35,7 +35,7 @@ public class Contest {
     private List<ContestProblem> problems;
 
     public ContestProblem getProblem(String index) {
-        for (ContestProblem problem : problems)
+        for (ContestProblem problem : getProblems())
             if (Objects.equals(problem.getProblemIndex(), index))
                 return problem;
         return null;

@@ -1,6 +1,6 @@
 package istu.bacs.web.submission;
 
-import istu.bacs.db.contest.ContestProblem;
+import istu.bacs.db.contest.Contest;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
@@ -10,6 +10,7 @@ import istu.bacs.web.model.submission.SubmitSolution;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 import static istu.bacs.db.submission.Verdict.SCHEDULED;
@@ -23,17 +24,19 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final RabbitService rabbitService;
 
     @Override
+    @Transactional
     public Submission findById(int submissionId) {
         return submissionRepository.findById(submissionId).orElse(null);
     }
 
     @Override
     public int submit(SubmitSolution sol, User author) {
+        Contest contest = new Contest().withContestId(sol.getContestId());
         SubmissionResult res = new SubmissionResult().withVerdict(SCHEDULED);
-        ContestProblem cp = ContestProblem.withId(sol.getContestId(), sol.getProblemIndex());
         istu.bacs.db.submission.Submission submission = istu.bacs.db.submission.Submission.builder()
                 .author(author)
-                .contestProblem(cp)
+                .contest(contest)
+                .problemIndex(sol.getProblemIndex())
                 .pretestsOnly(false)
                 .created(LocalDateTime.now())
                 .language(sol.getLanguage())

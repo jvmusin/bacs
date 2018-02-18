@@ -25,4 +25,8 @@ public class Problem {
 
     private int timeLimitMillis;
     private int memoryLimitBytes;
+
+    public ResourceName getResourceName() {
+        return problemId.getResourceName();
+    }
 }

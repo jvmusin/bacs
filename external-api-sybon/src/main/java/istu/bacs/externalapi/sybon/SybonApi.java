@@ -1,6 +1,7 @@
 package istu.bacs.externalapi.sybon;
 
 import istu.bacs.db.problem.Problem;
+import istu.bacs.db.problem.ResourceName;
 import istu.bacs.db.submission.Submission;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.externalapi.ExternalApi;
@@ -13,6 +14,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import static istu.bacs.db.problem.ResourceName.SYBON;
 import static istu.bacs.db.submission.Verdict.PENDING;
 import static istu.bacs.externalapi.sybon.SybonContinueCondition.Always;
 import static java.lang.Integer.parseInt;
@@ -22,8 +24,6 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public class SybonApi implements ExternalApi {
-
-    static final String API_NAME = "SYBON";
 
     private static final SybonSubmitResultConverter submitResultConverter = new SybonSubmitResultConverter();
     private static final SybonLanguageConverter languageConverter = new SybonLanguageConverter();
@@ -89,7 +89,7 @@ public class SybonApi implements ExternalApi {
         submit.setCompilerId(languageConverter.convert(submission.getLanguage()));
         submit.setSolution(Base64.getEncoder().encodeToString(submission.getSolution().getBytes()));
         submit.setSolutionFileType("Text");
-        submit.setProblemId(parseInt(submission.getProblem().getRawProblemId()));
+        submit.setProblemId(parseInt(submission.getProblem().getProblemId().getResourceProblemId()));
         submit.setPretestsOnly(submission.isPretestsOnly());
         submit.setContinueCondition(Always);
 
@@ -149,7 +149,7 @@ public class SybonApi implements ExternalApi {
     }
 
     @Override
-    public String getApiName() {
-        return API_NAME;
+    public ResourceName getResourceName() {
+        return SYBON;
     }
 }
