@@ -10,11 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.notFound;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/contests")
@@ -38,9 +41,10 @@ public class ContestController {
     }
 
     @GetMapping("/{contestId}")
-    public Contest getContest(@PathVariable int contestId) {
+    public ResponseEntity<Contest> getContest(@PathVariable int contestId) {
         istu.bacs.db.contest.Contest contest = contestService.findById(contestId);
-        return Contest.fromDb(contest);
+        if (contest == null) return notFound().build();
+        return ok().body(Contest.fromDb(contest));
     }
 
     @GetMapping("/{contestId}/problems")

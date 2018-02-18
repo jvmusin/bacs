@@ -48,6 +48,7 @@ public class SubmissionController {
 
         CriteriaQuery<istu.bacs.db.submission.Submission> query = cb.createQuery(istu.bacs.db.submission.Submission.class);
         Root<istu.bacs.db.submission.Submission> s = query.from(istu.bacs.db.submission.Submission.class);
+        s.fetch("contest");
 
         List<Predicate> predicates = new ArrayList<>();
         if (author != null) {
@@ -64,7 +65,6 @@ public class SubmissionController {
             predicates.add(s.get("contestProblem").in(problems));
         }
 
-        s.fetch("contest");
         query.select(s)
                 .where(predicates.toArray(new Predicate[0]))
                 .orderBy(new OrderImpl(s.get("submissionId"), false));
