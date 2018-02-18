@@ -3,6 +3,9 @@ package istu.bacs.web.problem;
 import istu.bacs.externalapi.ExternalApi;
 import istu.bacs.web.model.problem.ArchiveProblem;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +21,17 @@ public class ProblemController {
     private final ExternalApi externalApi;
 
     @GetMapping
-    public List<ArchiveProblem> getAllProblems(@RequestParam(name = "external", required = false) String external) {
-        if (external != null) {
+    public List<ArchiveProblem> getAllProblems(
+            @RequestParam(name = "external", required = false) String external,
+            @RequestParam(required = false, defaultValue = "0") int pageIndex,
+            @RequestParam(required = false, defaultValue = "50") int pageSize) {
+
+        if (external != null)
             problemService.saveAll(externalApi.getAllProblems());
-        }
-        return problemService.findAllProblems().stream()
+
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("contestId").descending());
+
+        return problemService.findAll(pageable).stream()
                 .map(ArchiveProblem::fromDb)
                 .collect(toList());
     }
