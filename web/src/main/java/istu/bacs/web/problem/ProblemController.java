@@ -41,7 +41,7 @@ public class ProblemController {
             return Collections.singletonList(ArchiveProblem.fromDb(problem));
         }
 
-        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("contestId").descending());
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("problemId"));
 
         return problemService.findAll(pageable).stream()
                 .map(ArchiveProblem::fromDb)
