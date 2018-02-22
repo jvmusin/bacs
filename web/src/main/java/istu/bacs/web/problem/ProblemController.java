@@ -1,18 +1,19 @@
 package istu.bacs.web.problem;
 
 import istu.bacs.db.problem.Problem;
-import istu.bacs.externalapi.ExternalApi;
-import istu.bacs.web.contest.ContestService;
+import istu.bacs.db.problem.ResourceName;
 import istu.bacs.web.model.problem.ArchiveProblem;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -21,35 +22,33 @@ import static java.util.stream.Collectors.toList;
 public class ProblemController {
 
     private final ProblemService problemService;
-    private final ContestService contestService;
-    private final ExternalApi externalApi;
 
     @GetMapping
     public List<ArchiveProblem> getAllProblems(
             @RequestParam(name = "external", required = false) String external,
+
             @RequestParam(name = "contestId", required = false) Integer contestId,
             @RequestParam(name = "problemIndex", required = false) String problemIndex,
+
+            @RequestParam(name = "resourceName", required = false) ResourceName resourceName,
+            @RequestParam(name = "resourceProblemId", required = false) String resourceProblemId,
+
             @RequestParam(required = false, defaultValue = "0") int pageIndex,
             @RequestParam(required = false, defaultValue = "50") int pageSize) {
 
         if (external != null) {
-            problemService.saveAll(externalApi.getAllProblems());
+            problemService.fetchExternalProblems();
         }
 
         if (contestId != null && problemIndex != null) {
-            Problem problem = contestService.findById(contestId).getProblem(problemIndex).getProblem();
-            return Collections.singletonList(ArchiveProblem.fromDb(problem));
+            Problem problem = problemService.findByContestIdAndProblemIndex(contestId, problemIndex);
+            ArchiveProblem archiveProblem = ArchiveProblem.fromDb(problem);
+            return singletonList(archiveProblem);
         }
 
-        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("problemId"));
-
-        return problemService.findAll(pageable).stream()
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        return problemService.findAll(resourceName, resourceProblemId, pageable).stream()
                 .map(ArchiveProblem::fromDb)
                 .collect(toList());
-    }
-
-    @GetMapping("/{problemId}")
-    public ArchiveProblem getProblem(@PathVariable String problemId) {
-        return ArchiveProblem.fromDb(problemService.findById(problemId));
     }
 }
