@@ -8,6 +8,7 @@ import istu.bacs.web.model.WebModelUtils;
 import istu.bacs.web.model.contest.builder.EditContest;
 import istu.bacs.web.model.contest.builder.EditContestProblem;
 import istu.bacs.web.model.problem.ArchiveProblemId;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
+@Slf4j
 public class ContestServiceImpl implements ContestService {
 
     private final ContestRepository contestRepository;
@@ -49,6 +51,8 @@ public class ContestServiceImpl implements ContestService {
 
         joinProblems(c, contest.getProblems());
         contestRepository.save(c);
+
+        log.info("Contest {}: {} successfully created", c.getContestId(), c.getName());
 
         return c.getContestId();
     }
