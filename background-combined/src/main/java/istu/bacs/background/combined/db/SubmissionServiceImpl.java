@@ -39,8 +39,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     private void initializeSubmission(Submission submission) {
-        if (submission != null)
-            System.out.println(submission.getContest().getProblems().size());
+        if (submission != null) {
+            submission.getContest().getProblems().size();
+        }
     }
 
     private void initializeSubmissions(Iterable<Submission> submissions) {

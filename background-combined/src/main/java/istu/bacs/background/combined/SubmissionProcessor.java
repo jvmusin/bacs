@@ -56,11 +56,9 @@ public abstract class SubmissionProcessor implements ApplicationListener<Context
 
         Set<Integer> ids = new HashSet<>();
         while (!q.isEmpty() && ids.size() < maxSubmissionsPerBatch) ids.add(q.poll());
-        log().trace("Processing {} submissions: {}", ids.size(), ids);
 
         try {
             List<Submission> submissions = submissionService.findAllByIds(new ArrayList<>(ids));
-            log().trace("Found {} submissions", submissions.size());
 
             boolean anyProcessed = process(submissions);
 
