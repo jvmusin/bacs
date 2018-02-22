@@ -2,6 +2,7 @@ package istu.bacs.db.contest;
 
 import istu.bacs.db.problem.Problem;
 import lombok.*;
+import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,10 +29,11 @@ public class ContestProblem implements Serializable {
             @JoinColumn(name = "resource_name"),
             @JoinColumn(name = "resource_problem_id")
     })
+    @Wither
     private Problem problem;
 
-    public ContestProblem withId(int contestId, String problemIndex) {
-        setContest(new Contest().withContestId(contestId));
+    public ContestProblem withId(Contest contest, String problemIndex) {
+        setContest(contest);
         setProblemIndex(problemIndex);
         return this;
     }

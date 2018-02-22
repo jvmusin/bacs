@@ -3,9 +3,11 @@ package istu.bacs.web.contest;
 import istu.bacs.db.contest.Contest;
 import istu.bacs.db.contest.ContestProblem;
 import istu.bacs.db.contest.ContestRepository;
+import istu.bacs.db.problem.Problem;
 import istu.bacs.web.model.WebModelUtils;
 import istu.bacs.web.model.contest.builder.EditContest;
 import istu.bacs.web.model.contest.builder.EditContestProblem;
+import istu.bacs.web.model.problem.ArchiveProblemId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,8 @@ public class ContestServiceImpl implements ContestService {
     @Transactional
     public Contest findById(int contestId) {
         Contest contest = contestRepository.findById(contestId).orElse(null);
-        contest.getProblems().size();
+        //noinspection ConstantConditions
+        contest.getProblems().size();   //fetch lazily-fetched problems
         return contest;
     }
 
@@ -61,6 +64,7 @@ public class ContestServiceImpl implements ContestService {
                 .startTime(WebModelUtils.parseDateTime(contest.getStartTime()))
                 .finishTime(WebModelUtils.parseDateTime(contest.getFinishTime()))
                 .build();
+        contestRepository.save(c);
 
         joinProblems(c, contest.getProblems());
         contestRepository.save(c);
@@ -68,8 +72,19 @@ public class ContestServiceImpl implements ContestService {
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
         List<ContestProblem> contestProblems = problems.stream()
-                .map(p -> new ContestProblem().withId(contest.getContestId(), p.getProblemIndex()))
+                .map(p -> parseContestProblem(contest, p))
                 .collect(toList());
         contest.setProblems(contestProblems);
+    }
+
+    private ContestProblem parseContestProblem(Contest contest, EditContestProblem problem) {
+
+        ArchiveProblemId problemId = problem.getProblemId();
+        String resourceName = problemId.getResourceName();
+        String resourceProblemId = problemId.getResourceProblemId();
+        String problemIndex = problem.getProblemIndex();
+
+        Problem p = new Problem().withId(resourceName, resourceProblemId);
+        return new ContestProblem().withId(contest, problemIndex).withProblem(p);
     }
 }

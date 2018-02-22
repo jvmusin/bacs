@@ -1,7 +1,6 @@
 package istu.bacs.db.problem;
 
 import lombok.*;
-import lombok.experimental.Wither;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.persistence.Table;
 public class Problem {
 
     @EmbeddedId
-    @Wither
     private ProblemId problemId;
 
     private String name;
@@ -28,5 +26,11 @@ public class Problem {
 
     public ResourceName getResourceName() {
         return problemId.getResourceName();
+    }
+
+    public Problem withId(String resourceName, String resourceProblemId) {
+        ResourceName resource = ResourceName.valueOf(resourceName);
+        problemId = new ProblemId(resource, resourceProblemId);
+        return this;
     }
 }
