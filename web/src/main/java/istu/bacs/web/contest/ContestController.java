@@ -79,7 +79,12 @@ public class ContestController {
     }
 
     @DeleteMapping("/{contestId}")
-    public void deleteContest(@PathVariable int contestId) {
-        contestService.deleteContest(contestId);
+    public ResponseEntity<?> deleteContest(@PathVariable int contestId) {
+        try {
+            contestService.deleteContest(contestId);
+            return ok().build();
+        } catch (Exception e) {
+            return badRequest().body(e.getMessage());
+        }
     }
 }
