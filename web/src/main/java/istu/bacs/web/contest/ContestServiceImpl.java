@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,7 @@ public class ContestServiceImpl implements ContestService {
                 .name(contest.getName())
                 .startTime(WebModelUtils.parseDateTime(contest.getStartTime()))
                 .finishTime(WebModelUtils.parseDateTime(contest.getFinishTime()))
+                .problems(new ArrayList<>())
                 .build();
 
         joinProblems(c, contest.getProblems());
