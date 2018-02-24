@@ -97,7 +97,7 @@ public class ContestServiceImpl implements ContestService {
         ArchiveProblemId problemId = problem.getProblemId();
         String resourceName = problemId.getResourceName();
         String resourceProblemId = problemId.getResourceProblemId();
-        String problemIndex = problem.getProblemIndex();
+        String problemIndex = problem.getIndex();
         //noinspection ConstantConditions
         Problem p = problemRepository.findById(new ProblemId(ResourceName.valueOf(resourceName), resourceProblemId)).get();
 

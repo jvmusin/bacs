@@ -6,5 +6,5 @@ import lombok.Value;
 @Value
 public class EditContestProblem {
     ArchiveProblemId problemId;
-    String problemIndex;
+    String index;
 }
