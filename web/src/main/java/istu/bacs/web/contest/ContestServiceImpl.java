@@ -79,8 +79,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
-        if (problems == null) return;
         contest.getProblems().clear();
+        if (problems == null) return;
         for (EditContestProblem p : problems) {
             ContestProblem problem = parseContestProblem(contest, p);
             contest.getProblems().add(problem);
