@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/contests")
@@ -70,7 +69,12 @@ public class ContestController {
     }
 
     @PutMapping("/{contestId}")
-    public void editContest(@RequestBody EditContest contest, @PathVariable int contestId) {
-        contestService.editContest(contest, contestId);
+    public ResponseEntity<?> editContest(@RequestBody EditContest contest, @PathVariable int contestId) {
+        try {
+            contestService.editContest(contest, contestId);
+            return ok().build();
+        } catch (Exception e) {
+            return badRequest().body(e.getMessage());
+        }
     }
 }
