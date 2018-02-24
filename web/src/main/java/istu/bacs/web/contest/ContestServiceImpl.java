@@ -66,16 +66,15 @@ public class ContestServiceImpl implements ContestService {
             throw new IllegalArgumentException("Contest with id " + contestId + " doesn't exist");
 
         Contest c = realContest.get();
+        c.setName(contest.getName());
         c.setStartTime(WebModelUtils.parseDateTime(contest.getStartTime()));
         c.setFinishTime(WebModelUtils.parseDateTime(contest.getFinishTime()));
 
-        joinProblems(c, contest.getProblems());
+        //Don't know why but problems are not removing correctly by default
         Session session = em.unwrap(Session.class);
-        for (ContestProblem problem : c.getProblems()) {
-            session.saveOrUpdate(problem);
-        }
+        c.getProblems().forEach(session::delete);
 
-        contestRepository.save(c);
+        joinProblems(c, contest.getProblems());
     }
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
