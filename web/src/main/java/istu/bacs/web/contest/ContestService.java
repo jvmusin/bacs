@@ -11,4 +11,5 @@ public interface ContestService {
     List<Contest> findAll(Pageable pageable);
     int createContest(EditContest contest);
     void editContest(EditContest contest, int contestId);
+    void deleteContest(int contestId);
 }

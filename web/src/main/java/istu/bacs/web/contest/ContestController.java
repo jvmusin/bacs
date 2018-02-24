@@ -77,4 +77,9 @@ public class ContestController {
             return badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{contestId}")
+    public void deleteContest(@PathVariable int contestId) {
+        contestService.deleteContest(contestId);
+    }
 }

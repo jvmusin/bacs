@@ -100,4 +100,9 @@ public class ContestServiceImpl implements ContestService {
 
         return new ContestProblem().withId(contest, problemIndex).withProblem(p);
     }
+
+    @Override
+    public void deleteContest(int contestId) {
+        contestRepository.deleteById(contestId);
+    }
 }
