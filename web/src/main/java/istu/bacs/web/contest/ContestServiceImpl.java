@@ -34,10 +34,7 @@ public class ContestServiceImpl implements ContestService {
     @Override
     @Transactional
     public Contest findById(int contestId) {
-        Contest contest = contestRepository.findById(contestId).orElse(null);
-        //noinspection ConstantConditions
-        contest.getProblems().size();   //fetch lazily-fetched problems
-        return contest;
+        return contestRepository.findById(contestId).orElse(null);
     }
 
     @Override
