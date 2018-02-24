@@ -75,9 +75,12 @@ public class ContestServiceImpl implements ContestService {
         //Don't know why but problems are not removing correctly by default
         Session session = em.unwrap(Session.class);
         c.getProblems().forEach(session::delete);
+        c.getProblems().clear();
+        session.flush();
 
         joinProblems(c, contest.getProblems());
-        c.getProblems().forEach(session::save);
+        session.saveOrUpdate(c);
+        session.flush();
     }
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
