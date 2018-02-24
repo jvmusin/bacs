@@ -4,6 +4,7 @@ import istu.bacs.db.user.User;
 import istu.bacs.web.model.submission.Submission;
 import istu.bacs.web.model.submission.SubmitSolution;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.notFound;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/submissions")
@@ -20,8 +23,11 @@ public class SubmissionController {
     private final SubmissionService submissionService;
 
     @GetMapping("/{submissionId}")
-    public Submission getSubmission(@PathVariable int submissionId) {
-        return Submission.fromDb(submissionService.findById(submissionId));
+    public ResponseEntity<Submission> getSubmission(@PathVariable int submissionId) {
+        istu.bacs.db.submission.Submission submission = submissionService.findById(submissionId);
+        if (submission == null)
+            return notFound().build();
+        return ok(Submission.fromDb(submission));
     }
 
     @GetMapping
