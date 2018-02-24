@@ -34,7 +34,7 @@ public class ProblemController {
             @RequestParam(name = "resourceProblemId", required = false) String resourceProblemId,
 
             @RequestParam(required = false, defaultValue = "0") int pageIndex,
-            @RequestParam(required = false, defaultValue = "50") int pageSize) {
+            @RequestParam(required = false, defaultValue = ((int) 1e9) + "") int pageSize) {
 
         if (external != null) {
             problemService.fetchExternalProblems();
