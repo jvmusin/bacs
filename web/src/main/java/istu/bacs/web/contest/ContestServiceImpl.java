@@ -75,6 +75,7 @@ public class ContestServiceImpl implements ContestService {
         c.getProblems().forEach(session::delete);
 
         joinProblems(c, contest.getProblems());
+        c.getProblems().forEach(session::save);
     }
 
     private void joinProblems(Contest contest, List<EditContestProblem> problems) {
