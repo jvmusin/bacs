@@ -8,7 +8,7 @@ spring:
     include: aggregator-api
   datasource:
     hikari:
-      maximum-pool-size: 15
+      maximum-pool-size: 10
   jpa:
     open-in-view: false
 logging:
