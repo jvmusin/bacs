@@ -29,7 +29,6 @@ import java.util.List;
 
 import static istu.bacs.db.submission.Verdict.SCHEDULED;
 import static istu.bacs.rabbit.QueueName.SCHEDULED_SUBMISSIONS;
-import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -68,11 +67,10 @@ public class SubmissionServiceImpl implements SubmissionService {
             predicates.add(cb.equal(s.get("author"), author));
         }
         if (contestId != null) {
-            List<ContestProblem> problems = contestService.findById(contestId).getProblems()
-                    .stream()
-                    .filter(p -> problemIndex == null || p.getProblemIndex().equals(problemIndex))
-                    .collect(toList());
-            predicates.add(s.get("contestProblem").in(problems));
+            predicates.add(cb.equal(s.get("contest"), new Contest().withContestId(contestId)));
+        }
+        if (problemIndex != null) {
+            predicates.add(cb.equal(s.get("problemIndex"), problemIndex));
         }
 
         query.select(s)
