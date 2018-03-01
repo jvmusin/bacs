@@ -7,8 +7,10 @@ import istu.bacs.db.submission.SubmissionRepository;
 import istu.bacs.db.submission.SubmissionResult;
 import istu.bacs.db.user.User;
 import istu.bacs.rabbit.RabbitService;
+import istu.bacs.web.contest.ContestNotFoundException;
 import istu.bacs.web.contest.ContestService;
 import istu.bacs.web.model.submission.SubmitSolution;
+import istu.bacs.web.problem.ProblemNotFoundException;
 import istu.bacs.web.user.UserService;
 import lombok.AllArgsConstructor;
 import org.hibernate.query.criteria.internal.OrderImpl;
@@ -82,12 +84,25 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public int submit(SubmitSolution sol, User author) {
-        Contest contest = new Contest().withContestId(sol.getContestId());
+        int contestId = sol.getContestId();
+        Contest contest = contestService.findById(contestId);
+        if (contest == null) {
+            throw new ContestNotFoundException("Contest with id " + contestId + " not found");
+        }
+
+        String problemIndex = sol.getProblemIndex();
+        ContestProblem problem = contest.getProblem(problemIndex);
+        if (problem == null) {
+            throw new ProblemNotFoundException(
+                    "Problem for contestId = " + contestId +
+                            " and problemId = " + problemIndex + " not found");
+        }
+
         SubmissionResult res = new SubmissionResult().withVerdict(SCHEDULED);
         Submission submission = Submission.builder()
                 .author(author)
                 .contest(contest)
-                .problemIndex(sol.getProblemIndex())
+                .problemIndex(problemIndex)
                 .pretestsOnly(false)
                 .created(LocalDateTime.now())
                 .language(sol.getLanguage())
