@@ -1,17 +1,21 @@
 package istu.bacs.web.model.contest;
 
 import istu.bacs.web.model.problem.ContestProblem;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import static istu.bacs.web.model.WebModelUtils.formatDateTime;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Contest {
-    int id;
-    String name;
-    String startTime;
-    String finishTime;
-    ContestProblem[] problems;
+    private int id;
+    private String name;
+    private String startTime;
+    private String finishTime;
+    private ContestProblem[] problems;
 
     public static Contest fromDb(istu.bacs.db.contest.Contest contest) {
         return new Contest(

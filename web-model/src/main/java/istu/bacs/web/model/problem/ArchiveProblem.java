@@ -2,16 +2,20 @@ package istu.bacs.web.model.problem;
 
 import istu.bacs.db.problem.Problem;
 import istu.bacs.db.problem.ProblemId;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArchiveProblem {
 
-    ArchiveProblemId problemId;
-    String name;
-    int timeLimitMillis;
-    int memoryLimitBytes;
-    String statementUrl;
+    private ArchiveProblemId problemId;
+    private String name;
+    private int timeLimitMillis;
+    private int memoryLimitBytes;
+    private String statementUrl;
 
     public static ArchiveProblem fromDb(Problem problem) {
         ProblemId id = problem.getProblemId();

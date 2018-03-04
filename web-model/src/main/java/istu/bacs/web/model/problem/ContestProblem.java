@@ -1,16 +1,20 @@
 package istu.bacs.web.model.problem;
 
 import istu.bacs.db.contest.Contest;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContestProblem {
-    String index;
-    String name;
-    int contestId;
-    int timeLimitMillis;
-    int memoryLimitBytes;
-    String statementUrl;
+    private String index;
+    private String name;
+    private int contestId;
+    private int timeLimitMillis;
+    private int memoryLimitBytes;
+    private String statementUrl;
 
     public static ContestProblem fromDb(istu.bacs.db.contest.ContestProblem contestProblem) {
         Contest contest = contestProblem.getContest();

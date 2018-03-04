@@ -1,11 +1,15 @@
 package istu.bacs.web.model.contest.standings;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProblemSolvingResult {
-    String problemIndex;
-    boolean solved;
-    int failTries;
-    int solvedAt;
+    private String problemIndex;
+    private boolean solved;
+    private int failTries;
+    private int solvedAt;
 }

@@ -1,9 +1,13 @@
 package istu.bacs.web.model.problem;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArchiveProblemId {
-    String resourceName;
-    String resourceProblemId;
+    private String resourceName;
+    private String resourceProblemId;
 }

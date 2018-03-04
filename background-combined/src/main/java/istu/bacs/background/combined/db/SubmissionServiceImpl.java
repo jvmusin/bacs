@@ -43,8 +43,8 @@ public class SubmissionServiceImpl implements SubmissionService {
      */
     private void initializeSubmission(Submission submission) {
         if (submission != null) {
-            //noinspection ResultOfMethodCallIgnored
-            submission.getContest();
+            submission.getContest().getProblems().forEach(p -> {
+            });
         }
     }
 

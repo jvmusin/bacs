@@ -1,11 +1,15 @@
 package istu.bacs.web.model.user;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Login {
 
     //language=regexp
@@ -17,9 +21,9 @@ public class Login {
 
     @NotNull
     @Pattern(regexp = USERNAME_PATTERN)
-    String username;
+    private String username;
 
     @NotNull
     @Pattern(regexp = PASSWORD_PATTERN)
-    String password;
+    private String password;
 }

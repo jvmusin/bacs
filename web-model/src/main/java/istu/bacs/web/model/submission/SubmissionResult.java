@@ -1,15 +1,19 @@
 package istu.bacs.web.model.submission;
 
 import istu.bacs.db.submission.Verdict;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubmissionResult {
-    String buildInfo;
-    Verdict verdict;
-    Integer testsPassed;
-    Integer timeUsed;
-    Integer memoryUsed;
+    private String buildInfo;
+    private Verdict verdict;
+    private Integer testsPassed;
+    private Integer timeUsed;
+    private Integer memoryUsed;
 
     public static SubmissionResult fromDb(istu.bacs.db.submission.SubmissionResult result) {
         return new SubmissionResult(

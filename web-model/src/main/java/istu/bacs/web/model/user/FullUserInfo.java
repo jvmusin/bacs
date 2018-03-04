@@ -2,37 +2,40 @@ package istu.bacs.web.model.user;
 
 import istu.bacs.db.user.UserPersonalDetails;
 import istu.bacs.web.model.WebModelUtils;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FullUserInfo {
 
     @NotNull
     @Pattern(regexp = "^[\\d\\w_-]{3,40}$")
-    String username;
+    private String username;
 
     @NotNull
     @Pattern(regexp = "^[\\d\\w_-]{3,40}$")
-    String password;
+    private String password;
 
-    String[] roles;
+    private String[] roles;
 
-//    @NotNull
     @Email
-    String email;
+    private String email;
 
-    String firstName;
-    String middleName;
-    String lastName;
+    private String firstName;
+    private String middleName;
+    private String lastName;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    String birthDate;
-    String registrationDate;
+    private String birthDate;
+    private String registrationDate;
 
     public static FullUserInfo fromDb(UserPersonalDetails userPersonalDetails) {
         return new FullUserInfo(
