@@ -4,7 +4,6 @@ import istu.bacs.db.submission.Language;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;

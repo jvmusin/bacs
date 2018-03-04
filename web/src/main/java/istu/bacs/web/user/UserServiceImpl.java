@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(pass));
         user.setRoles(new String[]{"ROLE_USER"});
         userRepository.save(user);
+        userPersonalDetails.setUserId(user.getUserId());
         userPersonalDetailsRepository.save(userPersonalDetails);
         log.debug("User successfully registered: {}:'{}':'{}'", user.getUserId(), user.getUsername(), pass);
     }

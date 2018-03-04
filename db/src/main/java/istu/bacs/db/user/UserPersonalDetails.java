@@ -17,7 +17,6 @@ public class UserPersonalDetails {
     @Id
     private int userId;
 
-    @MapsId
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
