@@ -128,8 +128,9 @@ public class SubmissionServiceImpl implements SubmissionService {
      * @param submission посылка, поля которой необходимо инициализировать.
      */
     private void initializeSubmission(Submission submission) {
-        if (submission != null)
-            //noinspection ResultOfMethodCallIgnored
-            submission.getContest();
+        if (submission != null) {
+            submission.getContest().getProblems().forEach(p -> {
+            });
+        }
     }
 }

@@ -30,13 +30,23 @@ public class SubmissionServiceImpl implements SubmissionService {
         return submissions;
     }
 
+    /**
+     * Инициализирует все лениво-загружаемые поля посылки.
+     *
+     * @param submission посылка, поля которой необходимо инициализировать.
+     */
     private void initializeSubmission(Submission submission) {
         if (submission != null) {
-            //noinspection ResultOfMethodCallIgnored
-            submission.getContest();
+            submission.getContest().getProblems().forEach(p -> {
+            });
         }
     }
 
+    /**
+     * Инициализирует все лениво-загружаемые поля посылок.
+     *
+     * @param submissions посылки, поля которых необходимо инициализировать.
+     */
     private void initializeSubmissions(Iterable<Submission> submissions) {
         submissions.forEach(this::initializeSubmission);
     }
