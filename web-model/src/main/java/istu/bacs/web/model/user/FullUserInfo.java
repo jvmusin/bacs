@@ -33,7 +33,7 @@ public class FullUserInfo {
     private String middleName;
     private String lastName;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String birthDate;
     private String registrationDate;
 
@@ -46,7 +46,7 @@ public class FullUserInfo {
                 userPersonalDetails.getFirstName(),
                 userPersonalDetails.getMiddleName(),
                 userPersonalDetails.getLastName(),
-                WebModelUtils.formatDateTime(userPersonalDetails.getBirthDate()),
+                WebModelUtils.formatDate(userPersonalDetails.getBirthDate()),
                 WebModelUtils.formatDateTime(userPersonalDetails.getRegistrationDate())
         );
     }

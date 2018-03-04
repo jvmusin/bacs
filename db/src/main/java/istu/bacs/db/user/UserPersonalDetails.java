@@ -3,6 +3,7 @@ package istu.bacs.db.user;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,6 +28,6 @@ public class UserPersonalDetails {
     private String middleName;
     private String lastName;
 
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
     private LocalDateTime registrationDate;
 }

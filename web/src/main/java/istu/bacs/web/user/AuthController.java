@@ -50,7 +50,7 @@ public class AuthController {
                 .firstName(user.getFirstName())
                 .middleName(user.getMiddleName())
                 .lastName(user.getLastName())
-                .birthDate(WebModelUtils.parseDateTime(user.getBirthDate()))
+                .birthDate(WebModelUtils.parseDate(user.getBirthDate()))
                 .registrationDate(LocalDateTime.now())
                 .build();
 
