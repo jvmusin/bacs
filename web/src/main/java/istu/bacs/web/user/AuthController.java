@@ -35,7 +35,7 @@ public class AuthController {
             List<String> errorList = errors.getAllErrors().stream()
                     .map(FieldError.class::cast)
                     .map(e -> String.format("Найдена ошибка в поле %s (текущее значение: '%s'): %s",
-                            e.getObjectName(), e.getRejectedValue(), e.getDefaultMessage()))
+                            e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
                     .collect(Collectors.toList());
             return badRequest().body(errorList);
         }
