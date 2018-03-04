@@ -1,19 +1,18 @@
 package istu.bacs.web.submission;
 
-import istu.bacs.db.user.User;
+import istu.bacs.web.contest.ContestNotFoundException;
 import istu.bacs.web.model.submission.Submission;
 import istu.bacs.web.model.submission.SubmitSolution;
+import istu.bacs.web.problem.ProblemNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/submissions")
@@ -42,7 +41,11 @@ public class SubmissionController {
     }
 
     @PostMapping
-    public int submitSolution(@Valid @RequestBody SubmitSolution sol, @AuthenticationPrincipal User author) {
-        return submissionService.submit(sol, author);
+    public ResponseEntity submitSolution(@Valid @RequestBody SubmitSolution sol) {
+        try {
+            return ok(submissionService.submit(sol));
+        } catch (ContestNotFoundException | ProblemNotFoundException e) {
+            return badRequest().body(e.getMessage());
+        }
     }
 }

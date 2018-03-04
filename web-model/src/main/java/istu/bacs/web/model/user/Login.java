@@ -9,11 +9,11 @@ import javax.validation.constraints.Pattern;
 public class Login {
 
     //language=regexp
-    static final String USERNAME_PATTERN = "^[\\d\\w_-]{3,40}$";
+    private static final String USERNAME_PATTERN = "^[\\d\\w_-]{3,40}$";
 
     @SuppressWarnings("squid:S2068")
     //language=regexp
-    static final String PASSWORD_PATTERN = "^[\\d\\w_-]{3,40}$";
+    private static final String PASSWORD_PATTERN = "^[\\d\\w_-]{3,40}$";
 
     @NotNull
     @Pattern(regexp = USERNAME_PATTERN)

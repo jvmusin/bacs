@@ -1,31 +1,24 @@
 package istu.bacs.web.user;
 
 import istu.bacs.db.user.User;
+import istu.bacs.db.user.UserPersonalDetails;
+import istu.bacs.db.user.UserPersonalDetailsRepository;
 import istu.bacs.db.user.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserPersonalDetailsRepository userPersonalDetailsRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
-    }
 
     @Override
     public User findByUsername(String username) {
@@ -33,7 +26,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(User user) {
+    public void register(UserPersonalDetails userPersonalDetails) {
+        User user = userPersonalDetails.getUser();
+
         if (userRepository.findByUsername(user.getUsername()) != null) {
             log.debug("Registration failed: Username is already taken: '{}':'{}'", user.getUsername(), user.getPassword());
             throw new UsernameAlreadyTakenException(user.getUsername());
@@ -55,6 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(pass));
         user.setRoles(new String[]{"ROLE_USER"});
         userRepository.save(user);
+        userPersonalDetailsRepository.save(userPersonalDetails);
         log.debug("User successfully registered: {}:'{}':'{}'", user.getUserId(), user.getUsername(), pass);
     }
 }

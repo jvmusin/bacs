@@ -1,6 +1,5 @@
 INSERT INTO "user"(user_id, username, password, roles) VALUES (1, 'Musin', '$2a$10$1/dMsM7IGrxwFSf/bpQP0.JzRORVvt7pY8A6jpbzE26CiFdaTSn/K', '{ROLE_USER, ROLE_ADMIN}');
 
-
 INSERT INTO problem(resource_name, resource_problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('FAKE', '1',  '', '', 1, 1);
 INSERT INTO problem(resource_name, resource_problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('FAKE', '2',  '', '', 1, 1);
 INSERT INTO problem(resource_name, resource_problem_id, name, statement_url, time_limit_millis, memory_limit_bytes) VALUES ('FAKE', '5',  '', '', 1, 1);

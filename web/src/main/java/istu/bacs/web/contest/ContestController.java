@@ -30,7 +30,7 @@ public class ContestController {
     @GetMapping
     public List<Contest> getAllContests(
             @RequestParam(required = false, defaultValue = "0") int pageIndex,
-            @RequestParam(required = false, defaultValue = "50") int pageSize) {
+            @RequestParam(required = false, defaultValue = (int) 1e9 + "") int pageSize) {
 
         Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("contestId").descending());
 

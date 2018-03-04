@@ -25,6 +25,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static istu.bacs.db.submission.Verdict.SCHEDULED;
@@ -44,7 +45,13 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Transactional
     public Submission findById(int submissionId) {
         Submission submission = submissionRepository.findById(submissionId).orElse(null);
-        initializeSubmission(submission);
+        if (submission != null) {
+            User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            boolean isAdmin = Arrays.stream(currentUser.getRoles()).anyMatch(r -> r.equals("ROLE_ADMIN"));
+            if (submission.getAuthor().getUserId() != (int) currentUser.getUserId() && !isAdmin)
+                throw new RuntimeException(new IllegalAccessException("Unable to get this submission till requested by the author or an admin"));
+            initializeSubmission(submission);
+        }
         return submission;
     }
 
@@ -61,7 +68,8 @@ public class SubmissionServiceImpl implements SubmissionService {
         List<Predicate> predicates = new ArrayList<>();
         if (authorUsername != null) {
             User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User author = authorUsername.equals(currentUser.getUsername())
+            boolean isAdmin = Arrays.stream(currentUser.getRoles()).anyMatch(r -> r.equals("ROLE_ADMIN"));
+            User author = authorUsername.equals(currentUser.getUsername()) || !isAdmin
                     ? currentUser
                     : userService.findByUsername(authorUsername);
             predicates.add(cb.equal(s.get("author"), author));
@@ -81,7 +89,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public int submit(SubmitSolution sol, User author) {
+    public int submit(SubmitSolution sol) {
         int contestId = sol.getContestId();
         Contest contest = contestService.findById(contestId);
         if (contest == null) {
@@ -93,8 +101,10 @@ public class SubmissionServiceImpl implements SubmissionService {
         if (problem == null) {
             throw new ProblemNotFoundException(
                     "Problem for contestId = " + contestId +
-                            " and problemId = " + problemIndex + " not found");
+                            " and problemIndex = " + problemIndex + " not found");
         }
+
+        User author = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         SubmissionResult res = new SubmissionResult().withVerdict(SCHEDULED);
         Submission submission = Submission.builder()
@@ -112,6 +122,11 @@ public class SubmissionServiceImpl implements SubmissionService {
         return submission.getSubmissionId();
     }
 
+    /**
+     * Инициализирует все лениво-загружаемые поля посылки.
+     *
+     * @param submission посылка, поля которой необходимо инициализировать.
+     */
     private void initializeSubmission(Submission submission) {
         if (submission != null)
             //noinspection ResultOfMethodCallIgnored

@@ -31,8 +31,10 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     private void initializeSubmission(Submission submission) {
-        if (submission != null)
-            System.out.println(submission.getContest().getProblems().size());
+        if (submission != null) {
+            //noinspection ResultOfMethodCallIgnored
+            submission.getContest();
+        }
     }
 
     private void initializeSubmissions(Iterable<Submission> submissions) {

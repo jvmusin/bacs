@@ -10,13 +10,17 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 @UtilityClass
 public class WebModelUtils {
 
-    private static DateTimeFormatter formatter = ISO_DATE_TIME;
+    private static final DateTimeFormatter dateTimeFormatter = ISO_DATE_TIME;
 
     public static String formatDateTime(LocalDateTime dateTime) {
-        return formatter.format(dateTime);
+        if (dateTime == null)
+            return null;
+        return dateTimeFormatter.format(dateTime);
     }
 
     public static LocalDateTime parseDateTime(String dateTime) {
-        return formatter.parse(dateTime, LocalDateTime::from);
+        if (dateTime == null)
+            return null;
+        return dateTimeFormatter.parse(dateTime, LocalDateTime::from);
     }
 }

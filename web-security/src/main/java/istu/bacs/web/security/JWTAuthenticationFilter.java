@@ -35,14 +35,14 @@ class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) {
         try {
-            Login user = new ObjectMapper().readValue(req.getInputStream(), Login.class);
+            Login login = new ObjectMapper().readValue(req.getInputStream(), Login.class);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    user.getUsername(),
-                    user.getPassword()
+                    login.getUsername(),
+                    login.getPassword()
             );
 
-            log.debug("User attempts to login '{}':'{}'", user.getUsername(), user.getPassword());
+            log.debug("User attempts to login '{}':'{}'", login.getUsername(), login.getPassword());
 
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
