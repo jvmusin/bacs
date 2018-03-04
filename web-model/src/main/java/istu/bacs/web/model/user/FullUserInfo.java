@@ -3,7 +3,6 @@ package istu.bacs.web.model.user;
 import istu.bacs.db.user.UserPersonalDetails;
 import istu.bacs.web.model.WebModelUtils;
 import lombok.Value;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
@@ -14,18 +13,16 @@ import javax.validation.constraints.Pattern;
 public class FullUserInfo {
 
     @NotNull
-    @Length(min = 3, max = 40)
-    @Pattern(regexp = "^[\\d\\w_-]$")
+    @Pattern(regexp = "^[\\d\\w_-]{3,40}$")
     String username;
 
     @NotNull
-    @Length(min = 3, max = 40)
-    @Pattern(regexp = "^[\\d\\w_-]$")
+    @Pattern(regexp = "^[\\d\\w_-]{3,40}$")
     String password;
 
     String[] roles;
 
-    @NotNull
+//    @NotNull
     @Email
     String email;
 
