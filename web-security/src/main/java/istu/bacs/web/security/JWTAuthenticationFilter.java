@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import istu.bacs.web.model.user.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,7 +46,7 @@ class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             log.debug("User attempts to login '{}':'{}'", login.getUsername(), login.getPassword());
 
             return authenticationManager.authenticate(authentication);
-        } catch (IOException e) {
+        } catch (IOException | BadCredentialsException e) {
             log.debug("User authentication failed: {}", e.getMessage());
             return null;
         }
