@@ -5,7 +5,7 @@ server:
     max-connections: 50
 spring:
   profiles:
-    include: aggregator-api
+    include: aggregator-api,postgres
   datasource:
     hikari:
       maximum-pool-size: 10
