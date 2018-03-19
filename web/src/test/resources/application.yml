@@ -1,0 +1,16 @@
+server:
+  port: 80
+  tomcat:
+    accept-count: 20000
+    max-connections: 50
+spring:
+  profiles:
+    include: aggregator-api,postgres-test
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    open-in-view: false
+logging:
+  level:
+    istu.bacs.web: DEBUG
