@@ -21,6 +21,7 @@ public class SybonLanguageConverter implements Converter<Language, Integer> {
         supportedLanguages.put(FPC, 5);
         supportedLanguages.put(Python2, 6);
         supportedLanguages.put(Python3, 7);
+        supportedLanguages.put(Java, 8);
     }
 
     @Override

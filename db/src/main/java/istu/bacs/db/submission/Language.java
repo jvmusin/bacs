@@ -7,5 +7,6 @@ public enum Language {
     FPC,
     Python2,
     Python3,
-    Mono
+    Mono,
+    Java
 }
